@@ -477,6 +477,33 @@ svg{fill:none}
 .sheet .it[aria-pressed="true"] .ico{opacity:.5}
 .sheet .it:active{background:#EEF1DA}
 .sheet :focus-visible{outline-color:var(--l-olive)}
+
+/* Helles Blatt auf allen Seiten: gleiche Bausteine, helle Werte */
+.sheet{
+  --surface:#FFFFFF; --surface-2:#EEF0E2; --line:#E1E5D0; --ink:#3B4716; --muted:#737B57;
+  --accent:#6B7B26; --accent-ink:#FFFFFF; --accent-soft:#EEF1DA; --done:#6B7B26; --done-soft:#EEF1DA; --warn:#B45E26;
+  gap:14px;
+}
+.sheet .card{box-shadow:0 1px 2px rgba(59,71,22,.06)}
+.sheet h2{color:var(--muted)}
+.sheet .chk .sq{border-color:#C8CEB0}
+.sheet .chk button[aria-pressed="true"] .t{color:#9AA182}
+.sheet .seg button{color:var(--muted)}
+.sheet .seg button[aria-selected="true"]{color:#FFFFFF}
+.sheet #weekChart .bv{fill:#C3CB93}
+.sheet #weekChart .bv.sel{fill:var(--accent)}
+.sheet .wd.sel{box-shadow:0 0 0 1px var(--accent)}
+.sheet .wd.sel .d,.sheet .wd.today .d{color:var(--accent)}
+.sheet .rowlink:active{background:var(--surface-2)}
+.sheet .menu{overflow:hidden}
+.sheet .help{padding-inline:4px}
+.sheet .gauge-c b{color:var(--ink)}
+.page:not([data-page="heute"]) .phead{padding-top:8px}
+
+/* Blatt füllt den Bildschirm bis unten, auch bei kurzen Seiten */
+.page:not([hidden]){display:flex;flex-direction:column;min-height:calc(100vh - 134px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+.sheet{flex:1 0 auto}
+.back,.linkbtn{align-self:flex-start}
 </style>
 </head>
 <body>
@@ -533,6 +560,7 @@ svg{fill:none}
   <!-- ===== Seite: Trinken und Essen ===== -->
   <section class="page" data-page="essen" hidden>
     <header class="phead"><h1 class="ptitle">Trinken und Essen</h1><p class="psub"><span class="pdate"></span></p><p class="psub" id="sumFood"></p></header>
+    <div class="sheet">
     <div class="card water-card">
       <div class="gauge">
         <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="gt" cx="60" cy="60" r="52"/><circle class="gv" id="gaugev" cx="60" cy="60" r="52"/></svg>
@@ -549,11 +577,13 @@ svg{fill:none}
     <div class="card">
       <div class="counters" id="counters"></div>
     </div>
+    </div>
   </section>
 
   <!-- ===== Seite: Meal Prep ===== -->
   <section class="page" data-page="prep" hidden>
     <header class="phead"><h1 class="ptitle">Meal Prep</h1><p class="psub" id="prepMeta"></p></header>
+    <div class="sheet">
     <div class="seg" role="tablist" aria-label="Liste wählen">
       <button role="tab" id="tabShop" data-act="tab" data-tab="shop" aria-selected="true">Einkaufen · Sa 16:00</button>
       <button role="tab" id="tabPrep" data-act="tab" data-tab="prep" aria-selected="false">Vorbereiten</button>
@@ -564,11 +594,13 @@ svg{fill:none}
         <button class="btn" data-act="list-reset" id="resetBtn">Liste leeren</button>
       </div>
     </div>
+    </div>
   </section>
 
   <!-- ===== Seite: Wie geht es dir? ===== -->
   <section class="page" data-page="ich" hidden>
     <header class="phead"><h1 class="ptitle">Wie geht es dir?</h1><p class="psub"><span class="pdate"></span></p><p class="psub" id="sumFeel"></p></header>
+    <div class="sheet">
     <div class="card mcard">
       <div class="mhead"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></span><div><span class="lab">Schlaf letzte 24 h</span><span class="meta">Nacht plus Nachmittag, Ziel 6,5 h</span></div></div>
       <div class="step big">
@@ -595,11 +627,13 @@ svg{fill:none}
         <span class="meta" id="weightInfo"></span>
       </div>
     </div>
+    </div>
   </section>
 
   <!-- ===== Seite: Mehr ===== -->
   <section class="page" data-page="mehr" hidden>
     <header class="phead"><h1 class="ptitle">Mehr</h1></header>
+    <div class="sheet">
     <nav class="card menu" aria-label="Weitere Seiten">
       <button class="rowlink" data-act="nav" data-page="woche"><span class="ico" style="--k:var(--prep);--ks:var(--prep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="rl"><span class="t">Diese Woche</span><span class="s sum-week"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="gewicht"><span class="ico" style="--k:var(--food);--ks:var(--food-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg></span><span class="rl"><span class="t">Gewichtsverlauf</span><span class="s sum-chart"></span></span><i class="go" aria-hidden="true"></i></button>
@@ -610,41 +644,49 @@ svg{fill:none}
       <span>Erinnerungen für Wasser, Essen, Training und Schlaf kommen über deinen Google Kalender.</span>
       <span>Wenn es dir schlecht geht: Telefonseelsorge <b>0800 111 0 111</b>, rund um die Uhr, kostenlos. Im Notfall <b>112</b>.</span>
     </footer>
+    </div>
   </section>
 
   <!-- ===== Unterseiten von Mehr ===== -->
   <section class="page" data-page="woche" hidden>
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Diese Woche</h1><p class="psub sum-week"></p></header>
+    <div class="sheet">
     <div class="card">
       <div class="card-head"><h2>Erledigt pro Tag</h2><span class="meta">in Prozent</span></div>
       <div id="weekChart"></div>
     </div>
     <div class="week" id="week"></div>
     <div class="stats" id="stats"></div>
+    </div>
   </section>
 
   <section class="page chart" data-page="gewicht" hidden>
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Gewichtsverlauf</h1><p class="psub sum-chart"></p></header>
+    <div class="sheet">
     <div class="card">
       <div class="keys"><span><i></i>Dein Gewicht</span><span><i class="dash"></i>Richtwert 0,5 bis 0,75 kg pro Woche</span></div>
       <div id="chart"></div>
       <p class="chartsum" id="chartsum"></p>
+    </div>
     </div>
   </section>
 
   <section class="page" data-page="ueberblick" hidden>
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Wochen im Überblick</h1><p class="psub">Oktober und November</p></header>
+    <div class="sheet">
     <div class="card">
       <div class="tablewrap"><table id="table"></table></div>
+    </div>
     </div>
   </section>
 
   <section class="page" data-page="backup" hidden>
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Backup</h1><p class="psub sum-backup"></p></header>
+    <div class="sheet">
     <div class="card backup">
       <p>Deine Einträge liegen nur auf diesem iPhone. Speichere jeden Samstag ein Backup in Dateien, und schick es Claude, wenn du eine Auswertung willst.</p>
       <div class="row">
@@ -660,6 +702,7 @@ svg{fill:none}
         </div>
       </div>
       <div class="msg" id="msg" role="status"></div>
+    </div>
     </div>
   </section>
 </div>
