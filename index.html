@@ -437,6 +437,12 @@ svg{fill:none}
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-weight:700;font-size:14px;z-index:30;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;max-width:calc(100% - 40px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion: reduce){.toast{transition:none}}
+
+/* Kopf: Heute, Schicht, Datum */
+.page[data-page="heute"]{padding-top:10px}
+.titlerow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.shift{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px;color:var(--accent);margin-top:2px}
+.shift svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -444,12 +450,6 @@ svg{fill:none}
 
   <!-- ===== Seite: Heute ===== -->
   <section class="page" data-page="heute">
-    <div class="hello">
-      <div class="avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5C5 11 10.5 5 20 5c0 10-6 15-14.5 14.5"/><path d="M5 19.5c3-4 6.5-6.5 10-8.5"/></svg></div>
-      <div class="hello-txt"><span class="brand">Tagesplan</span><span class="hello-sub" id="greet">Guten Tag</span></div>
-      <button class="pill" data-act="today" id="toToday" hidden>Heute</button>
-    </div>
-
     <div class="install" id="install" hidden>
       <b>Als App installieren</b>
       <span>In Safari unten auf Teilen tippen, dann "Zum Home-Bildschirm". Danach öffnest du den Tagesplan über das Symbol, ohne Browserleiste.</span>
@@ -457,8 +457,11 @@ svg{fill:none}
     <div class="banner" id="saveErr" hidden>Speichern hat nicht geklappt. Prüf, ob auf dem iPhone noch Speicher frei ist.</div>
 
     <div class="titlebox">
-      <h1 class="dayname" id="dayname">Heute</h1>
-      <span class="hello-sub" id="helloSub"></span>
+      <div class="titlerow">
+        <h1 class="dayname" id="dayname">Heute</h1>
+        <button class="pill" data-act="today" id="toToday" hidden>Zu heute</button>
+      </div>
+      <span class="shift" id="shift"></span>
     </div>
 
     <div class="weekstrip" role="group" aria-label="Datum wählen">
@@ -702,7 +705,7 @@ svg{fill:none}
   function target(s){ var v=W_START-SLOPE*diff(PLAN_START,s); return Math.max(W_FINAL, Math.min(W_START, v)); }
 
   // ---------- Tagesplan ----------
-  function dayType(s){ var w=dow(s); return w===6?"Frei":w===0?"Abendschicht":"Früh- und Spätschicht"; }
+  function dayType(s){ var w=dow(s); return w===6?"Frei":w===0?"Spätschicht":"Früh- und Spätschicht"; }
   function itemsFor(s){
     var w=dow(s);
     if(w>=1&&w<=5){
@@ -800,9 +803,9 @@ svg{fill:none}
   function fmtL(v){ return fmt(v,2).replace(/,?0+$/,""); }
   function renderHead(){
     var today=trackerToday(), dd=parse(view), hr=new Date().getHours();
-    $("greet").textContent = (hr<4||hr>=22) ? "Gute Nacht" : hr<11 ? "Guten Morgen" : hr<17 ? "Guten Tag" : "Guten Abend";
     $("dayname").textContent = view===today ? "Heute" : view===addDays(today,-1) ? "Gestern" : view===addDays(today,1) ? "Morgen" : DAYS[dow(view)];
-    $("helloSub").textContent = DAYS[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
+    var wd=dow(view), sh = wd===6 ? ["leaf","Frei"] : wd===0 ? ["moon","Spätschicht"] : ["sun","Früh- und Spätschicht"];
+    $("shift").innerHTML = svgI(sh[0])+'<span>'+sh[1]+'</span>';
     $("toToday").hidden = view===today;
     var lbl=(view===today?"Heute, ":"")+DAYS[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
     Array.prototype.forEach.call(document.querySelectorAll(".pdate"), function(el){ el.textContent=lbl; });
