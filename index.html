@@ -11,9 +11,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Tagesplan">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#EDF0F5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0F1420" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#11130D">
 <meta name="format-detection" content="telephone=no">
 <style>
 @font-face{font-family:"Figtree";font-weight:400;font-display:swap;src:url(fonts/figtree-400.woff2) format("woff2")}
@@ -22,26 +21,20 @@
 @font-face{font-family:"Bricolage Grotesque";font-weight:800;font-display:swap;src:url(fonts/bricolage-800.woff2) format("woff2")}
 @font-face{font-family:"IBM Plex Mono";font-weight:500;font-display:swap;src:url(fonts/plexmono-500.woff2) format("woff2")}
 
-/* Layout: eine Spalte wie eine Handy-App (max 620px). Oben der Tag als Zeitband, darunter die Module in der Reihenfolge des Tages. */
+/* Layout: eine Spalte wie eine Handy-App (max 620px). Startseite = Tag + Checkliste, Rest als eigene Seiten über die Leiste unten.
+   Farbe: bewusst nur dunkel. Fast schwarzer Grund mit Oliv-Stich, Karten in dunklem Oliv, helles Oliv als einziger Akzent. */
 :root{
-  --bg:#EDF0F5; --surface:#FFFFFF; --surface-2:#E3E8F0; --ink:#161E2E; --muted:#5B6578; --line:#D5DCE6;
-  --accent:#2C47C4; --accent-ink:#FFFFFF; --accent-soft:#E3E8FB;
-  --sleep:#6A5ACD; --work:#D48B17; --way:#A7B0BF; --train:#DD5B3A; --people:#1B8FA6;
-  --done:#1F8A5B; --done-soft:#DCF1E6; --warn:#B4541A;
+  --bg:#11130D; --glow:#2A3319;
+  --surface:#1A1D14; --surface-2:#242A1C; --line:#30362A;
+  --ink:#EEEFE2; --muted:#A4A78E;
+  --accent:#B9C46E; --accent-ink:#151808; --accent-soft:#29301C;
+  --sleep:#A39BEB; --work:#DBAB4E; --way:#5F6653; --train:#E58C69; --people:#6FC3BF;
+  --done:#B9C46E; --done-soft:#29301C; --warn:#EBA462;
   --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
   --body:"Figtree",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --r:14px;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0F1420; --surface:#171E2D; --surface-2:#212A3C; --ink:#E7ECF5; --muted:#9AA4B8; --line:#2B3548;
-    --accent:#8198FF; --accent-ink:#0F1420; --accent-soft:#232E52;
-    --sleep:#9D90FF; --work:#EBAA3E; --way:#56627A; --train:#FF8466; --people:#43BFD6;
-    --done:#3CC48A; --done-soft:#17362A; --warn:#F09A5F;
-    color-scheme:dark;
-  }
+  --r:18px;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
@@ -255,6 +248,74 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
 .help{font-size:13px;color:var(--muted);display:grid;gap:4px;padding-inline:4px}
 .help b{color:var(--ink);-webkit-user-select:all;user-select:all;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* ===== Oliv-Design ===== */
+body{background:radial-gradient(140% 55% at 15% -8%, var(--glow) 0%, rgba(17,19,13,0) 62%) no-repeat, var(--bg)}
+.brand{color:var(--muted);font-size:15px;letter-spacing:.02em}
+.dayname{font-size:clamp(48px,15vw,68px);line-height:.9;letter-spacing:-.035em}
+.dayname::after{content:"";display:inline-block;width:.15em;height:.15em;border-radius:50%;background:var(--accent);margin-left:.05em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+h2{color:var(--muted)}
+.install,.banner{background:var(--accent-soft);color:var(--ink);border:1px solid #3A4426}
+
+.datebar{background:var(--surface);border-color:var(--line);border-radius:16px}
+.datebar button{background:var(--surface-2);color:var(--ink)}
+.datebar button:active{background:var(--accent-soft)}
+.linkbtn,.back{color:var(--accent)}
+
+.check-head{align-items:center;margin-bottom:4px}
+.check-head .nextline{margin:6px 0 0}
+.nextline{color:var(--accent)}
+.ring{position:relative;width:58px;height:58px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:5}
+.ring .rt{stroke:var(--surface-2)}
+.ring .rv{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:125.66;stroke-dashoffset:125.66;transition:stroke-dashoffset .4s ease}
+.ring .count{position:absolute;inset:0;display:grid;place-items:center;font:800 14px/1 var(--display)}
+
+.it{border-radius:12px}
+.it .time{color:var(--muted)}
+.it.next{background:var(--accent-soft)}
+.it.next .time{color:var(--accent)}
+.tag{color:var(--accent)}
+.box{border-color:#48503A;color:var(--accent-ink)}
+.it[aria-pressed="true"] .box{background:var(--accent);border-color:var(--accent)}
+.it[aria-pressed="true"] .lab{color:var(--muted);text-decoration:line-through;text-decoration-color:#5A6248}
+
+.drop{background:var(--surface-2);border-color:var(--line)}
+.drop.on{background:var(--accent);border-color:var(--accent)}
+.drop.goal{box-shadow:inset 0 -3px 0 var(--accent)}
+.drop.goal.on{box-shadow:inset 0 -3px 0 var(--accent-ink)}
+.step button{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.step output.met{color:var(--accent)}
+.rate button{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.rate button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.weight input{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+
+.seg{background:var(--surface-2)}
+.seg button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.chk .sq{border-color:#48503A;color:var(--accent-ink)}
+.chk button[aria-pressed="true"] .sq{background:var(--accent);border-color:var(--accent)}
+.btn{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+.wd{background:var(--surface-2);border-color:var(--line)}
+.wd.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.wd.today .d{color:var(--accent)}
+.wd .mini i{background:var(--accent)}
+.stat{background:var(--surface-2)}
+tr.cur td{background:var(--accent-soft)}
+td.good{color:var(--accent)}
+.chart .area{fill:var(--accent);opacity:.12}
+.chart .goal{stroke:var(--accent)}
+.chart .goal-lab{fill:var(--accent)}
+
+.tabbar{background:rgba(17,19,13,.88);-webkit-backdrop-filter:saturate(1.2) blur(16px);backdrop-filter:saturate(1.2) blur(16px);border-top:1px solid var(--line)}
+.tabs svg{box-sizing:content-box;padding:4px 16px;border-radius:14px;transition:background .2s ease}
+.tabs button[aria-current="page"]{color:var(--accent)}
+.tabs button[aria-current="page"] svg{background:var(--accent-soft)}
+.rowlink:active,.it:active{background:var(--surface-2)}
+.go{border-color:var(--muted)}
 </style>
 </head>
 <body>
@@ -279,9 +340,10 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
     <button class="linkbtn" data-act="today" id="toToday" hidden>Zurück zu heute</button>
 
     <div class="card">
-      <div class="card-head"><h2>Checkliste</h2><span class="count" id="listcount">0/0</span></div>
-      <div class="bar"><i id="sumbar" style="width:0%"></i></div>
-      <p class="nextline" id="listmeta"></p>
+      <div class="card-head check-head">
+        <div><h2>Checkliste</h2><p class="nextline" id="listmeta"></p></div>
+        <div class="ring" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="rt" cx="24" cy="24" r="20"/><circle class="rv" id="ringv" cx="24" cy="24" r="20"/></svg><span class="count" id="listcount">0/0</span></div>
+      </div>
       <ul class="items" id="items"></ul>
     </div>
   </section>
@@ -578,7 +640,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
   function edit(fn){ var d=clone(cur()); fn(d); days[view]=d; render(); persist(); }
 
   // ---------- Rendern ----------
-  var CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function nowMinutes(){ var n=new Date(); var m=n.getHours()*60+n.getMinutes(); return n.getHours()<4? m+1440 : m; }
 
   function renderHead(){
@@ -590,7 +652,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
     Array.prototype.forEach.call(document.querySelectorAll(".pdate"), function(el){ el.textContent=lbl; });
     var its=itemsFor(view), d=cur(), n=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
     $("listcount").textContent = n+"/"+its.length;
-    $("sumbar").style.width = Math.round(100*n/its.length)+"%";
+    $("ringv").style.strokeDashoffset = (125.66*(1-n/its.length)).toFixed(2);
   }
   function setAll(sel,text){ Array.prototype.forEach.call(document.querySelectorAll(sel), function(el){ el.textContent=text; }); }
 
@@ -760,7 +822,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
     setAll(".sum-backup", (lastBackup ? "Letztes Backup "+shortDate(lastBackup) : "Noch kein Backup")+" · "+n+(n===1?" Tag":" Tage")+" erfasst");
   }
 
-  var SQ='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var SQ='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function renderLists(){
     var src = listTab==="shop" ? SHOP : PREP, state = lists[listTab], total=0, done=0;
     $("tabShop").setAttribute("aria-selected", listTab==="shop");

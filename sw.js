@@ -1,5 +1,5 @@
 // Offline-Cache für den Tagesplan. Bei Änderungen an der App die Versionsnummer erhöhen.
-const CACHE = "tagesplan-v4";
+const CACHE = "tagesplan-v5";
 const ASSETS = [
   "./",
   "./index.html",
