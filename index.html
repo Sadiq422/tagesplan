@@ -101,6 +101,7 @@ h2{font:700 12px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;c
 .tag{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);vertical-align:1px}
 
 .water{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.water:has(> :nth-child(13)){grid-template-columns:repeat(8,minmax(0,1fr))}
 .drop{height:40px;border-radius:7px;border:1px solid var(--line);background:var(--surface-2);cursor:pointer;padding:0}
 .drop.on{background:var(--accent);border-color:var(--accent)}
 .drop.goal{box-shadow:inset 0 -3px 0 var(--done)}
@@ -502,7 +503,7 @@ svg{fill:none}
 
 /* Blatt füllt den Bildschirm bis unten, auch bei kurzen Seiten */
 .page:not([hidden]){display:flex;flex-direction:column;min-height:calc(100vh - 134px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
-.sheet{flex:1 0 auto}
+.sheet{flex:1 0 auto;align-content:start}
 .back,.linkbtn{align-self:flex-start}
 
 /* Leiste unten: jede Seite eigene Farbe */
@@ -511,6 +512,58 @@ svg{fill:none}
 .tabs button span{transition:color .2s ease}
 .tabs button[aria-current="page"] svg{background:var(--tc);color:#151808;opacity:1;box-shadow:0 6px 16px -8px var(--tc)}
 .tabs button[aria-current="page"] span{color:var(--tc)}
+
+/* ===== Plan bearbeiten, Ziele, Formular ===== */
+.lt{--surface:#FFFFFF; --surface-2:#EEF0E2; --line:#E1E5D0; --ink:#3B4716; --muted:#737B57; --accent:#6B7B26; --accent-ink:#FFFFFF; --accent-soft:#EEF1DA; --warn:#B45E26;
+  --sleep:#6A61C4; --sleep-s:#ECEAFA; --train:#C0603E; --train-s:#FAE9E2; --food:#A87A18; --food-s:#FAF0D9; --wake:#9C7F0C; --wake-s:#F9F2D2;
+  --coffee:#94663F; --coffee-s:#F4E9DE; --prep:#5A6A22; --prep-s:#EAEED5; --walk:#3C7F53; --walk-s:#E0F0E5; --people:#2A7F7B; --people-s:#DDF0EE}
+.pdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.pday{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 0 7px;display:grid;justify-items:center;gap:2px;cursor:pointer;color:var(--ink)}
+.pday .n{font:800 15px/1 var(--display)}
+.pday .c{font-size:11px;color:var(--muted);font-weight:700}
+.pday.today .n{color:var(--accent)}
+.pday.sel{background:var(--accent);border-color:var(--accent);color:#FFFFFF}
+.pday.sel .n,.pday.sel .c{color:#FFFFFF}
+.fields{display:grid;gap:12px}
+.field{display:grid;gap:6px}
+.field label{font-size:13px;font-weight:700;color:var(--muted)}
+.field input{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:0 12px;font:500 16px var(--body);-webkit-appearance:none;appearance:none}
+.field input:focus{outline:2px solid var(--accent);outline-offset:1px;background:var(--surface)}
+.field.inline{grid-template-columns:1fr auto;align-items:center}
+.field.two{grid-template-columns:1fr 1fr;gap:10px}
+.field.two>div{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:6px;min-width:0}
+.field input{box-sizing:border-box;min-width:0;max-width:100%;height:46px}
+.field input[type="date"],.field input[type="time"]{display:block;text-align:left;line-height:44px}
+.field input::-webkit-date-and-time-value{text-align:left}
+.field input::-webkit-calendar-picker-indicator{opacity:.45}
+.note{margin:0;font-size:13.5px;color:var(--muted)}
+.formerr{margin:0;font-size:13.5px;color:var(--warn);font-weight:600}
+.formerr:empty{display:none}
+.plist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.prow{display:grid;grid-template-columns:44px minmax(0,1fr) 14px;gap:12px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:12px 14px 12px 12px;cursor:pointer;color:var(--ink)}
+.prow .lab{font-weight:700;line-height:1.3}
+.prow .tm{font-family:var(--mono);color:var(--accent);font-size:12.5px}
+.empty-note{padding:18px;border:1px dashed var(--line);border-radius:18px;color:var(--muted);text-align:center;font-size:14px}
+.daypick{display:flex;flex-wrap:wrap;gap:6px}
+.dchip{min-width:46px;min-height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-weight:700;cursor:pointer}
+.dchip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#FFFFFF}
+.catpick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.catb{display:grid;justify-items:center;gap:4px;padding:8px 2px;border-radius:14px;min-width:0;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:12px;font-weight:600;cursor:pointer}
+.catb .ico{width:32px;height:32px;border-radius:10px}
+.catb .ico svg{width:18px;height:18px}
+.catb span:last-child{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.catb[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1.5px var(--accent);background:var(--accent-soft)}
+.btn.danger{color:#B23A2A;border-color:#EBC9C2;background:#FBEFEC}
+.modal{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.modal[hidden]{display:none!important}
+.modal-bg{position:absolute;inset:0;background:rgba(8,10,5,.6)}
+.modal-card{position:relative;width:100%;max-width:620px;max-height:92vh;overflow:auto;background:#F3F4EA;color:var(--ink);border-radius:28px 28px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;animation:sheetup .22s ease}
+@keyframes sheetup{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+.grab{justify-self:center;width:42px;height:5px;border-radius:9px;background:#D6DBC3}
+.mtitle{font:800 22px/1.1 var(--display);color:var(--ink);text-transform:none;letter-spacing:-.01em;margin:0}
+.mbtns{justify-content:flex-start}
+body.modal-open{overflow:hidden}
+@media (prefers-reduced-motion: reduce){.modal-card{animation:none}}
 </style>
 </head>
 <body>
@@ -609,7 +662,7 @@ svg{fill:none}
     <header class="phead"><h1 class="ptitle">Wie geht es dir?</h1><p class="psub"><span class="pdate"></span></p><p class="psub" id="sumFeel"></p></header>
     <div class="sheet">
     <div class="card mcard">
-      <div class="mhead"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></span><div><span class="lab">Schlaf letzte 24 h</span><span class="meta">Nacht plus Nachmittag, Ziel 6,5 h</span></div></div>
+      <div class="mhead"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></span><div><span class="lab">Schlaf letzte 24 h</span><span class="meta" id="sleepGoal">Nacht plus Nachmittag, Ziel 6,5 h</span></div></div>
       <div class="step big">
         <button data-act="sleep" data-d="-0.5" aria-label="Weniger Schlaf">−</button>
         <output id="sleepOut">– h</output>
@@ -642,6 +695,8 @@ svg{fill:none}
     <header class="phead"><h1 class="ptitle">Mehr</h1></header>
     <div class="sheet">
     <nav class="card menu" aria-label="Weitere Seiten">
+      <button class="rowlink" data-act="nav" data-page="plan"><span class="ico" style="--k:var(--train);--ks:var(--train-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span><span class="rl"><span class="t">Plan bearbeiten</span><span class="s sum-plan"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="ziele"><span class="ico" style="--k:var(--wake);--ks:var(--wake-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span><span class="rl"><span class="t">Ziele</span><span class="s sum-goals"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="woche"><span class="ico" style="--k:var(--prep);--ks:var(--prep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="rl"><span class="t">Diese Woche</span><span class="s sum-week"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="gewicht"><span class="ico" style="--k:var(--food);--ks:var(--food-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg></span><span class="rl"><span class="t">Gewichtsverlauf</span><span class="s sum-chart"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="ueberblick"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M3.5 10h17M3.5 15h17M10 4.5v15"/></svg></span><span class="rl"><span class="t">Wochen im Überblick</span><span class="s">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><i class="go" aria-hidden="true"></i></button>
@@ -655,6 +710,50 @@ svg{fill:none}
   </section>
 
   <!-- ===== Unterseiten von Mehr ===== -->
+  <section class="page" data-page="plan" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Plan bearbeiten</h1><p class="psub">Änderungen gelten ab heute. Vergangene Tage bleiben, wie sie waren.</p></header>
+    <div class="sheet">
+      <div class="pdays" id="pdays" role="group" aria-label="Wochentag wählen"></div>
+      <div class="card fields">
+        <div class="card-head"><h2 id="pDayName">Montag</h2></div>
+        <div class="field"><label for="pShift">Schicht</label><input id="pShift" maxlength="40" autocomplete="off" placeholder="z. B. Frühschicht oder Frei"></div>
+        <div class="field inline"><label>Wasserziel</label><div class="step"><button type="button" data-act="pwater" data-d="-0.25" aria-label="Wasserziel verringern">−</button><output id="pWater">3 L</output><button type="button" data-act="pwater" data-d="0.25" aria-label="Wasserziel erhöhen">+</button></div></div>
+      </div>
+      <div class="sect-head"><h2>Aufgaben</h2><button class="pill" data-act="task-new">+ Aufgabe</button></div>
+      <ul class="plist" id="plist"></ul>
+      <div class="card fields">
+        <div class="card-head"><h2>Diesen Tag kopieren</h2></div>
+        <p class="note">Übernimmt Schicht, Wasserziel und alle Aufgaben auf die gewählten Tage.</p>
+        <div class="daypick" id="copyDays"></div>
+        <div class="row"><button class="btn primary" data-act="copy-day">Kopieren</button></div>
+      </div>
+      <div class="card fields">
+        <div class="row"><button class="btn" data-act="plan-reset">Standardplan wiederherstellen</button></div>
+        <div class="confirm" id="resetConfirm" hidden>
+          <span>Alle Wochentage bekommen wieder den ursprünglichen Plan. Deine Einträge und Ziele bleiben.</span>
+          <div class="row"><button class="btn primary" data-act="plan-reset-yes">Zurücksetzen</button><button class="btn" data-act="plan-reset-no">Abbrechen</button></div>
+        </div>
+      </div>
+      <p class="note">Die Erinnerungen im Google Kalender ändern sich nicht automatisch. Sag Claude Bescheid, dann werden sie angepasst.</p>
+    </div>
+  </section>
+
+  <section class="page" data-page="ziele" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Ziele</h1><p class="psub">Grundlage für Richtwert, Gewichtskurve und Schlafziel</p></header>
+    <div class="sheet">
+      <div class="card fields">
+        <div class="field two"><div><label for="gStart">Start</label><input type="date" id="gStart"></div><div><label for="gStartW">Startgewicht kg</label><input id="gStartW" inputmode="decimal" autocomplete="off"></div></div>
+        <div class="field two"><div><label for="gEnd">Ziel bis</label><input type="date" id="gEnd"></div><div><label for="gTargetW">Zielgewicht kg</label><input id="gTargetW" inputmode="decimal" autocomplete="off"></div></div>
+        <div class="field two"><div><label for="gFinalW">Endziel kg</label><input id="gFinalW" inputmode="decimal" autocomplete="off"></div><div><label for="gSleep">Schlafziel h</label><input id="gSleep" inputmode="decimal" autocomplete="off"></div></div>
+        <p class="note" id="gPace"></p>
+        <p class="formerr" id="gErr" role="alert"></p>
+        <div class="row"><button class="btn primary" data-act="goals-save">Ziele speichern</button></div>
+      </div>
+    </div>
+  </section>
+
   <section class="page" data-page="woche" hidden>
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Diese Woche</h1><p class="psub sum-week"></p></header>
@@ -673,7 +772,7 @@ svg{fill:none}
     <header class="phead"><h1 class="ptitle">Gewichtsverlauf</h1><p class="psub sum-chart"></p></header>
     <div class="sheet">
     <div class="card">
-      <div class="keys"><span><i></i>Dein Gewicht</span><span><i class="dash"></i>Richtwert 0,5 bis 0,75 kg pro Woche</span></div>
+      <div class="keys"><span><i></i>Dein Gewicht</span><span><i class="dash"></i><span id="paceKey">Richtwert</span></span></div>
       <div id="chart"></div>
       <p class="chartsum" id="chartsum"></p>
     </div>
@@ -682,7 +781,7 @@ svg{fill:none}
 
   <section class="page" data-page="ueberblick" hidden>
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
-    <header class="phead"><h1 class="ptitle">Wochen im Überblick</h1><p class="psub">Oktober und November</p></header>
+    <header class="phead"><h1 class="ptitle">Wochen im Überblick</h1><p class="psub" id="tableRange">Oktober und November</p></header>
     <div class="sheet">
     <div class="card">
       <div class="tablewrap"><table id="table"></table></div>
@@ -724,23 +823,33 @@ svg{fill:none}
   </div>
 </nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="taskModal" hidden>
+  <div class="modal-bg" data-act="task-cancel"></div>
+  <form class="modal-card lt" id="taskForm" novalidate>
+    <div class="grab" aria-hidden="true"></div>
+    <h2 class="mtitle" id="tmTitle">Aufgabe</h2>
+    <div class="field two"><div><label for="tTime">Uhrzeit</label><input type="time" id="tTime" required></div><div class="spacer"></div></div>
+    <div class="field"><label for="tLabel">Titel</label><input id="tLabel" maxlength="60" autocomplete="off" placeholder="z. B. Spaziergang"></div>
+    <div class="field"><label for="tHint">Hinweis, optional</label><input id="tHint" maxlength="120" autocomplete="off" placeholder="z. B. 20 Minuten draußen"></div>
+    <div class="field"><label>Kategorie</label><div class="catpick" id="tCats"></div></div>
+    <div class="field" id="tAlsoWrap"><label>Auch an diesen Tagen</label><div class="daypick" id="tAlso"></div></div>
+    <p class="formerr" id="tErr" role="alert"></p>
+    <div class="row mbtns"><button class="btn primary" type="submit">Speichern</button><button class="btn" type="button" data-act="task-cancel">Abbrechen</button><button class="btn danger" type="button" data-act="task-delete" id="tDelete">Löschen</button></div>
+  </form>
+</div>
+
 
 <script>
 (function(){
   "use strict";
-  // ---------- Plan-Konstanten ----------
-  var PLAN_START = "2026-09-30", PLAN_END = "2026-11-30";
-  var W_START = 78, W_END = 72.5, W_FINAL = 70;
-  var WATER_MAX = 12;
+  // ---------- Ziele (bearbeitbar, siehe Mehr > Ziele) ----------
+  var WATER_MAX = 16;
   var KEY = "tagesplan.v1";
-
-  // Wasser-Plan: [Uhrzeit in Minuten, Liter bis dahin], passend zu den Kalender-Erinnerungen
-  var WATER_PLAN = {
-    work:[[330,.25],[345,.5],[450,.75],[540,1],[660,1.25],[810,1.5],[935,2],[1020,2.25],[1125,2.5],[1230,2.75],[1320,3]],
-    sat:[[540,.25],[570,.5],[630,.75],[725,1.25],[780,1.5],[870,1.75],[1035,2],[1110,2.25],[1200,2.5],[1290,2.75]],
-    sun:[[450,.25],[465,.5],[615,1],[720,1.25],[780,1.5],[870,1.75],[1035,2.25],[1170,2.5],[1290,2.75]]
-  };
-  function waterPlanFor(s){ var w=new Date(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10)).getDay(); return w===6?WATER_PLAN.sat:w===0?WATER_PLAN.sun:WATER_PLAN.work; }
+  var PLAN_START, PLAN_END, W_START, W_END, W_FINAL, SLOPE, SLEEP_GOAL;
+  function applyGoals(g){
+    PLAN_START=g.startDate; PLAN_END=g.targetDate; W_START=+g.startW; W_END=+g.targetW; W_FINAL=+g.finalW; SLEEP_GOAL=+g.sleepH||6.5;
+    SLOPE=(W_START-W_END)/Math.max(1,diff(PLAN_START,PLAN_END));
+  }
 
   // Meal Prep: Einkaufsliste (Samstag) und Vorbereitung (Sonntag und Mittwoch)
   var SHOP=[
@@ -783,61 +892,84 @@ svg{fill:none}
   function shortDate(s){ var d=parse(s); return pad(d.getDate())+"."+pad(d.getMonth()+1)+"."; }
   function fmt(v,dig){ return v.toLocaleString("de-DE",{minimumFractionDigits:dig,maximumFractionDigits:dig}); }
   function litres(glasses){ return fmt(glasses*0.25,2).replace(/,?0+$/,"").replace(/,$/,"")+" L"; }
-  function mins(t){ var p=t.split(":").map(Number); var m=p[0]*60+p[1]; return m===0?1440:m; }
+  function mins(t){ var p=String(t).split(":").map(Number); var m=p[0]*60+(p[1]||0); return p[0]<4 ? m+1440 : m; }
   function isDate(s){ return typeof s==="string" && /^\d{4}-\d{2}-\d{2}$/.test(s); }
 
   // ---------- Richtwert ----------
-  var SLOPE=(W_START-W_END)/diff(PLAN_START,PLAN_END);
-  function target(s){ var v=W_START-SLOPE*diff(PLAN_START,s); return Math.max(W_FINAL, Math.min(W_START, v)); }
+  function target(s){ var v=W_START-SLOPE*diff(PLAN_START,s); return Math.max(Math.min(W_FINAL,W_END), Math.min(W_START, v)); }
 
-  // ---------- Tagesplan ----------
-  function dayType(s){ var w=dow(s); return w===6?"Frei":w===0?"Spätschicht":"Früh- und Spätschicht"; }
-  function itemsFor(s){
-    var w=dow(s);
-    if(w>=1&&w<=5){
-      var pm = (w===2||w===4) ? {id:"training",t:"16:00",label:"Training, 40 Min",hint:"Kniebeugen, Liegestütze, Ausfallschritte, Rudern, Hüftheben, Plank",k:"train"}
-        : w===3 ? {id:"prep2",t:"16:00",label:"Meal Prep Runde 2",hint:"Essen für Donnerstag und Freitag"}
-        : {id:"walk",t:"16:00",label:"Spaziergang oder Ruhe",hint:"20 bis 30 Minuten draußen im Tageslicht"};
-      return [
-        {id:"wake",t:"5:30",label:"Aufstehen, Glas Wasser, Licht an"},
-        {id:"breakfast",t:"5:45",label:"Frühstück mit Eiweiß",hint:"60 g Haferflocken, Magerquark, Beeren, ein paar Walnüsse"},
-        {id:"snack",t:"9:00",label:"Snack",hint:"Apfel oder Orange, Handvoll Mandeln"},
-        {id:"coffee",t:"11:50",label:"Letzter Kaffee",hint:"Ab 12:00 kein Koffein mehr"},
-        {id:"lunch",t:"13:30",label:"Hauptmahlzeit aus dem Meal Prep",hint:"Hähnchen oder Linsen, Reis oder Kartoffeln, Salat mit Olivenöl"},
-        {id:"nap",t:"14:00",label:"Schlafblock, 90 Min",hint:"Dunkel, Handy weg, Wecker auf 15:30",k:"sleep"},
-        pm,
-        {id:"pre",t:"17:00",label:"Kleine Mahlzeit vor der Schicht",hint:"2 Eier, Vollkornbrot, Paprika"},
-        {id:"break",t:"20:30",label:"Leichtes Essen in der Pause",hint:"Joghurt mit Obst oder Wrap mit Hähnchen und Gemüse"},
-        {id:"night",t:"00:00",label:"Nachtroutine, 00:30 schlafen",hint:"Licht dimmen, Handy weg, nichts Schweres essen",k:"sleep"}
-      ];
-    }
-    if(w===6) return [
-      {id:"wake",t:"9:00",label:"Aufstehen, spätestens 9:00"},
-      {id:"check",t:"9:15",label:"Wochen-Check: wiegen",hint:"Nüchtern, unter \"Ich\" eintragen, danach Backup speichern"},
-      {id:"training",t:"11:00",label:"Training lang, 60 Min",hint:"Alle Übungen plus 20 Minuten zügig gehen",k:"train"},
-      {id:"coffee",t:"11:50",label:"Letzter Kaffee"},
-      {id:"lunch",t:"13:00",label:"Mittagessen mit Eiweiß und Gemüse"},
-      {id:"family",t:"15:00",label:"Familie anrufen",k:"people"},
-      {id:"people",t:"17:00",label:"Zeit mit Menschen",hint:"Freund, Gemeinde oder Sport in der Gruppe",k:"people"},
-      {id:"night",t:"22:30",label:"Nachtroutine, 23:00 schlafen",k:"sleep"}
-    ];
-    return [
-      {id:"wake",t:"7:30",label:"Aufstehen"},
-      {id:"training",t:"9:30",label:"Training leicht, 40 Min",hint:"Plank, Hüftheben, Ausfallschritte, 20 Minuten gehen",k:"train"},
-      {id:"prep",t:"11:00",label:"Meal Prep für Montag bis Mittwoch",hint:"1 kg Hähnchen, Reis, Linsen-Curry, 6 Eier, Gemüse schneiden"},
-      {id:"coffee",t:"11:50",label:"Letzter Kaffee"},
-      {id:"lunch",t:"13:00",label:"Hauptmahlzeit"},
-      {id:"nap",t:"15:30",label:"Schlafblock, 90 Min",hint:"Wecker auf 17:00",k:"sleep"},
-      {id:"pre",t:"17:30",label:"Kleine Mahlzeit vor der Schicht"},
-      {id:"night",t:"00:00",label:"Nachtroutine, 00:30 schlafen",k:"sleep"}
-    ];
+  // ---------- Tagesplan als Daten ----------
+  var CATS={
+    wake:{i:"sun",c:"wake",n:"Aufstehen"}, food:{i:"bowl",c:"food",n:"Essen"}, snack:{i:"apple",c:"food",n:"Snack"},
+    coffee:{i:"cup",c:"coffee",n:"Kaffee"}, sleep:{i:"moon",c:"sleep",n:"Schlaf"}, train:{i:"dumbbell",c:"train",n:"Training"},
+    prep:{i:"pot",c:"prep",n:"Kochen"}, walk:{i:"walk",c:"walk",n:"Bewegung"}, weigh:{i:"scale",c:"prep",n:"Wiegen"},
+    family:{i:"phone",c:"people",n:"Familie"}, people:{i:"users",c:"people",n:"Menschen"}, water:{i:"drop",c:"people",n:"Trinken"},
+    other:{i:"check",c:"prep",n:"Sonstiges"}
+  };
+  var CAT_ORDER=["wake","food","snack","coffee","water","train","walk","sleep","prep","weigh","family","people","other"];
+  function T(id,t,label,cat,hint){ var o={id:id,t:t,label:label,cat:cat}; if(hint) o.hint=hint; return o; }
+  function defaultPlan(){
+    var W="Früh- und Spätschicht";
+    function work(pm){ return [
+      T("wake","05:30","Aufstehen, Glas Wasser, Licht an","wake"),
+      T("breakfast","05:45","Frühstück mit Eiweiß","food","60 g Haferflocken, Magerquark, Beeren, ein paar Walnüsse"),
+      T("snack","09:00","Snack","snack","Apfel oder Orange, Handvoll Mandeln"),
+      T("coffee","11:50","Letzter Kaffee","coffee","Ab 12:00 kein Koffein mehr"),
+      T("lunch","13:30","Hauptmahlzeit aus dem Meal Prep","food","Hähnchen oder Linsen, Reis oder Kartoffeln, Salat mit Olivenöl"),
+      T("nap","14:00","Schlafblock, 90 Min","sleep","Dunkel, Handy weg, Wecker auf 15:30"),
+      pm,
+      T("pre","17:00","Kleine Mahlzeit vor der Schicht","food","2 Eier, Vollkornbrot, Paprika"),
+      T("break","20:30","Leichtes Essen in der Pause","food","Joghurt mit Obst oder Wrap mit Hähnchen und Gemüse"),
+      T("night","00:00","Nachtroutine, 00:30 schlafen","sleep","Licht dimmen, Handy weg, nichts Schweres essen")
+    ]; }
+    var train=T("training","16:00","Training, 40 Min","train","Kniebeugen, Liegestütze, Ausfallschritte, Rudern, Hüftheben, Plank");
+    var prep2=T("prep2","16:00","Meal Prep Runde 2","prep","Essen für Donnerstag und Freitag");
+    var walk=T("walk","16:00","Spaziergang oder Ruhe","walk","20 bis 30 Minuten draußen im Tageslicht");
+    return {version:1,
+      goals:{startDate:"2026-09-30",targetDate:"2026-11-30",startW:78,targetW:72.5,finalW:70,sleepH:6.5},
+      days:{
+        "1":{shift:W,water:3,tasks:work(walk)}, "2":{shift:W,water:3,tasks:work(train)}, "3":{shift:W,water:3,tasks:work(prep2)},
+        "4":{shift:W,water:3,tasks:work(train)}, "5":{shift:W,water:3,tasks:work(walk)},
+        "6":{shift:"Frei",water:2.75,tasks:[
+          T("wake","09:00","Aufstehen, spätestens 9:00","wake"),
+          T("check","09:15","Wochen-Check: wiegen","weigh","Nüchtern, unter \"Ich\" eintragen, danach Backup speichern"),
+          T("training","11:00","Training lang, 60 Min","train","Alle Übungen plus 20 Minuten zügig gehen"),
+          T("coffee","11:50","Letzter Kaffee","coffee"),
+          T("lunch","13:00","Mittagessen mit Eiweiß und Gemüse","food"),
+          T("family","15:00","Familie anrufen","family"),
+          T("people","17:00","Zeit mit Menschen","people","Freund, Gemeinde oder Sport in der Gruppe"),
+          T("night","22:30","Nachtroutine, 23:00 schlafen","sleep")]},
+        "0":{shift:"Spätschicht",water:2.75,tasks:[
+          T("wake","07:30","Aufstehen","wake"),
+          T("training","09:30","Training leicht, 40 Min","train","Plank, Hüftheben, Ausfallschritte, 20 Minuten gehen"),
+          T("prep","11:00","Meal Prep für Montag bis Mittwoch","prep","1 kg Hähnchen, Reis, Linsen-Curry, 6 Eier, Gemüse schneiden"),
+          T("coffee","11:50","Letzter Kaffee","coffee"),
+          T("lunch","13:00","Hauptmahlzeit","food"),
+          T("nap","15:30","Schlafblock, 90 Min","sleep","Wecker auf 17:00"),
+          T("pre","17:30","Kleine Mahlzeit vor der Schicht","food"),
+          T("night","00:00","Nachtroutine, 00:30 schlafen","sleep")]}
+      }};
   }
-  function blocksFor(s){
-    var w=dow(s);
-    if(w>=1&&w<=5) return [[30,330,"sleep","Schlaf"],[330,750,"work","Arbeit"],[750,810,"way",""],[840,930,"sleep",""],[960,1000,(w===2||w===4)?"train":"free",""],[1060,1410,"work","Arbeit"],[1410,1440,"way",""]];
-    if(w===6) return [[30,540,"sleep","Schlaf"],[660,720,"train",""],[900,930,"people",""],[1020,1140,"people",""],[1380,1440,"sleep",""]];
-    return [[0,450,"sleep","Schlaf"],[570,610,"train",""],[930,1020,"sleep",""],[1080,1110,"way",""],[1110,1410,"work","Arbeit"],[1410,1440,"way",""]];
+  function validPlan(p){
+    if(!p || typeof p!=="object" || !p.days || !p.goals) return false;
+    for(var w=0;w<7;w++){ var d=p.days[String(w)]; if(!d || !Array.isArray(d.tasks)) return false; }
+    return isDate(p.goals.startDate) && isDate(p.goals.targetDate);
   }
+  function sortTasks(a){ return a.slice().sort(function(x,y){ return mins(x.t)-mins(y.t); }); }
+  function dayPlan(s){ return plan.days[String(dow(s))]; }
+  function itemsFor(s){ var d=days[s]; if(d && Array.isArray(d.tasks)) return d.tasks; var p=dayPlan(s); return p ? sortTasks(p.tasks) : []; }
+  function shiftIcon(t){ t=(t||"").toLowerCase(); return t.indexOf("frei")>=0 ? "leaf" : t.indexOf("früh")>=0 ? "sun" : "moon"; }
+  function waterGoalL(s){ var p=dayPlan(s); return (p && +p.water) || 2.5; }
+  function sollNow(s){
+    var its=itemsFor(s); if(!its.length) return 0;
+    var a=mins(its[0].t), e=mins(its[its.length-1].t)-120; if(e<=a) e=a+60;
+    var f=Math.max(0,Math.min(1,(nowMinutes()-a)/(e-a)));
+    return Math.floor(waterGoalL(s)*f/0.25)*0.25;
+  }
+  function doneCats(s){ var d=days[s], r={}; if(!d||!d.done) return r; itemsFor(s).forEach(function(i){ if(d.done[i.id]) r[i.cat]=true; }); return r; }
+  function trainingPlanned(){ var n=0; for(var w=0;w<7;w++){ if(plan.days[String(w)].tasks.some(function(t){ return t.cat==="train"; })) n++; } return n; }
+  function esc(t){ return String(t==null?"":t).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function fmtT(t){ var p=t.split(":"), h=+p[0]; return (h===0?"00":String(h))+":"+p[1]; }
   var COUNTERS=[
     {k:"veg",label:"Gemüse und Salat",sub:"Handvoll",goal:3,max:8,icon:"leaf",kind:"walk"},
     {k:"fruit",label:"Obst",sub:"Portionen",goal:2,max:6,icon:"apple",kind:"train"},
@@ -848,22 +980,23 @@ svg{fill:none}
   // ---------- Speicher auf dem Handy ----------
   function blank(s){ return {type:"day",date:s,done:{},water:0,veg:0,fruit:0,protein:0,nuts:0,sleep:null,energy:null,mood:null,weight:null}; }
   function clone(o){ return JSON.parse(JSON.stringify(o)); }
-  function load(){
-    try{
-      var raw=localStorage.getItem(KEY);
-      if(raw){ var o=JSON.parse(raw); if(o && o.days && typeof o.days==="object") return {days:o.days,lastBackup:o.lastBackup||null,lists:(o.lists&&typeof o.lists==="object")?o.lists:{shop:{},prep:{}}}; }
-    }catch(e){}
-    var start=blank(PLAN_START); start.weight=W_START;
-    var init={}; init[PLAN_START]=start;
-    return {days:init,lastBackup:null,lists:{shop:{},prep:{}}};
+  var raw=null; try{ raw=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ raw=null; }
+  var plan = (raw && validPlan(raw.plan)) ? raw.plan : defaultPlan();
+  applyGoals(plan.goals);
+  var days, lastBackup=null, lists={shop:{},prep:{}};
+  if(raw && raw.days && typeof raw.days==="object"){
+    days=raw.days; lastBackup=raw.lastBackup||null;
+    if(raw.lists && typeof raw.lists==="object") lists=raw.lists;
+    // Ältere Einträge: Plan des Tages festhalten, damit spätere Änderungen sie nicht verfälschen
+    if(!raw.plan){ Object.keys(days).forEach(function(k){ var d=days[k]; if(d && !Array.isArray(d.tasks) && isDate(k)){ var pd=plan.days[String(dow(k))]; d.tasks=clone(sortTasks(pd.tasks)); } }); }
+  } else {
+    days={}; var st=blank(PLAN_START); st.weight=W_START; st.tasks=clone(sortTasks(plan.days[String(dow(PLAN_START))].tasks)); days[PLAN_START]=st;
   }
-  var store=load();
-  var days=store.days, lastBackup=store.lastBackup, lists=store.lists;
   lists.shop=lists.shop||{}; lists.prep=lists.prep||{};
   var saveOk=true, saveTimer=null;
   function persistNow(){
     clearTimeout(saveTimer); saveTimer=null;
-    try{ localStorage.setItem(KEY, JSON.stringify({v:1,days:days,lastBackup:lastBackup,lists:lists})); saveOk=true; }
+    try{ localStorage.setItem(KEY, JSON.stringify({v:2,days:days,lastBackup:lastBackup,lists:lists,plan:plan})); saveOk=true; }
     catch(e){ saveOk=false; }
     setStatus();
   }
@@ -871,17 +1004,17 @@ svg{fill:none}
   document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="hidden" && saveTimer) persistNow(); });
   window.addEventListener("pagehide", function(){ if(saveTimer) persistNow(); });
   if(navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(function(){}); }
+  if(!raw || !raw.plan) persistNow();
 
   var view=trackerToday(), lastToday=view;
   function cur(){ return days[view] || blank(view); }
   function $(id){ return document.getElementById(id); }
   function setStatus(){ var e=$("saveErr"); if(e) e.hidden=saveOk; }
-  function edit(fn){ var d=clone(cur()); fn(d); days[view]=d; render(); persist(); }
+  function edit(fn){ var d=clone(cur()); if(!Array.isArray(d.tasks)) d.tasks=clone(itemsFor(view)); fn(d); days[view]=d; render(); persist(); }
 
   // ---------- Rendern ----------
   var ICON={"heute": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8 12.5l2.7 2.5L16 9.5\"/>", "drop": "<path d=\"M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z\"/>", "dropplus": "<path d=\"M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z\"/><path d=\"M12 11.5v5M9.5 14h5\"/>", "list": "<rect x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2\"/><path d=\"M9 3.5h6M9 10h6M9 14h6M9 18h3.5\"/>", "heart": "<path d=\"M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z\"/>", "dots": "<circle cx=\"5\" cy=\"12\" r=\"1.3\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/><circle cx=\"19\" cy=\"12\" r=\"1.3\"/>", "sun": "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4\"/>", "bowl": "<path d=\"M3.5 11.5h17a8.5 8.5 0 0 1-17 0z\"/><path d=\"M8.5 8c0-1.3 1-1.8 1-3M12.5 8c0-1.3 1-1.8 1-3\"/>", "apple": "<path d=\"M12 7.5c-3-2-7.5-1-7.5 4 0 4 3 8.5 5 8.5 1 0 1.5-.5 2.5-.5s1.5.5 2.5.5c2 0 5-4.5 5-8.5 0-5-4.5-6-7.5-4z\"/><path d=\"M12 7.5c0-2 1-3.5 3-4\"/>", "cup": "<path d=\"M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z\"/><path d=\"M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5v3M12 3.5v3\"/>", "moon": "<path d=\"M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z\"/>", "dumbbell": "<path d=\"M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11\"/>", "pot": "<path d=\"M4 10.5h16v5.5a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z\"/><path d=\"M2 10.5h20M9.5 7c0-1 1-1.5 1-2.5M14 7c0-1 1-1.5 1-2.5\"/>", "walk": "<circle cx=\"13.5\" cy=\"4.5\" r=\"1.8\"/><path d=\"M10 21l2-6 3 3v3M12 15l-1-5 4-1 2 4 2.5 1M11 10l-3 2-1 3\"/>", "scale": "<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"4\"/><path d=\"M8.8 10.5a4.5 4.5 0 0 1 6.4 0M12 10.5l1.6-1.6\"/>", "phone": "<path d=\"M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z\"/>", "users": "<circle cx=\"9\" cy=\"8\" r=\"3.2\"/><path d=\"M3 20a6 6 0 0 1 12 0\"/><circle cx=\"17\" cy=\"9\" r=\"2.6\"/><path d=\"M15.8 14.2A5 5 0 0 1 21 19\"/>", "cart": "<circle cx=\"9\" cy=\"20\" r=\"1.4\"/><circle cx=\"18\" cy=\"20\" r=\"1.4\"/><path d=\"M2.5 3.5h3l2.4 11.5h11l2-8H6.6\"/>", "leaf": "<path d=\"M5 19.5C5 11 10.5 5 20 5c0 10-6 15-14.5 14.5\"/><path d=\"M5 19.5c3-4 6.5-6.5 10-8.5\"/>", "nut": "<path d=\"M12 3.5c4 0 7 3 7 8s-3 9.5-7 9.5-7-4.5-7-9.5 3-8 7-8z\"/><path d=\"M12 7.5v10\"/>", "bolt": "<path d=\"M13 2.5 5 13.5h6l-1 8 8-11h-6z\"/>", "smile": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01\"/>", "cal": "<rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15\" rx=\"3\"/><path d=\"M3.5 10h17M8 3v4M16 3v4\"/>", "trend": "<path d=\"M3 17l5-5 4 3 8-8\"/><path d=\"M15 7h5v5\"/>", "table": "<rect x=\"3.5\" y=\"4.5\" width=\"17\" height=\"15\" rx=\"3\"/><path d=\"M3.5 10h17M3.5 15h17M10 4.5v15\"/>", "cloud": "<path d=\"M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5\"/><path d=\"M12 12v8M9 15l3-3 3 3\"/>", "check": "<path d=\"M5 12.5l4.5 4.5L19 7.5\"/>"};
   function svgI(n){ return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(ICON[n]||"")+'</svg>'; }
-  var KIND={wake:["sun","wake"],breakfast:["bowl","food"],snack:["apple","food"],coffee:["cup","coffee"],lunch:["bowl","food"],nap:["moon","sleep"],training:["dumbbell","train"],prep2:["pot","prep"],prep:["pot","prep"],walk:["walk","walk"],pre:["bowl","food"],"break":["bowl","food"],night:["moon","sleep"],check:["scale","prep"],family:["phone","people"],people:["users","people"]};
   function tileHtml(name,kind){ return '<span class="ico" style="--k:var(--'+kind+');--ks:var(--'+kind+'-s)">'+svgI(name)+'</span>'; }
   var CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function nowMinutes(){ var n=new Date(); var m=n.getHours()*60+n.getMinutes(); return n.getHours()<4? m+1440 : m; }
@@ -890,21 +1023,21 @@ svg{fill:none}
   function renderHead(){
     var today=trackerToday(), dd=parse(view), hr=new Date().getHours();
     $("dayname").textContent = view===today ? "Heute" : view===addDays(today,-1) ? "Gestern" : view===addDays(today,1) ? "Morgen" : DAYS[dow(view)];
-    var wd=dow(view), sh = wd===6 ? ["leaf","Frei"] : wd===0 ? ["moon","Spätschicht"] : ["sun","Früh- und Spätschicht"];
-    $("shift").innerHTML = svgI(sh[0])+'<span>'+sh[1]+'</span>';
+    var dpv=dayPlan(view)||{}; $("shift").innerHTML = svgI(shiftIcon(dpv.shift))+'<span>'+esc(dpv.shift||"")+'</span>';
     $("toToday").hidden = view===today;
     var lbl=(view===today?"Heute, ":"")+DAYS[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
     Array.prototype.forEach.call(document.querySelectorAll(".pdate"), function(el){ el.textContent=lbl; });
     var its=itemsFor(view), d=cur(), n=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
+    var tot=Math.max(1,its.length);
     $("heroDone").textContent=n; $("heroTotal").textContent="/"+its.length;
-    $("listcount").textContent=Math.round(100*n/its.length)+"%";
+    $("listcount").textContent=Math.round(100*n/tot)+"%";
     $("listcount2").textContent=n+" von "+its.length;
-    $("ringv").style.strokeDashoffset=(125.66*(1-n/its.length)).toFixed(2);
-    var plan=waterPlanFor(view), goalL=plan[plan.length-1][1], wl=(d.water||0)*0.25;
+    $("ringv").style.strokeDashoffset=(125.66*(1-n/tot)).toFixed(2);
+    var goalL=waterGoalL(view), wl=(d.water||0)*0.25;
     $("heroWater").textContent=fmtL(wl)+" / "+fmtL(goalL)+" L";
     $("heroWaterBar").style.width=Math.min(100,Math.round(100*wl/goalL))+"%";
-    var tr=its.filter(function(i){ return i.k==="train"; })[0];
-    $("heroTrain").textContent = tr ? ((d.done&&d.done[tr.id]) ? "Erledigt" : tr.t+" Uhr") : "Ruhetag";
+    var tr=its.filter(function(i){ return i.cat==="train"; })[0];
+    $("heroTrain").textContent = tr ? ((d.done&&d.done[tr.id]) ? "Erledigt" : fmtT(tr.t)+" Uhr") : "Ruhetag";
     renderStrip();
   }
   function renderStrip(){
@@ -929,21 +1062,21 @@ svg{fill:none}
     if(isToday){ for(var i=0;i<its.length;i++){ var it=its[i]; if(!(d.done&&d.done[it.id]) && mins(it.t)>=nm-45){ nextId=it.id; break; } } }
     var done=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
     var nx=its.filter(function(i){ return i.id===nextId; })[0];
-    $("listmeta").textContent = nx ? "Als Nächstes: "+nx.t+" "+nx.label : (done===its.length ? "Alles geschafft." : (isToday ? "Für heute ist nichts mehr fällig." : "Tippe eine Aufgabe zum Abhaken."));
+    $("listmeta").textContent = !its.length ? "Keine Aufgaben geplant." : nx ? "Als Nächstes: "+fmtT(nx.t)+" "+nx.label : (done===its.length ? "Alles geschafft." : (isToday ? "Für heute ist nichts mehr fällig." : "Tippe eine Aufgabe zum Abhaken."));
     $("items").innerHTML = its.map(function(it){
-      var on=!!(d.done&&d.done[it.id]), kd=KIND[it.id]||["heute","prep"];
-      return '<li><button class="it'+(it.id===nextId?" next":"")+'" data-act="toggle" data-id="'+it.id+'" aria-pressed="'+on+'">'
+      var on=!!(d.done&&d.done[it.id]), cc=CATS[it.cat]||CATS.other, kd=[cc.i,cc.c];
+      return '<li><button class="it'+(it.id===nextId?" next":"")+'" data-act="toggle" data-id="'+esc(it.id)+'" aria-pressed="'+on+'">'
         + tileHtml(kd[0],kd[1])
-        +'<span class="lab">'+it.label+(it.id===nextId?'<span class="tag">Als Nächstes</span>':'')
-        +'<span class="hint"><span class="tm">'+it.t+'</span>'+(it.hint?' · '+it.hint:'')+'</span></span>'
+        +'<span class="lab">'+esc(it.label)+(it.id===nextId?'<span class="tag">Als Nächstes</span>':'')
+        +'<span class="hint"><span class="tm">'+fmtT(it.t)+'</span>'+(it.hint?' · '+esc(it.hint):'')+'</span></span>'
         +'<span class="box">'+CHECK+'</span></button></li>';
     }).join("");
   }
 
   function renderFood(){
     var d=cur(), w=d.water||0, html="";
-    var plan=waterPlanFor(view), goalL=plan[plan.length-1][1], goalG=Math.round(goalL/0.25);
-    for(var i=0;i<WATER_MAX;i++){
+    var goalL=waterGoalL(view), goalG=Math.round(goalL/0.25), nDrops=Math.max(12,goalG);
+    for(var i=0;i<nDrops;i++){
       html+='<button class="drop'+(i<w?" on":"")+(i===goalG-1?" goal":"")+'" data-act="water" data-n="'+(i+1)+'" aria-label="'+(i+1)+' Gläser"></button>';
     }
     $("water").innerHTML=html;
@@ -953,7 +1086,7 @@ svg{fill:none}
     var gl=$("waterGoal"), goalTxt="Ziel "+fmt(goalL,2).replace(/,?0+$/,"")+" L";
     var soll=0, cls="";
     if(view===trackerToday()){
-      var nm=nowMinutes(); plan.forEach(function(p){ if(p[0]<=nm) soll=p[1]; });
+      soll=sollNow(view);
       var ist=w*0.25; cls = soll===0 ? "" : ist+0.001<soll-0.25 ? "behind" : ist>=soll ? "ahead" : "";
       gl.innerHTML='Soll jetzt <span class="'+cls+'">'+litres(soll/0.25)+'</span> · '+goalTxt;
     } else gl.textContent=goalTxt;
@@ -977,6 +1110,7 @@ svg{fill:none}
   function renderFeel(){
     var d=cur();
     $("sleepOut").textContent = d.sleep==null ? "– h" : fmt(d.sleep,1).replace(",0","")+" h";
+    $("sleepGoal").textContent = "Nacht plus Nachmittag, Ziel "+fmt(SLEEP_GOAL,1).replace(",0","")+" h";
     $("energy").innerHTML=rateRow("energy",d.energy);
     $("mood").innerHTML=rateRow("mood",d.mood);
     $("energyOut").textContent = d.energy? d.energy+" von 10" : "Wie viel Kraft hast du heute?";
@@ -1000,20 +1134,20 @@ svg{fill:none}
       if(typeof d.sleep==="number") sl.push(d.sleep);
       if(typeof d.energy==="number") en.push(d.energy);
       if(typeof d.mood==="number") mo.push(d.mood);
-      if(d.done&&d.done.training) tr++;
-      if(d.done&&d.done.family) fam=true;
+      var dc=doneCats(x.date); if(dc.train) tr++; if(dc.family) fam=true;
       if(typeof d.weight==="number") wt=d.weight;
     });
     function avg(a){ return a.length? a.reduce(function(s,v){return s+v;},0)/a.length : null; }
     return {list:list,sleep:avg(sl),energy:avg(en),mood:avg(mo),training:tr,family:fam,weight:wt};
   }
-  function pctFor(s){ var d=days[s]; if(!d||!d.done) return 0; var its=itemsFor(s); return its.filter(function(i){return d.done[i.id];}).length/its.length; }
+  function pctFor(s){ var d=days[s]; if(!d||!d.done) return 0; var its=itemsFor(s); if(!its.length) return 0; return its.filter(function(i){return d.done[i.id];}).length/its.length; }
 
   function renderWeek(){
     var mon=mondayOf(view), today=trackerToday(), wk=weekData(mon);
-    setAll(".sum-week", shortDate(mon)+"–"+shortDate(addDays(mon,6))+" · Training "+wk.training+"/4 · Familie "+(wk.family?"angerufen":"noch nicht"));
+    var TP=trainingPlanned();
+    setAll(".sum-week", shortDate(mon)+"–"+shortDate(addDays(mon,6))+" · Training "+wk.training+"/"+TP+" · Familie "+(wk.family?"angerufen":"noch nicht"));
     $("week").innerHTML = wk.list.map(function(x){
-      var p=Math.round(pctFor(x.date)*100), tr=!!(x.d&&x.d.done&&x.d.done.training);
+      var p=Math.round(pctFor(x.date)*100), tr=!!doneCats(x.date).train;
       return '<button class="wd'+(x.date===view?" sel":"")+(x.date===today?" today":"")+'" data-act="goto" data-date="'+x.date+'" aria-label="'+DAYS[dow(x.date)]+', '+p+' Prozent erledigt">'
         +'<span class="n">'+DSHORT[dow(x.date)]+'</span><span class="d">'+parse(x.date).getDate()+'</span>'
         +'<span class="mini"><i style="width:'+p+'%"></i></span><span class="tr'+(tr?" on":"")+'"></span></button>';
@@ -1029,7 +1163,7 @@ svg{fill:none}
     $("weekChart").innerHTML='<svg viewBox="0 0 '+Wc+' '+Hc+'" role="img" aria-label="Erledigte Aufgaben pro Tag">'+bars+'</svg>';
     function f(v,unit){ return v==null? "–" : fmt(v,1)+(unit||""); }
     $("stats").innerHTML =
-      '<div class="stat"><div class="v">'+wk.training+'/4</div><div class="k">Trainings</div></div>'
+      '<div class="stat"><div class="v">'+wk.training+'/'+TP+'</div><div class="k">Trainings</div></div>'
       +'<div class="stat"><div class="v">'+f(wk.sleep," h")+'</div><div class="k">Schlaf Ø</div></div>'
       +'<div class="stat"><div class="v">'+f(wk.energy)+'</div><div class="k">Energie Ø</div></div>'
       +'<div class="stat"><div class="v">'+f(wk.mood)+'</div><div class="k">Stimmung Ø</div></div>'
@@ -1043,15 +1177,17 @@ svg{fill:none}
     var end=PLAN_END; if(pts.length && pts[pts.length-1].date>end) end=pts[pts.length-1].date;
     var span=Math.max(1,diff(PLAN_START,end));
     var ws=pts.map(function(p){return p.w;});
-    var yMin=Math.floor(Math.min.apply(null,[72].concat(ws))-0.5), yMax=Math.ceil(Math.max.apply(null,[78.5].concat(ws))+0.2);
+    var yMin=Math.floor(Math.min.apply(null,[W_END-0.5].concat(ws))-0.5), yMax=Math.ceil(Math.max.apply(null,[W_START+0.5].concat(ws))+0.2);
     function x(s){ return L+(W-L-R)*diff(PLAN_START,s)/span; }
     function y(v){ return T+(H-T-B)*(yMax-v)/(yMax-yMin); }
     var step=(yMax-yMin)>10?2:1, o='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Gewicht und Richtwert von Ende September bis Ende November">';
     for(var v=yMin; v<=yMax; v+=step){ o+='<line class="grid" x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'"/><text class="ax" x="'+(L-8)+'" y="'+(y(v)+3.5).toFixed(1)+'" text-anchor="end">'+v+'</text>'; }
-    ["2026-10-01","2026-10-15","2026-11-01","2026-11-15","2026-11-30"].filter(function(s){ return s<=end; }).forEach(function(s,i,a){
+    var ticks=[PLAN_START]; for(var tk=addDays(PLAN_START,1); tk<end; tk=addDays(tk,1)){ var dd2=parse(tk).getDate(); if(dd2===1||dd2===15) ticks.push(tk); } ticks.push(end);
+    if(ticks.length>6){ var keep=[ticks[0]]; for(var ti=1;ti<ticks.length-1;ti++){ if(parse(ticks[ti]).getDate()===1) keep.push(ticks[ti]); } keep.push(end); ticks=keep; }
+    ticks.filter(function(s,i,a){ return i===0 || i===a.length-1 || diff(a[i-1],s)>=6; }).forEach(function(s,i,a){
       o+='<text class="ax" x="'+x(s).toFixed(1)+'" y="'+(H-10)+'" text-anchor="'+(i===a.length-1?"end":"middle")+'">'+shortDate(s)+'</text>';
     });
-    o+='<line class="goal" x1="'+L+'" x2="'+(W-R)+'" y1="'+y(W_END).toFixed(1)+'" y2="'+y(W_END).toFixed(1)+'"/><text class="goal-lab" x="'+(W-R+6)+'" y="'+(y(W_END)+4).toFixed(1)+'">72,5 Ziel</text>';
+    o+='<line class="goal" x1="'+L+'" x2="'+(W-R)+'" y1="'+y(W_END).toFixed(1)+'" y2="'+y(W_END).toFixed(1)+'"/><text class="goal-lab" x="'+(W-R+6)+'" y="'+(y(W_END)+4).toFixed(1)+'">'+fmt(W_END,1)+' Ziel</text>';
     var planPts=[[PLAN_START,W_START],[PLAN_END,W_END]];
     if(end>PLAN_END) planPts.push([end,target(end)]);
     o+='<polyline class="plan" points="'+planPts.map(function(p){ return x(p[0]).toFixed(1)+","+y(p[1]).toFixed(1); }).join(" ")+'"/>';
@@ -1069,19 +1205,21 @@ svg{fill:none}
     }
     o+='</svg>';
     $("chart").innerHTML=o;
+    $("paceKey").textContent="Richtwert "+fmt(SLOPE*7,2).replace(/0$/,"")+" kg pro Woche";
     var sum=$("chartsum");
     if(pts.length){
       var lp2=pts[pts.length-1], t=target(lp2.date), dlt=lp2.w-t, rest=lp2.w-W_END;
       sum.innerHTML='Zuletzt <b>'+fmt(lp2.w,1)+' kg</b> ('+shortDate(lp2.date)+'). '
         +(Math.abs(dlt)<0.25?'Genau im Plan. ':dlt<0?'<b>'+fmt(-dlt,1)+' kg</b> besser als der Richtwert. ':'<b>'+fmt(dlt,1)+' kg</b> über dem Richtwert, kein Problem, der Trend zählt. ')
-        +(rest>0?'Noch <b>'+fmt(rest,1)+' kg</b> bis 72,5.':'Ziel für November erreicht.');
+        +(rest>0?'Noch <b>'+fmt(rest,1)+' kg</b> bis '+fmt(W_END,1)+'.':'Ziel erreicht.');
     } else sum.textContent="";
-    if(pts.length){ var lp3=pts[pts.length-1], r3=lp3.w-W_END; setAll(".sum-chart","Zuletzt "+fmt(lp3.w,1)+" kg"+(r3>0?" · noch "+fmt(r3,1)+" kg bis 72,5":" · Ziel erreicht")); }
+    if(pts.length){ var lp3=pts[pts.length-1], r3=lp3.w-W_END; setAll(".sum-chart","Zuletzt "+fmt(lp3.w,1)+" kg"+(r3>0?" · noch "+fmt(r3,1)+" kg bis "+fmt(W_END,1):" · Ziel erreicht")); }
     else setAll(".sum-chart","Noch kein Gewicht eingetragen");
   }
 
   function renderTable(){
-    var first=mondayOf(PLAN_START), last=mondayOf(PLAN_END), curMon=mondayOf(trackerToday()), rows="";
+    var first=mondayOf(PLAN_START), last=mondayOf(PLAN_END), curMon=mondayOf(trackerToday()), rows="", TPt=trainingPlanned();
+    var ms=MONTHS[parse(PLAN_START).getMonth()], me=MONTHS[parse(PLAN_END).getMonth()]; $("tableRange").textContent = ms===me ? ms : ms+" bis "+me;
     for(var m=first; m<=last; m=addDays(m,7)){
       var wk=weekData(m), sat=addDays(m,5), t=target(sat<PLAN_START?PLAN_START:sat), fut=m>curMon;
       var wcell = wk.weight==null ? '<td class="dim">–</td>' : '<td class="'+(wk.weight<=t+0.1?"good":"")+'">'+fmt(wk.weight,1)+'</td>';
@@ -1090,7 +1228,7 @@ svg{fill:none}
         +'<td class="'+(wk.sleep==null?"dim":"")+'">'+(wk.sleep==null?"–":fmt(wk.sleep,1))+'</td>'
         +'<td class="'+(wk.energy==null?"dim":"")+'">'+(wk.energy==null?"–":fmt(wk.energy,1))+'</td>'
         +'<td class="'+(wk.mood==null?"dim":"")+'">'+(wk.mood==null?"–":fmt(wk.mood,1))+'</td>'
-        +'<td class="'+(fut?"dim":wk.training>=4?"good":"")+'">'+(fut?"–":wk.training+"/4")+'</td>'
+        +'<td class="'+(fut?"dim":wk.training>=TPt?"good":"")+'">'+(fut?"–":wk.training+"/"+TPt)+'</td>'
         +'<td class="'+(fut?"dim":"")+'">'+(fut?"–":wk.family?"Ja":"Nein")+'</td></tr>';
     }
     $("table").innerHTML='<thead><tr><th>Woche</th><th>Gewicht kg</th><th>Richtwert</th><th>Schlaf h</th><th>Energie</th><th>Stimmung</th><th>Training</th><th>Familie</th></tr></thead><tbody>'+rows+'</tbody>';
@@ -1119,14 +1257,14 @@ svg{fill:none}
     $("resetBtn").textContent = listTab==="shop" ? "Einkaufsliste leeren" : "Vorbereitung leeren";
   }
 
-  function render(){ renderHead(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); setStatus(); }
+  function render(){ renderHead(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); renderPlan(); renderGoals(); setStatus(); }
 
   // ---------- Backup ----------
   var pendingImport=null;
   function msg(t){ $("msg").textContent=t; }
   async function exportBackup(){
     persistNow();
-    var data=JSON.stringify({app:"Tagesplan",version:1,exported:new Date().toISOString(),days:days});
+    var data=JSON.stringify({app:"Tagesplan",version:2,exported:new Date().toISOString(),days:days,plan:plan,lists:lists});
     var name="tagesplan-backup-"+iso(new Date())+".json";
     var file=null;
     try{ file=new File([data],name,{type:"application/json"}); }catch(e){}
@@ -1150,10 +1288,10 @@ svg{fill:none}
         var o=JSON.parse(r.result), src=o && o.days;
         if(!src || typeof src!=="object") throw new Error("format");
         var clean={}, count=0;
-        Object.keys(src).forEach(function(k){ var d=src[k]; if(isDate(k) && d && typeof d==="object"){ var b=blank(k); Object.keys(b).forEach(function(f){ if(f in d) b[f]=d[f]; }); b.date=k; b.type="day"; clean[k]=b; count++; } });
+        Object.keys(src).forEach(function(k){ var d=src[k]; if(isDate(k) && d && typeof d==="object"){ var b=blank(k); Object.keys(b).forEach(function(f){ if(f in d) b[f]=d[f]; }); if(Array.isArray(d.tasks)) b.tasks=d.tasks; b.date=k; b.type="day"; clean[k]=b; count++; } });
         if(!count) throw new Error("empty");
-        pendingImport=clean;
-        $("confirmText").textContent=count+" Tage im Backup gefunden. Laden überschreibt die gleichen Tage auf diesem iPhone, andere Tage bleiben.";
+        pendingImport={days:clean, plan: validPlan(o.plan)?o.plan:null, lists:(o.lists&&typeof o.lists==="object")?o.lists:null};
+        $("confirmText").textContent=(count===1?"1 Tag":count+" Tage")+" im Backup gefunden"+(pendingImport.plan?", dazu dein Plan und deine Ziele":"")+". Laden überschreibt die gleichen Tage auf diesem iPhone, andere Tage bleiben.";
         $("confirm").hidden=false; msg("");
       }catch(e){ pendingImport=null; $("confirm").hidden=true; msg("Diese Datei ist kein Tagesplan-Backup. Wähle eine Datei, die mit tagesplan-backup beginnt."); }
     };
@@ -1179,15 +1317,42 @@ svg{fill:none}
     if(a==="nextweek"){ view=addDays(view,7); render(); return; }
     if(a==="water"){ var n=+b.dataset.n; edit(function(d){ d.water = (d.water===n) ? n-1 : n; }); return; }
     if(a==="count"){ var k=b.dataset.k, dl=+b.dataset.d, c=COUNTERS.filter(function(x){return x.k===k;})[0]; edit(function(d){ d[k]=Math.max(0,Math.min(c.max,(d[k]||0)+dl)); }); return; }
-    if(a==="sleep"){ var s=+b.dataset.d; edit(function(d){ if(d.sleep==null) d.sleep = s>0?6.5:6; else d.sleep=Math.max(0,Math.min(14,d.sleep+s)); }); return; }
+    if(a==="sleep"){ var s=+b.dataset.d; edit(function(d){ if(d.sleep==null) d.sleep = s>0?SLEEP_GOAL:SLEEP_GOAL-0.5; else d.sleep=Math.max(0,Math.min(14,d.sleep+s)); }); return; }
     if(a==="rate"){ var key=b.dataset.k, v=+b.dataset.v; edit(function(d){ d[key] = d[key]===v ? null : v; }); return; }
     if(a==="export"){ exportBackup(); return; }
+    if(a==="pday"){ pDay=+b.dataset.w; copySel={}; renderPlan(); return; }
+    if(a==="pwater"){ var dp=plan.days[String(pDay)]; dp.water=Math.max(1,Math.min(4,Math.round(((+dp.water||2.5)+(+b.dataset.d))*4)/4)); savePlan(); return; }
+    if(a==="task-new"){ openTask(null); return; }
+    if(a==="task-edit"){ openTask(b.dataset.id); return; }
+    if(a==="task-cancel"){ closeTask(); return; }
+    if(a==="task-delete"){ var dpl=plan.days[String(pDay)]; dpl.tasks=dpl.tasks.filter(function(x){ return x.id!==editId; }); savePlan(); closeTask(); toast("Aufgabe gelöscht"); return; }
+    if(a==="cat-pick"){ tCat=b.dataset.cat; renderCatPick(); return; }
+    if(a==="also-pick"){ var aw=+b.dataset.w; alsoSel[aw]=!alsoSel[aw]; b.setAttribute("aria-pressed",!!alsoSel[aw]); return; }
+    if(a==="copy-pick"){ var cw=+b.dataset.w; copySel[cw]=!copySel[cw]; b.setAttribute("aria-pressed",!!copySel[cw]); return; }
+    if(a==="copy-day"){ var tg=Object.keys(copySel).filter(function(k){ return copySel[k]; }); if(!tg.length){ toast("Erst Tage auswählen"); return; } var src=plan.days[String(pDay)]; tg.forEach(function(w){ plan.days[w]=clone(src); }); copySel={}; savePlan(); toast(DAYS[pDay]+" auf "+tg.length+(tg.length===1?" Tag":" Tage")+" kopiert"); return; }
+    if(a==="plan-reset"){ $("resetConfirm").hidden=false; return; }
+    if(a==="plan-reset-no"){ $("resetConfirm").hidden=true; return; }
+    if(a==="plan-reset-yes"){ var goals=plan.goals; plan=defaultPlan(); plan.goals=goals; $("resetConfirm").hidden=true; savePlan(); toast("Standardplan wiederhergestellt"); return; }
+    if(a==="goals-save"){
+      var g={startDate:$("gStart").value, targetDate:$("gEnd").value, startW:num("gStartW"), targetW:num("gTargetW"), finalW:num("gFinalW"), sleepH:num("gSleep")};
+      var er="";
+      if(!isDate(g.startDate)||!isDate(g.targetDate)) er="Bitte Start- und Zieldatum wählen.";
+      else if(g.targetDate<=g.startDate) er="Das Zieldatum muss nach dem Startdatum liegen.";
+      else if(!(g.startW>=40&&g.startW<=200&&g.targetW>=40&&g.targetW<=200&&g.finalW>=40&&g.finalW<=200)) er="Gewichte bitte zwischen 40 und 200 kg eingeben.";
+      else if(!(g.sleepH>=4&&g.sleepH<=12)) er="Schlafziel bitte zwischen 4 und 12 Stunden.";
+      $("gErr").textContent=er; if(er) return;
+      var pace=(g.startW-g.targetW)/Math.max(1,diff(g.startDate,g.targetDate))*7;
+      plan.goals=g; savePlan();
+      toast("Ziele gespeichert");
+      $("gErr").textContent = pace>1 ? "Hinweis: mehr als 1 kg pro Woche ist sehr streng und kostet Kraft. 0,5 bis 0,75 kg sind nachhaltiger." : "";
+      return;
+    }
     if(a==="tab"){ listTab=b.dataset.tab; renderLists(); return; }
     if(a==="listcheck"){ var lid=b.dataset.id, st=lists[listTab]; if(st[lid]) delete st[lid]; else st[lid]=true; renderLists(); persist(); return; }
     if(a==="list-reset"){ lists[listTab]={}; renderLists(); persist(); msg(""); return; }
     if(a==="import"){ $("importFile").click(); return; }
     if(a==="import-no"){ pendingImport=null; $("confirm").hidden=true; msg("Nichts geändert."); return; }
-    if(a==="import-yes"){ if(pendingImport){ var cnt=Object.keys(pendingImport).length; Object.keys(pendingImport).forEach(function(k){ days[k]=pendingImport[k]; }); pendingImport=null; $("confirm").hidden=true; persistNow(); render(); msg(cnt+" Tage geladen."); } return; }
+    if(a==="import-yes"){ if(pendingImport){ var pi=pendingImport, cnt=Object.keys(pi.days).length; Object.keys(pi.days).forEach(function(k){ days[k]=pi.days[k]; if(!Array.isArray(days[k].tasks)) days[k].tasks=clone(sortTasks(((pi.plan||plan).days[String(dow(k))]).tasks)); }); if(pi.plan){ plan=pi.plan; applyGoals(plan.goals); } if(pi.lists){ lists=pi.lists; lists.shop=lists.shop||{}; lists.prep=lists.prep||{}; } pendingImport=null; $("confirm").hidden=true; persistNow(); render(); msg((cnt===1?"1 Tag":cnt+" Tage")+" geladen."+(pi.plan?" Plan und Ziele übernommen.":"")); } return; }
   });
   $("weight").addEventListener("change", function(){
     var raw=this.value.trim().replace(",",".");
@@ -1211,12 +1376,95 @@ svg{fill:none}
   var standalone = window.navigator.standalone===true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
   $("install").hidden = standalone;
 
+
+  // ---------- Plan bearbeiten ----------
+  var WEEK_ORDER=[1,2,3,4,5,6,0];
+  var pDay=dow(trackerToday()), editId=null, tCat="other", alsoSel={}, copySel={};
+  function savePlan(){
+    for(var w=0;w<7;w++){ plan.days[String(w)].tasks=sortTasks(plan.days[String(w)].tasks); }
+    var today=trackerToday();
+    Object.keys(days).forEach(function(k){
+      if(k<today) return;
+      var d=days[k], nt=clone(sortTasks(plan.days[String(dow(k))].tasks)), keep={};
+      nt.forEach(function(t){ if(d.done && d.done[t.id]) keep[t.id]=true; });
+      d.tasks=nt; d.done=keep;
+    });
+    applyGoals(plan.goals); persistNow(); render();
+  }
+  function dayChips(sel, excl, act){
+    return WEEK_ORDER.filter(function(w){ return excl.indexOf(w)<0; }).map(function(w){
+      return '<button type="button" class="dchip" data-act="'+act+'" data-w="'+w+'" aria-pressed="'+(!!sel[w])+'">'+DSHORT[w]+'</button>';
+    }).join("");
+  }
+  function renderPlan(){
+    if(!$("pdays")) return;
+    var dp=plan.days[String(pDay)];
+    $("pdays").innerHTML = WEEK_ORDER.map(function(w){
+      return '<button class="pday'+(w===pDay?" sel":"")+(w===dow(trackerToday())?" today":"")+'" data-act="pday" data-w="'+w+'"><span class="n">'+DSHORT[w]+'</span><span class="c">'+plan.days[String(w)].tasks.length+'</span></button>';
+    }).join("");
+    $("pDayName").textContent=DAYS[pDay];
+    var inp=$("pShift"); if(document.activeElement!==inp) inp.value=dp.shift||"";
+    $("pWater").textContent=fmtL(+dp.water||2.5)+" L";
+    var tasks=sortTasks(dp.tasks);
+    $("plist").innerHTML = tasks.length ? tasks.map(function(t){
+      var c=CATS[t.cat]||CATS.other;
+      return '<li><button class="prow" data-act="task-edit" data-id="'+esc(t.id)+'">'+tileHtml(c.i,c.c)
+        +'<span class="lab">'+esc(t.label)+'<span class="hint"><span class="tm">'+fmtT(t.t)+'</span>'+(t.hint?' · '+esc(t.hint):'')+'</span></span><i class="go" aria-hidden="true"></i></button></li>';
+    }).join("") : '<li class="empty-note">Noch keine Aufgaben für '+DAYS[pDay]+'. Tippe auf "+ Aufgabe".</li>';
+    $("copyDays").innerHTML = dayChips(copySel,[pDay],"copy-pick");
+    setAll(".sum-plan", "Aufgaben, Uhrzeiten, Schicht und Wasserziel pro Wochentag");
+  }
+  function renderCatPick(){
+    $("tCats").innerHTML = CAT_ORDER.map(function(k){ var c=CATS[k];
+      return '<button type="button" class="catb" data-act="cat-pick" data-cat="'+k+'" aria-pressed="'+(k===tCat)+'">'+tileHtml(c.i,c.c)+'<span>'+c.n+'</span></button>'; }).join("");
+  }
+  function openTask(id){
+    var dp=plan.days[String(pDay)], t=id ? dp.tasks.filter(function(x){ return x.id===id; })[0] : null;
+    editId = t ? t.id : null; tCat = t ? (t.cat||"other") : "other"; alsoSel={};
+    $("tmTitle").textContent = t ? "Aufgabe bearbeiten · "+DAYS[pDay] : "Neue Aufgabe · "+DAYS[pDay];
+    var hh=t ? t.t : "12:00"; if(hh.length===4) hh="0"+hh;
+    $("tTime").value=hh; $("tLabel").value=t ? t.label : ""; $("tHint").value=t ? (t.hint||"") : "";
+    $("tDelete").hidden=!t; $("tAlsoWrap").hidden=!!t; $("tErr").textContent="";
+    $("tAlso").innerHTML=dayChips(alsoSel,[pDay],"also-pick");
+    renderCatPick();
+    $("taskModal").hidden=false; document.body.classList.add("modal-open");
+  }
+  function closeTask(){ $("taskModal").hidden=true; document.body.classList.remove("modal-open"); editId=null; }
+  $("taskForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var time=$("tTime").value, label=$("tLabel").value.trim(), hint=$("tHint").value.trim();
+    if(!/^\d{2}:\d{2}$/.test(time)){ $("tErr").textContent="Bitte eine Uhrzeit wählen."; return; }
+    if(!label){ $("tErr").textContent="Bitte einen Titel eingeben, zum Beispiel \"Spaziergang\"."; return; }
+    var dp=plan.days[String(pDay)];
+    if(editId){
+      var t=dp.tasks.filter(function(x){ return x.id===editId; })[0];
+      if(t){ t.t=time; t.label=label; t.cat=tCat; if(hint) t.hint=hint; else delete t.hint; }
+      savePlan(); closeTask(); toast("Aufgabe gespeichert");
+    } else {
+      var nt={id:"t"+Date.now().toString(36)+Math.random().toString(36).slice(2,5), t:time, label:label, cat:tCat}; if(hint) nt.hint=hint;
+      var targets=[pDay].concat(Object.keys(alsoSel).filter(function(k){ return alsoSel[k]; }).map(Number));
+      targets.forEach(function(w){ plan.days[String(w)].tasks.push(clone(nt)); });
+      savePlan(); closeTask(); toast(targets.length>1 ? "Aufgabe an "+targets.length+" Tagen hinzugefügt" : "Aufgabe hinzugefügt");
+    }
+  });
+  $("pShift").addEventListener("change", function(){ var v=this.value.trim(); plan.days[String(pDay)].shift=v; savePlan(); toast("Schicht gespeichert"); });
+
+  // ---------- Ziele ----------
+  function renderGoals(){
+    if(!$("gStart")) return;
+    var g=plan.goals, ids={gStart:g.startDate,gEnd:g.targetDate,gStartW:fmt(+g.startW,1),gTargetW:fmt(+g.targetW,1),gFinalW:fmt(+g.finalW,1),gSleep:fmt(+g.sleepH,1)};
+    Object.keys(ids).forEach(function(id){ var el=$(id); if(document.activeElement!==el) el.value=ids[id]; });
+    $("gPace").textContent = "Richtwert: "+fmt(SLOPE*7,2).replace(/0$/,"")+" kg pro Woche von "+fmt(W_START,1)+" auf "+fmt(W_END,1)+" kg bis "+shortDate(PLAN_END)+PLAN_END.slice(0,4)+".";
+    setAll(".sum-goals", fmt(W_START,1)+" auf "+fmt(W_END,1)+" kg bis "+shortDate(PLAN_END)+" · Schlaf "+fmt(SLEEP_GOAL,1).replace(",0","")+" h");
+  }
+  function num(id){ return parseFloat(String($(id).value).replace(",",".")); }
+
   // ---------- Kurze Rückmeldung ----------
   var toastT=null;
   function toast(t){ var el=$("toast"); el.textContent=t; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove("show"); },1800); }
 
   // ---------- Seiten ----------
-  var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr"};
+  var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr",plan:"mehr",ziele:"mehr"};
   function show(pg){
     Array.prototype.forEach.call(document.querySelectorAll(".page"), function(el){ el.hidden = el.dataset.page!==pg; });
     var tab=PARENT[pg]||pg;

@@ -1,6 +1,6 @@
 # Tagesplan
 
-Persönliche iPhone-App (Progressive Web App) für den Alltag mit Früh- und Spätschicht: Tages-Checkliste mit festen Zeiten, Wasser- und Essenszähler, Schlaf, Energie, Stimmung, Gewicht und Gewichtsverlauf für Oktober und November 2026.
+Persönliche iPhone-App (Progressive Web App) für den Alltag mit Früh- und Spätschicht: Tages-Checkliste mit eigenem Wochenplan (Aufgaben, Uhrzeiten, Schicht, Wasserziel pro Wochentag, in der App bearbeitbar), Wasser- und Essenszähler, Schlaf, Energie, Stimmung, Gewicht und Gewichtsverlauf für Oktober und November 2026.
 
 ## Installieren
 
@@ -12,7 +12,8 @@ Persönliche iPhone-App (Progressive Web App) für den Alltag mit Früh- und Sp�
 
 - Alle Einträge werden nur auf dem Gerät gespeichert (`localStorage`), nichts geht an einen Server.
 - Die App funktioniert offline (Service Worker in `sw.js`).
-- Über **Backup speichern** entsteht eine JSON-Datei, die sich in Dateien sichern und mit **Backup laden** wiederherstellen lässt.
+- Über **Backup speichern** entsteht eine JSON-Datei mit Einträgen, Plan, Zielen und Listen, die sich in Dateien sichern und mit **Backup laden** wiederherstellen lässt.
+- Jeder Tag speichert den Plan, der an dem Tag galt. Planänderungen wirken ab heute, vergangene Tage bleiben unverändert.
 
 ## Aufbau
 
