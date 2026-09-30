@@ -199,6 +199,21 @@ td.good{color:var(--done);font-weight:700}
 .confirm{background:var(--surface-2);border-radius:10px;padding:12px;display:grid;gap:10px;font-size:14px}
 .msg{font-size:13px;color:var(--muted);min-height:1.2em}
 
+details.acc{padding:0;overflow:hidden}
+details.acc>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 16px;min-height:60px;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+details.acc>summary::-webkit-details-marker{display:none}
+.acc-title{display:grid;gap:2px;min-width:0;flex:1}
+.acc-h{font:700 16px/1.25 var(--body)}
+.acc-sum{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.acc-sum .behind{color:var(--warn);font-weight:700}
+.acc-sum .ahead{color:var(--done);font-weight:700}
+.chev{width:30px;height:30px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;flex:none;transition:transform .2s ease}
+.chev::before{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-2px) rotate(45deg)}
+details.acc[open]>summary .chev{transform:rotate(180deg)}
+details.acc[open]>summary{border-bottom:1px solid var(--line)}
+.acc-body{padding:12px 16px 16px}
+.acc-body.feel{padding-top:16px}
+
 .help{font-size:13px;color:var(--muted);display:grid;gap:4px;padding-inline:4px}
 .help b{color:var(--ink);-webkit-user-select:all;user-select:all;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
@@ -247,33 +262,39 @@ td.good{color:var(--done);font-weight:700}
     </div>
   </section>
 
-  <section class="card" aria-labelledby="h-list">
-    <div class="card-head"><h2 id="h-list">Checkliste</h2><span class="meta" id="listmeta"></span></div>
-    <ul class="items" id="items"></ul>
-  </section>
-
-  <section class="card" aria-labelledby="h-food">
-    <div class="card-head"><h2 id="h-food">Trinken und Essen</h2><span class="meta">1 Glas = 250 ml</span></div>
-    <div class="water" id="water"></div>
-    <div class="waterline"><span><b id="waterL">0 L</b> getrunken</span><span id="waterGoal">Ziel 3 L</span></div>
-    <div class="counters" id="counters"></div>
-  </section>
-
-  <section class="card" aria-labelledby="h-prep">
-    <div class="card-head"><h2 id="h-prep">Meal Prep</h2><span class="meta" id="prepMeta"></span></div>
-    <div class="seg" role="tablist" aria-label="Liste wählen">
-      <button role="tab" id="tabShop" data-act="tab" data-tab="shop" aria-selected="true">Einkaufen (Sa 16:00)</button>
-      <button role="tab" id="tabPrep" data-act="tab" data-tab="prep" aria-selected="false">Vorbereiten</button>
+  <details class="card acc" id="acc-list">
+    <summary><span class="acc-title"><span class="acc-h">Checkliste</span><span class="acc-sum" id="listmeta"></span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body">
+      <ul class="items" id="items"></ul>
     </div>
-    <div id="lists"></div>
-    <div class="row" style="margin-top:12px">
-      <button class="btn" data-act="list-reset" id="resetBtn">Liste für neue Woche leeren</button>
-    </div>
-  </section>
+  </details>
 
-  <section class="card" aria-labelledby="h-feel">
-    <div class="card-head"><h2 id="h-feel">Wie geht es dir?</h2></div>
-    <div class="feel">
+  <details class="card acc" id="acc-food">
+    <summary><span class="acc-title"><span class="acc-h">Trinken und Essen</span><span class="acc-sum" id="sumFood"></span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body">
+      <div class="water" id="water"></div>
+      <div class="waterline"><span><b id="waterL">0 L</b> getrunken, 1 Glas = 250 ml</span><span id="waterGoal">Ziel 3 L</span></div>
+      <div class="counters" id="counters"></div>
+    </div>
+  </details>
+
+  <details class="card acc" id="acc-prep">
+    <summary><span class="acc-title"><span class="acc-h">Meal Prep</span><span class="acc-sum" id="prepMeta"></span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body">
+      <div class="seg" role="tablist" aria-label="Liste wählen">
+        <button role="tab" id="tabShop" data-act="tab" data-tab="shop" aria-selected="true">Einkaufen (Sa 16:00)</button>
+        <button role="tab" id="tabPrep" data-act="tab" data-tab="prep" aria-selected="false">Vorbereiten</button>
+      </div>
+      <div id="lists"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" data-act="list-reset" id="resetBtn">Liste leeren</button>
+      </div>
+    </div>
+  </details>
+
+  <details class="card acc" id="acc-feel">
+    <summary><span class="acc-title"><span class="acc-h">Wie geht es dir?</span><span class="acc-sum" id="sumFeel"></span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body feel">
       <div class="feelrow">
         <div class="rowhead"><span class="lab">Schlaf letzte 24 h</span><span class="meta">Nacht plus Nachmittag</span></div>
         <div class="step">
@@ -302,43 +323,51 @@ td.good{color:var(--done);font-weight:700}
         </div>
       </div>
     </div>
-  </section>
+  </details>
 
-  <section class="card" aria-labelledby="h-week">
-    <div class="card-head"><h2 id="h-week">Diese Woche</h2><span class="meta" id="weekrange"></span></div>
-    <div class="week" id="week"></div>
-    <div class="stats" id="stats"></div>
-  </section>
-
-  <section class="card chart" aria-labelledby="h-chart">
-    <div class="card-head"><h2 id="h-chart">Gewichtsverlauf</h2><span class="meta">Ziel Ende November 72,5 kg</span></div>
-    <div class="keys"><span><i></i>Dein Gewicht</span><span><i class="dash"></i>Richtwert 0,5 bis 0,75 kg pro Woche</span></div>
-    <div id="chart"></div>
-    <p class="chartsum" id="chartsum"></p>
-  </section>
-
-  <section class="card" aria-labelledby="h-table">
-    <div class="card-head"><h2 id="h-table">Wochen im Überblick</h2><span class="meta">Oktober und November</span></div>
-    <div class="tablewrap"><table id="table"></table></div>
-  </section>
-
-  <section class="card backup" aria-labelledby="h-backup">
-    <div class="card-head"><h2 id="h-backup">Backup</h2><span class="meta" id="backupInfo"></span></div>
-    <p>Deine Einträge liegen nur auf diesem iPhone. Speichere jeden Samstag ein Backup in Dateien, und schick es Claude, wenn du eine Auswertung willst.</p>
-    <div class="row">
-      <button class="btn primary" data-act="export">Backup speichern</button>
-      <button class="btn" data-act="import">Backup laden</button>
-      <input type="file" id="importFile" accept="application/json,.json" hidden>
+  <details class="card acc" id="acc-week">
+    <summary><span class="acc-title"><span class="acc-h">Diese Woche</span><span class="acc-sum" id="weekrange"></span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body">
+      <div class="week" id="week"></div>
+      <div class="stats" id="stats"></div>
     </div>
-    <div class="confirm" id="confirm" hidden>
-      <span id="confirmText"></span>
+  </details>
+
+  <details class="card acc chart" id="acc-chart">
+    <summary><span class="acc-title"><span class="acc-h">Gewichtsverlauf</span><span class="acc-sum" id="sumChart"></span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body">
+      <div class="keys"><span><i></i>Dein Gewicht</span><span><i class="dash"></i>Richtwert 0,5 bis 0,75 kg pro Woche</span></div>
+      <div id="chart"></div>
+      <p class="chartsum" id="chartsum"></p>
+    </div>
+  </details>
+
+  <details class="card acc" id="acc-table">
+    <summary><span class="acc-title"><span class="acc-h">Wochen im Überblick</span><span class="acc-sum">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body">
+      <div class="tablewrap"><table id="table"></table></div>
+    </div>
+  </details>
+
+  <details class="card acc" id="acc-backup">
+    <summary><span class="acc-title"><span class="acc-h">Backup</span><span class="acc-sum" id="backupInfo"></span></span><span class="chev" aria-hidden="true"></span></summary>
+    <div class="acc-body backup">
+      <p>Deine Einträge liegen nur auf diesem iPhone. Speichere jeden Samstag ein Backup in Dateien, und schick es Claude, wenn du eine Auswertung willst.</p>
       <div class="row">
-        <button class="btn primary" data-act="import-yes">Laden</button>
-        <button class="btn" data-act="import-no">Abbrechen</button>
+        <button class="btn primary" data-act="export">Backup speichern</button>
+        <button class="btn" data-act="import">Backup laden</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
       </div>
+      <div class="confirm" id="confirm" hidden>
+        <span id="confirmText"></span>
+        <div class="row">
+          <button class="btn primary" data-act="import-yes">Laden</button>
+          <button class="btn" data-act="import-no">Abbrechen</button>
+        </div>
+      </div>
+      <div class="msg" id="msg" role="status"></div>
     </div>
-    <div class="msg" id="msg" role="status"></div>
-  </section>
+  </details>
 
   <footer class="help">
     <span>Erinnerungen für Wasser, Essen, Training und Schlaf kommen über deinen Google Kalender.</span>
@@ -434,7 +463,7 @@ td.good{color:var(--done);font-weight:700}
     }
     if(w===6) return [
       {id:"wake",t:"9:00",label:"Aufstehen, spätestens 9:00"},
-      {id:"check",t:"9:15",label:"Wochen-Check: wiegen",hint:"Nüchtern, Gewicht unten eintragen, danach Backup speichern"},
+      {id:"check",t:"9:15",label:"Wochen-Check: wiegen",hint:"Nüchtern, unter \"Wie geht es dir?\" eintragen, danach Backup speichern"},
       {id:"training",t:"11:00",label:"Training lang, 60 Min",hint:"Alle Übungen plus 20 Minuten zügig gehen",k:"train"},
       {id:"coffee",t:"11:50",label:"Letzter Kaffee"},
       {id:"lunch",t:"13:00",label:"Mittagessen mit Eiweiß und Gemüse"},
@@ -544,7 +573,8 @@ td.good{color:var(--done);font-weight:700}
     var its=itemsFor(view), d=cur(), isToday=view===trackerToday(), nm=nowMinutes(), nextId=null;
     if(isToday){ for(var i=0;i<its.length;i++){ var it=its[i]; if(!(d.done&&d.done[it.id]) && mins(it.t)>=nm-45){ nextId=it.id; break; } } }
     var done=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
-    $("listmeta").textContent=done+"/"+its.length;
+    var nx=its.filter(function(i){ return i.id===nextId; })[0];
+    $("listmeta").textContent = done+"/"+its.length+" erledigt"+(nx ? " · Als Nächstes "+nx.t+" "+nx.label : done===its.length ? " · alles geschafft" : "");
     $("items").innerHTML = its.map(function(it){
       var on=!!(d.done&&d.done[it.id]);
       var kd = '<i class="kdot" style="--k:'+(it.k?'var(--'+it.k+')':'transparent')+'"></i>';
@@ -564,11 +594,16 @@ td.good{color:var(--done);font-weight:700}
     $("water").innerHTML=html;
     $("waterL").textContent=litres(w);
     var gl=$("waterGoal"), goalTxt="Ziel "+fmt(goalL,2).replace(/,?0+$/,"")+" L";
+    var soll=0, cls="";
     if(view===trackerToday()){
-      var nm=nowMinutes(), soll=0; plan.forEach(function(p){ if(p[0]<=nm) soll=p[1]; });
-      var ist=w*0.25, cls = soll===0 ? "" : ist+0.001<soll-0.25 ? "behind" : ist>=soll ? "ahead" : "";
+      var nm=nowMinutes(); plan.forEach(function(p){ if(p[0]<=nm) soll=p[1]; });
+      var ist=w*0.25; cls = soll===0 ? "" : ist+0.001<soll-0.25 ? "behind" : ist>=soll ? "ahead" : "";
       gl.innerHTML='Soll jetzt <span class="'+cls+'">'+litres(soll/0.25)+'</span> · '+goalTxt;
     } else gl.textContent=goalTxt;
+    var sf=litres(w)+" von "+goalTxt.replace("Ziel ","");
+    if(view===trackerToday() && soll>0){ sf+=' · Soll jetzt <span class="'+cls+'">'+litres(soll/0.25)+'</span>'; }
+    sf+=" · Gemüse "+(d.veg||0)+"/3 · Obst "+(d.fruit||0)+"/2";
+    $("sumFood").innerHTML=sf;
     $("counters").innerHTML = COUNTERS.map(function(c){
       var v=d[c.k]||0;
       return '<div class="ctr"><span class="lab">'+c.label+'<small>'+c.sub+', Ziel '+c.goal+'</small></span>'
@@ -592,6 +627,12 @@ td.good{color:var(--done);font-weight:700}
     var inp=$("weight");
     if(document.activeElement!==inp) inp.value = typeof d.weight==="number" ? fmt(d.weight,1) : "";
     $("weightInfo").textContent = view>=PLAN_START ? "Richtwert heute "+fmt(target(view),1)+" kg" : "";
+    var parts=[];
+    if(d.sleep!=null) parts.push("Schlaf "+fmt(d.sleep,1).replace(",0","")+" h");
+    if(d.energy) parts.push("Energie "+d.energy+"/10");
+    if(d.mood) parts.push("Stimmung "+d.mood+"/10");
+    if(typeof d.weight==="number") parts.push(fmt(d.weight,1)+" kg");
+    $("sumFeel").textContent = parts.length ? parts.join(" · ") : "Schlaf, Energie, Stimmung, Gewicht eintragen";
   }
 
   function weekData(mon){
@@ -613,7 +654,7 @@ td.good{color:var(--done);font-weight:700}
 
   function renderWeek(){
     var mon=mondayOf(view), today=trackerToday(), wk=weekData(mon);
-    $("weekrange").textContent=shortDate(mon)+"–"+shortDate(addDays(mon,6));
+    $("weekrange").textContent=shortDate(mon)+"–"+shortDate(addDays(mon,6))+" · Training "+wk.training+"/4 · Familie "+(wk.family?"angerufen":"noch nicht");
     $("week").innerHTML = wk.list.map(function(x){
       var p=Math.round(pctFor(x.date)*100), tr=!!(x.d&&x.d.done&&x.d.done.training);
       return '<button class="wd'+(x.date===view?" sel":"")+(x.date===today?" today":"")+'" data-act="goto" data-date="'+x.date+'" aria-label="'+DAYS[dow(x.date)]+', '+p+' Prozent erledigt">'
@@ -669,6 +710,8 @@ td.good{color:var(--done);font-weight:700}
         +(Math.abs(dlt)<0.25?'Genau im Plan. ':dlt<0?'<b>'+fmt(-dlt,1)+' kg</b> besser als der Richtwert. ':'<b>'+fmt(dlt,1)+' kg</b> über dem Richtwert, kein Problem, der Trend zählt. ')
         +(rest>0?'Noch <b>'+fmt(rest,1)+' kg</b> bis 72,5.':'Ziel für November erreicht.');
     } else sum.textContent="";
+    if(pts.length){ var lp3=pts[pts.length-1], r3=lp3.w-W_END; $("sumChart").textContent="Zuletzt "+fmt(lp3.w,1)+" kg"+(r3>0?" · noch "+fmt(r3,1)+" kg bis 72,5":" · Ziel erreicht"); }
+    else $("sumChart").textContent="Noch kein Gewicht eingetragen";
   }
 
   function renderTable(){
@@ -689,7 +732,7 @@ td.good{color:var(--done);font-weight:700}
 
   function renderBackup(){
     var n=Object.keys(days).length;
-    $("backupInfo").textContent = lastBackup ? "Letztes Backup "+shortDate(lastBackup) : n+" Tage erfasst";
+    $("backupInfo").textContent = (lastBackup ? "Letztes Backup "+shortDate(lastBackup) : "Noch kein Backup")+" · "+n+(n===1?" Tag":" Tage")+" erfasst";
   }
 
   var SQ='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -705,7 +748,8 @@ td.good{color:var(--done);font-weight:700}
             return '<li><button data-act="listcheck" data-id="'+it[0]+'" aria-pressed="'+on+'"><span class="sq">'+SQ+'</span><span class="t">'+it[1]+(it[2]?'<small>'+it[2]+'</small>':'')+'</span></button></li>';
           }).join("") + '</ul></div>';
     }).join("");
-    $("prepMeta").textContent = done+"/"+total+" erledigt";
+    function cnt(list,st){ var t=0,dn=0; list.forEach(function(g){ g.items.forEach(function(it){ t++; if(st[it[0]]) dn++; }); }); return dn+"/"+t; }
+    $("prepMeta").textContent = "Einkaufen "+cnt(SHOP,lists.shop)+" · Vorbereiten "+cnt(PREP,lists.prep);
     $("resetBtn").textContent = listTab==="shop" ? "Einkaufsliste leeren" : "Vorbereitung leeren";
   }
 
@@ -759,7 +803,7 @@ td.good{color:var(--done);font-weight:700}
     if(a==="prev"){ view=addDays(view,-1); render(); return; }
     if(a==="next"){ view=addDays(view,1); render(); return; }
     if(a==="today"){ view=trackerToday(); render(); return; }
-    if(a==="goto"){ view=b.dataset.date; render(); return; }
+    if(a==="goto"){ view=b.dataset.date; render(); try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ window.scrollTo(0,0); } return; }
     if(a==="toggle"){ var id=b.dataset.id; edit(function(d){ d.done=d.done||{}; if(d.done[id]) delete d.done[id]; else d.done[id]=true; }); return; }
     if(a==="water"){ var n=+b.dataset.n; edit(function(d){ d.water = (d.water===n) ? n-1 : n; }); return; }
     if(a==="count"){ var k=b.dataset.k, dl=+b.dataset.d, c=COUNTERS.filter(function(x){return x.k===k;})[0]; edit(function(d){ d[k]=Math.max(0,Math.min(c.max,(d[k]||0)+dl)); }); return; }
@@ -794,6 +838,14 @@ td.good{color:var(--done);font-weight:700}
   // Hinweis zum Installieren nur im Browser, nicht in der installierten App
   var standalone = window.navigator.standalone===true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
   $("install").hidden = standalone;
+
+  // ---------- Auf- und Zuklappen (wird auf dem Handy gemerkt) ----------
+  var UIKEY="tagesplan.ui", uiOpen={"acc-list":true};
+  try{ var u=JSON.parse(localStorage.getItem(UIKEY)||"null"); if(u && u.open && typeof u.open==="object") uiOpen=u.open; }catch(e){}
+  Array.prototype.forEach.call(document.querySelectorAll("details.acc"), function(el){
+    el.open = !!uiOpen[el.id];
+    el.addEventListener("toggle", function(){ uiOpen[el.id]=el.open; try{ localStorage.setItem(UIKEY, JSON.stringify({open:uiOpen})); }catch(e){} });
+  });
 
   render();
 
