@@ -1,0 +1,6 @@
+# Persönliche Daten nie ins öffentliche Repo
+daten/
+tagesplan-backup-*.json
+tagesplan-tage-*.csv
+tagesplan-wochen-*.csv
+__pycache__/

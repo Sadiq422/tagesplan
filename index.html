@@ -594,6 +594,32 @@ body.modal-open{overflow:hidden}
 .dowbars .bar{height:10px;border-radius:9px;background:var(--surface-2);overflow:hidden}
 .dowbars .bar i{display:block;height:100%;background:var(--accent);border-radius:9px}
 .dowbars .pv{font:500 12px var(--mono);text-align:right;color:var(--ink)}
+
+/* ===== Hinweise, Wochenrückblick, Backup ===== */
+.nudges{display:grid;gap:10px}
+.nudges[hidden]{display:none}
+.nudge{display:grid;grid-template-columns:44px minmax(0,1fr) 14px;gap:12px;align-items:center;width:100%;text-align:left;border:1px solid #D9DFC0;background:#EEF1DA;border-radius:20px;padding:12px 14px 12px 12px;cursor:pointer;color:var(--ink)}
+.nudge .lab{font-weight:700;line-height:1.3;display:grid;gap:2px}
+.nudge .hint{font-weight:500;font-size:13px;color:var(--muted)}
+.weeknav{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px}
+.weeknav .wn{height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:22px;cursor:pointer}
+.weeknav .wn:disabled{opacity:.35;cursor:default}
+.weeknav .wt{display:grid;justify-items:center;gap:2px}
+.weeknav .wt b{font:800 20px/1.1 var(--display);color:var(--ink)}
+.weeknav .wt span{font-size:13px;color:var(--muted)}
+.stats.rb{grid-template-columns:repeat(2,minmax(0,1fr))}
+.stat .dl{font:500 11.5px var(--mono);color:var(--muted);margin-top:3px}
+.stat .dl.up{color:#3C7F53}
+.stat .dl.down{color:#B45E26}
+.insights{margin:0;padding:0 0 0 18px;display:grid;gap:7px;font-size:14.5px;line-height:1.45;color:var(--ink)}
+.insights li::marker{color:var(--accent)}
+.field textarea{width:100%;box-sizing:border-box;min-height:84px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:10px 12px;font:500 16px/1.45 var(--body);resize:vertical}
+.field textarea:focus{outline:2px solid var(--accent);outline-offset:1px;background:var(--surface)}
+.banner.due{background:#FBEFE4;border:1px solid #F0D2B8;color:#7A3F14;font-weight:600}
+.card.backup p{margin:0}
+.card.backup{display:grid;gap:12px}
+.card.backup .msg:empty{display:none}
+.card.backup .confirm[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -642,6 +668,7 @@ body.modal-open{overflow:hidden}
     </div>
 
     <div class="sheet">
+      <div class="nudges" id="nudges" hidden></div>
       <div class="sect-head"><h2>Deine Aufgaben</h2><span class="meta" id="listcount2">0/0</span></div>
       <ul class="tasks" id="items"></ul>
     </div>
@@ -728,6 +755,7 @@ body.modal-open{overflow:hidden}
       <button class="rowlink" data-act="nav" data-page="plan"><span class="ico" style="--k:var(--train);--ks:var(--train-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span><span class="rl"><span class="t">Plan bearbeiten</span><span class="s sum-plan"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="ziele"><span class="ico" style="--k:var(--wake);--ks:var(--wake-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span><span class="rl"><span class="t">Ziele</span><span class="s sum-goals"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="woche"><span class="ico" style="--k:var(--prep);--ks:var(--prep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="rl"><span class="t">Diese Woche</span><span class="s sum-week"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="open-review"><span class="ico" style="--k:var(--people);--ks:var(--people-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg></span><span class="rl"><span class="t">Wochenrückblick</span><span class="s sum-rb"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="auswertung"><span class="ico" style="--k:var(--walk);--ks:var(--walk-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-12"/><path d="M3 20h18"/></svg></span><span class="rl"><span class="t">Auswertung</span><span class="s sum-ana"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="gewicht"><span class="ico" style="--k:var(--food);--ks:var(--food-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg></span><span class="rl"><span class="t">Gewichtsverlauf</span><span class="s sum-chart"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="ueberblick"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M3.5 10h17M3.5 15h17M10 4.5v15"/></svg></span><span class="rl"><span class="t">Wochen im Überblick</span><span class="s">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><i class="go" aria-hidden="true"></i></button>
@@ -815,6 +843,32 @@ body.modal-open{overflow:hidden}
     </div>
   </section>
 
+  <section class="page" data-page="rueckblick" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Wochenrückblick</h1><p class="psub">Montag bis Sonntag, verglichen mit der Vorwoche</p></header>
+    <div class="sheet">
+      <div class="weeknav">
+        <button class="wn" data-act="rb-prev" aria-label="Vorherige Woche">‹</button>
+        <div class="wt"><b id="rbTitle">KW</b><span id="rbRange"></span></div>
+        <button class="wn" data-act="rb-next" id="rbNext" aria-label="Nächste Woche">›</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Zahlen</h2><span class="meta">zur Vorwoche</span></div>
+        <div class="stats rb" id="rbStats"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Auffällig</h2></div>
+        <ul class="insights" id="rbInsights"></ul>
+      </div>
+      <div class="card fields">
+        <div class="card-head"><h2>Deine Notizen</h2><span class="meta" id="rbSaved" role="status"></span></div>
+        <div class="field"><label for="rbGood">Was lief gut?</label><textarea id="rbGood" rows="3" maxlength="600" placeholder="Zum Beispiel: Drei Trainings geschafft, früher geschlafen."></textarea></div>
+        <div class="field"><label for="rbNextTxt">Was machst du nächste Woche anders?</label><textarea id="rbNextTxt" rows="3" maxlength="600" placeholder="Eine Sache reicht. Zum Beispiel: Wasserflasche mit zur Arbeit."></textarea></div>
+      </div>
+      <p class="note">Die Notizen bleiben auf dem iPhone, kommen mit ins Backup und landen in Notion unter Wochen.</p>
+    </div>
+  </section>
+
   <section class="page" data-page="woche" hidden>
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Diese Woche</h1><p class="psub sum-week"></p></header>
@@ -854,8 +908,10 @@ body.modal-open{overflow:hidden}
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Backup</h1><p class="psub sum-backup"></p></header>
     <div class="sheet">
+    <div class="banner due" id="backupDue" hidden></div>
     <div class="card backup">
-      <p>Deine Einträge liegen nur auf diesem iPhone. Speichere jeden Samstag ein Backup in Dateien, und schick es Claude, wenn du eine Auswertung willst.</p>
+      <div class="card-head"><h2>Sichern</h2></div>
+      <p>Deine Einträge liegen nur auf diesem iPhone. Das Backup enthält alles: Tage, Plan, Ziele, Listen und Wochennotizen. Speichere es jeden Samstag in Dateien oder Google Drive.</p>
       <div class="row">
         <button class="btn primary" data-act="export">Backup speichern</button>
         <button class="btn" data-act="import">Backup laden</button>
@@ -869,6 +925,20 @@ body.modal-open{overflow:hidden}
         </div>
       </div>
       <div class="msg" id="msg" role="status"></div>
+    </div>
+    <div class="card backup">
+      <div class="card-head"><h2>Export</h2></div>
+      <p>CSV für Notion, Excel oder Python. Die Spalten heißen genau wie in deiner Notion-Seite "Tagesplan Daten".</p>
+      <div class="row">
+        <button class="btn primary" data-act="csv-days">Tage als CSV</button>
+        <button class="btn" data-act="csv-weeks">Wochen als CSV</button>
+      </div>
+      <p class="note">Nach Notion: Datei an Claude schicken, dann werden neue Tage eingetragen und vorhandene aktualisiert. Oder in Notion selbst über "Merge with CSV".</p>
+    </div>
+    <div class="card backup">
+      <div class="card-head"><h2>Speicher</h2></div>
+      <p id="storeState"></p>
+      <p class="note" id="storeSize"></p>
     </div>
     </div>
   </section>
@@ -1020,7 +1090,9 @@ body.modal-open{overflow:hidden}
   function dayPlan(s){ return plan.days[String(dow(s))]; }
   function itemsFor(s){ var d=days[s]; if(d && Array.isArray(d.tasks)) return d.tasks; var p=dayPlan(s); return p ? sortTasks(p.tasks) : []; }
   function shiftIcon(t){ t=(t||"").toLowerCase(); return t.indexOf("frei")>=0 ? "leaf" : t.indexOf("früh")>=0 ? "sun" : "moon"; }
-  function waterGoalL(s){ var p=dayPlan(s); return (p && +p.water) || 2.5; }
+  function waterGoalL(s){ var d=days[s]; if(d && +d.waterGoal) return +d.waterGoal; var p=dayPlan(s); return (p && +p.water) || 2.5; }
+  function dayShift(s){ var d=days[s]; if(d && typeof d.shift==="string") return d.shift; var p=dayPlan(s); return (p && p.shift) || ""; }
+  function snapPlan(d,k,pl){ var pd=(pl||plan).days[String(dow(k))]; d.tasks=clone(sortTasks(pd.tasks)); d.shift=pd.shift||""; d.waterGoal=+pd.water||2.5; }
   function sollNow(s){
     var its=itemsFor(s); if(!its.length) return 0;
     var a=mins(its[0].t), e=mins(its[its.length-1].t)-120; if(e<=a) e=a+60;
@@ -1044,20 +1116,21 @@ body.modal-open{overflow:hidden}
   var raw=null; try{ raw=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ raw=null; }
   var plan = (raw && validPlan(raw.plan)) ? raw.plan : defaultPlan();
   applyGoals(plan.goals);
-  var days, lastBackup=null, lists={shop:{},prep:{}};
+  var days, lastBackup=null, lists={shop:{},prep:{}}, weeks={};
   if(raw && raw.days && typeof raw.days==="object"){
     days=raw.days; lastBackup=raw.lastBackup||null;
     if(raw.lists && typeof raw.lists==="object") lists=raw.lists;
     // Ältere Einträge: Plan des Tages festhalten, damit spätere Änderungen sie nicht verfälschen
-    if(!raw.plan){ Object.keys(days).forEach(function(k){ var d=days[k]; if(d && !Array.isArray(d.tasks) && isDate(k)){ var pd=plan.days[String(dow(k))]; d.tasks=clone(sortTasks(pd.tasks)); } }); }
+    if(!raw.plan){ Object.keys(days).forEach(function(k){ var d=days[k]; if(d && !Array.isArray(d.tasks) && isDate(k)) snapPlan(d,k); }); }
+    if(raw.weeks && typeof raw.weeks==="object") weeks=raw.weeks;
   } else {
-    days={}; var st=blank(PLAN_START); st.weight=W_START; st.tasks=clone(sortTasks(plan.days[String(dow(PLAN_START))].tasks)); days[PLAN_START]=st;
+    days={}; var st=blank(PLAN_START); st.weight=W_START; snapPlan(st,PLAN_START); days[PLAN_START]=st;
   }
   lists.shop=lists.shop||{}; lists.prep=lists.prep||{};
   var saveOk=true, saveTimer=null;
   function persistNow(){
     clearTimeout(saveTimer); saveTimer=null;
-    try{ localStorage.setItem(KEY, JSON.stringify({v:2,days:days,lastBackup:lastBackup,lists:lists,plan:plan})); saveOk=true; }
+    try{ localStorage.setItem(KEY, JSON.stringify({v:2,days:days,lastBackup:lastBackup,lists:lists,plan:plan,weeks:weeks})); saveOk=true; }
     catch(e){ saveOk=false; }
     setStatus();
   }
@@ -1071,7 +1144,7 @@ body.modal-open{overflow:hidden}
   function cur(){ return days[view] || blank(view); }
   function $(id){ return document.getElementById(id); }
   function setStatus(){ var e=$("saveErr"); if(e) e.hidden=saveOk; }
-  function edit(fn){ var d=clone(cur()); if(!Array.isArray(d.tasks)) d.tasks=clone(itemsFor(view)); fn(d); days[view]=d; render(); persist(); }
+  function edit(fn){ var d=clone(cur()); if(!Array.isArray(d.tasks)) snapPlan(d,view); fn(d); days[view]=d; render(); persist(); }
 
   // ---------- Rendern ----------
   var ICON={"heute": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8 12.5l2.7 2.5L16 9.5\"/>", "drop": "<path d=\"M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z\"/>", "dropplus": "<path d=\"M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z\"/><path d=\"M12 11.5v5M9.5 14h5\"/>", "list": "<rect x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2\"/><path d=\"M9 3.5h6M9 10h6M9 14h6M9 18h3.5\"/>", "heart": "<path d=\"M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z\"/>", "dots": "<circle cx=\"5\" cy=\"12\" r=\"1.3\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/><circle cx=\"19\" cy=\"12\" r=\"1.3\"/>", "sun": "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4\"/>", "bowl": "<path d=\"M3.5 11.5h17a8.5 8.5 0 0 1-17 0z\"/><path d=\"M8.5 8c0-1.3 1-1.8 1-3M12.5 8c0-1.3 1-1.8 1-3\"/>", "apple": "<path d=\"M12 7.5c-3-2-7.5-1-7.5 4 0 4 3 8.5 5 8.5 1 0 1.5-.5 2.5-.5s1.5.5 2.5.5c2 0 5-4.5 5-8.5 0-5-4.5-6-7.5-4z\"/><path d=\"M12 7.5c0-2 1-3.5 3-4\"/>", "cup": "<path d=\"M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z\"/><path d=\"M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5v3M12 3.5v3\"/>", "moon": "<path d=\"M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z\"/>", "dumbbell": "<path d=\"M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11\"/>", "pot": "<path d=\"M4 10.5h16v5.5a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z\"/><path d=\"M2 10.5h20M9.5 7c0-1 1-1.5 1-2.5M14 7c0-1 1-1.5 1-2.5\"/>", "walk": "<circle cx=\"13.5\" cy=\"4.5\" r=\"1.8\"/><path d=\"M10 21l2-6 3 3v3M12 15l-1-5 4-1 2 4 2.5 1M11 10l-3 2-1 3\"/>", "scale": "<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"4\"/><path d=\"M8.8 10.5a4.5 4.5 0 0 1 6.4 0M12 10.5l1.6-1.6\"/>", "phone": "<path d=\"M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z\"/>", "users": "<circle cx=\"9\" cy=\"8\" r=\"3.2\"/><path d=\"M3 20a6 6 0 0 1 12 0\"/><circle cx=\"17\" cy=\"9\" r=\"2.6\"/><path d=\"M15.8 14.2A5 5 0 0 1 21 19\"/>", "cart": "<circle cx=\"9\" cy=\"20\" r=\"1.4\"/><circle cx=\"18\" cy=\"20\" r=\"1.4\"/><path d=\"M2.5 3.5h3l2.4 11.5h11l2-8H6.6\"/>", "leaf": "<path d=\"M5 19.5C5 11 10.5 5 20 5c0 10-6 15-14.5 14.5\"/><path d=\"M5 19.5c3-4 6.5-6.5 10-8.5\"/>", "nut": "<path d=\"M12 3.5c4 0 7 3 7 8s-3 9.5-7 9.5-7-4.5-7-9.5 3-8 7-8z\"/><path d=\"M12 7.5v10\"/>", "bolt": "<path d=\"M13 2.5 5 13.5h6l-1 8 8-11h-6z\"/>", "smile": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01\"/>", "cal": "<rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15\" rx=\"3\"/><path d=\"M3.5 10h17M8 3v4M16 3v4\"/>", "trend": "<path d=\"M3 17l5-5 4 3 8-8\"/><path d=\"M15 7h5v5\"/>", "table": "<rect x=\"3.5\" y=\"4.5\" width=\"17\" height=\"15\" rx=\"3\"/><path d=\"M3.5 10h17M3.5 15h17M10 4.5v15\"/>", "cloud": "<path d=\"M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5\"/><path d=\"M12 12v8M9 15l3-3 3 3\"/>", "check": "<path d=\"M5 12.5l4.5 4.5L19 7.5\"/>"};
@@ -1084,7 +1157,7 @@ body.modal-open{overflow:hidden}
   function renderHead(){
     var today=trackerToday(), dd=parse(view), hr=new Date().getHours();
     $("dayname").textContent = view===today ? "Heute" : view===addDays(today,-1) ? "Gestern" : view===addDays(today,1) ? "Morgen" : DAYS[dow(view)];
-    var dpv=dayPlan(view)||{}; $("shift").innerHTML = svgI(shiftIcon(dpv.shift))+'<span>'+esc(dpv.shift||"")+'</span>';
+    var shv=dayShift(view); $("shift").innerHTML = svgI(shiftIcon(shv))+'<span>'+esc(shv)+'</span>';
     $("toToday").hidden = view===today;
     var lbl=(view===today?"Heute, ":"")+DAYS[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
     Array.prototype.forEach.call(document.querySelectorAll(".pdate"), function(el){ el.textContent=lbl; });
@@ -1295,9 +1368,25 @@ body.modal-open{overflow:hidden}
     $("table").innerHTML='<thead><tr><th>Woche</th><th>Gewicht kg</th><th>Richtwert</th><th>Schlaf h</th><th>Energie</th><th>Stimmung</th><th>Training</th><th>Familie</th></tr></thead><tbody>'+rows+'</tbody>';
   }
 
+  var persisted=null;
+  if(navigator.storage && navigator.storage.persisted){ navigator.storage.persisted().then(function(v){ persisted=v; renderBackup(); }).catch(function(){}); }
+  function backupDue(){
+    var dd=dataDays(); if(!dd.length) return null;
+    if(!lastBackup) return dd.length>=3 ? {never:true} : null;
+    var age=diff(lastBackup,trackerToday()), newer=dd.some(function(k){ return k>=lastBackup; });
+    return (age>=7 && newer) ? {age:age} : null;
+  }
   function renderBackup(){
-    var n=Object.keys(days).length;
+    var n=dataDays().length;
     setAll(".sum-backup", (lastBackup ? "Letztes Backup "+shortDate(lastBackup) : "Noch kein Backup")+" · "+n+(n===1?" Tag":" Tage")+" erfasst");
+    if(!$("storeState")) return;
+    var size=0; try{ size=(localStorage.getItem(KEY)||"").length; }catch(e){}
+    var st = persisted===true ? "Dauerhafter Speicher ist aktiv. iOS löscht die Daten nicht von selbst." : "Der Browser darf die Daten bei Speichermangel löschen. Als App auf dem Home-Bildschirm ist das Risiko gering, ein Backup pro Woche schützt trotzdem.";
+    $("storeState").textContent = st;
+    $("storeSize").textContent = n+(n===1?" Tag":" Tage")+" mit Einträgen · "+Math.max(1,Math.round(size/1024))+" KB auf diesem iPhone";
+    var due=backupDue();
+    $("backupDue").hidden=!due;
+    if(due) $("backupDue").textContent = due.never ? "Du hast noch kein Backup. Speichere jetzt eins." : "Letztes Backup vor "+due.age+" Tagen. Zeit für ein neues.";
   }
 
   var SQ='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1318,29 +1407,62 @@ body.modal-open{overflow:hidden}
     $("resetBtn").textContent = listTab==="shop" ? "Einkaufsliste leeren" : "Vorbereitung leeren";
   }
 
-  function render(){ renderHead(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); renderPlan(); renderGoals(); renderAna(); setStatus(); }
+  function render(){ renderHead(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); renderPlan(); renderGoals(); renderAna(); renderReview(); renderNudges(); setStatus(); }
 
   // ---------- Backup ----------
   var pendingImport=null;
   function msg(t){ $("msg").textContent=t; }
+  async function shareFile(name, mime, data, title){
+    var file=null;
+    try{ file=new File([data],name,{type:mime}); }catch(e){}
+    if(file && navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file],title:title}); return true; }
+      catch(e){ if(e && e.name==="AbortError") return false; }
+    }
+    var url=URL.createObjectURL(new Blob([data],{type:mime}));
+    var a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); },5000);
+    return true;
+  }
   async function exportBackup(){
     persistNow();
-    var data=JSON.stringify({app:"Tagesplan",version:2,exported:new Date().toISOString(),days:days,plan:plan,lists:lists});
+    var data=JSON.stringify({app:"Tagesplan",version:2,exported:new Date().toISOString(),days:days,plan:plan,lists:lists,weeks:weeks});
     var name="tagesplan-backup-"+iso(new Date())+".json";
-    var file=null;
-    try{ file=new File([data],name,{type:"application/json"}); }catch(e){}
-    var done=false;
-    if(file && navigator.canShare && navigator.canShare({files:[file]})){
-      try{ await navigator.share({files:[file],title:"Tagesplan Backup"}); done=true; }
-      catch(e){ if(e && e.name==="AbortError"){ msg("Backup abgebrochen."); return; } }
-    }
-    if(!done){
-      var url=URL.createObjectURL(new Blob([data],{type:"application/json"}));
-      var a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){ URL.revokeObjectURL(url); },5000);
-    }
-    lastBackup=iso(new Date()); persistNow(); renderBackup();
-    msg("Backup erstellt: "+name+". Tipp: in Dateien auf iCloud Drive sichern.");
+    if(!(await shareFile(name,"application/json",data,"Tagesplan Backup"))){ msg("Backup abgebrochen."); return; }
+    lastBackup=iso(new Date()); persistNow(); render();
+    msg("Backup erstellt: "+name+". Tipp: in Dateien auf iCloud Drive oder in Google Drive sichern.");
+  }
+
+  // ---------- CSV-Export (Spalten wie in der Notion-Datenbank "Tagesplan Daten") ----------
+  function csvCell(v){ if(v==null) return ""; v=String(v); return /[",;\n\r]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
+  function csvNum(v,dig){ if(v==null || isNaN(v)) return ""; return String(+(+v).toFixed(dig==null?2:dig)); }
+  function toCSV(head, rows){ return [head].concat(rows).map(function(r){ return r.map(csvCell).join(","); }).join("\r\n")+"\r\n"; }
+  function dateDE(s){ var d=parse(s); return pad(d.getDate())+"."+pad(d.getMonth()+1)+"."+d.getFullYear(); }
+  function isoWeek(s){ var d=parse(s); d.setHours(12,0,0,0); d.setDate(d.getDate()+3-((d.getDay()+6)%7)); var w1=new Date(d.getFullYear(),0,4,12); return 1+Math.round(((d-w1)/864e5-3+((w1.getDay()+6)%7))/7); }
+  var DAY_HEAD=["Tag","Datum","Wochentag","Schicht","Checkliste","Erledigt","Aufgaben","Wasser L","Wasserziel L","Gemüse","Obst","Eiweiß","Nüsse","Schlaf h","Energie","Stimmung","Gewicht kg","Training","Familie","Offen"];
+  function dayRow(k){
+    var d=days[k], its=itemsFor(k), done=d.done||{}, n=its.filter(function(i){ return done[i.id]; }).length, dc=doneCats(k);
+    return [DSHORT[dow(k)]+" "+dateDE(k), k, DSHORT[dow(k)], dayShift(k), its.length?csvNum(n/its.length,2):"", n, its.length,
+      csvNum((d.water||0)*0.25,2), csvNum(waterGoalL(k),2), d.veg||0, d.fruit||0, d.protein||0, d.nuts||0,
+      csvNum(d.sleep,1), d.energy==null?"":d.energy, d.mood==null?"":d.mood, csvNum(d.weight,1),
+      dc.train?"Yes":"No", dc.family?"Yes":"No",
+      its.filter(function(i){ return !done[i.id]; }).map(function(i){ return fmtT(i.t)+" "+i.label; }).join("; ")];
+  }
+  var WEEK_HEAD=["Woche","Start","Tage erfasst","Checkliste","Trainings","Training geplant","Schlaf h","Energie","Stimmung","Wasser L","Gewicht kg","Familie","Lief gut","Nächste Woche"];
+  function weekTitle(mon){ return "KW "+isoWeek(mon)+" · "+shortDate(mon)+" bis "+dateDE(addDays(mon,6)); }
+  function weekRow(mon){
+    var w=weekSummary(mon), nt=weeks[mon]||{};
+    return [weekTitle(mon), mon, w.n, w.pct==null?"":csvNum(w.pct,2), w.train, w.trainPlanned, csvNum(w.sleep,1), csvNum(w.energy,1), csvNum(w.mood,1), csvNum(w.water,2), csvNum(w.weight,1), w.family?"Yes":"No", nt.good||"", nt.next||""];
+  }
+  function dataDays(){ var t=trackerToday(); return Object.keys(days).filter(function(k){ return isDate(k) && k<=t && hasData(days[k]); }).sort(); }
+  function dataWeeks(){ var m={}; dataDays().forEach(function(k){ m[mondayOf(k)]=true; }); Object.keys(weeks).forEach(function(k){ if(isDate(k)) m[k]=true; }); return Object.keys(m).sort(); }
+  async function exportCSV(kind){
+    persistNow();
+    var data, name, ks;
+    if(kind==="days"){ ks=dataDays(); if(!ks.length){ msg("Noch keine Tage mit Einträgen."); return; } data=toCSV(DAY_HEAD, ks.map(dayRow)); name="tagesplan-tage-"+iso(new Date())+".csv"; }
+    else { ks=dataWeeks(); if(!ks.length){ msg("Noch keine Wochen mit Einträgen."); return; } data=toCSV(WEEK_HEAD, ks.map(weekRow)); name="tagesplan-wochen-"+iso(new Date())+".csv"; }
+    if(!(await shareFile(name,"text/csv",data,"Tagesplan "+(kind==="days"?"Tage":"Wochen")))){ msg("Export abgebrochen."); return; }
+    msg(name+" erstellt, "+ks.length+" "+(kind==="days"?(ks.length===1?"Tag":"Tage"):(ks.length===1?"Woche":"Wochen"))+".");
   }
   function readImport(file){
     var r=new FileReader();
@@ -1349,9 +1471,9 @@ body.modal-open{overflow:hidden}
         var o=JSON.parse(r.result), src=o && o.days;
         if(!src || typeof src!=="object") throw new Error("format");
         var clean={}, count=0;
-        Object.keys(src).forEach(function(k){ var d=src[k]; if(isDate(k) && d && typeof d==="object"){ var b=blank(k); Object.keys(b).forEach(function(f){ if(f in d) b[f]=d[f]; }); if(Array.isArray(d.tasks)) b.tasks=d.tasks; b.date=k; b.type="day"; clean[k]=b; count++; } });
+        Object.keys(src).forEach(function(k){ var d=src[k]; if(isDate(k) && d && typeof d==="object"){ var b=blank(k); Object.keys(b).forEach(function(f){ if(f in d) b[f]=d[f]; }); if(Array.isArray(d.tasks)) b.tasks=d.tasks; if(typeof d.shift==="string") b.shift=d.shift; if(+d.waterGoal) b.waterGoal=+d.waterGoal; b.date=k; b.type="day"; clean[k]=b; count++; } });
         if(!count) throw new Error("empty");
-        pendingImport={days:clean, plan: validPlan(o.plan)?o.plan:null, lists:(o.lists&&typeof o.lists==="object")?o.lists:null};
+        pendingImport={days:clean, plan: validPlan(o.plan)?o.plan:null, lists:(o.lists&&typeof o.lists==="object")?o.lists:null, weeks:(o.weeks&&typeof o.weeks==="object")?o.weeks:null};
         $("confirmText").textContent=(count===1?"1 Tag":count+" Tage")+" im Backup gefunden"+(pendingImport.plan?", dazu dein Plan und deine Ziele":"")+". Laden überschreibt die gleichen Tage auf diesem iPhone, andere Tage bleiben.";
         $("confirm").hidden=false; msg("");
       }catch(e){ pendingImport=null; $("confirm").hidden=true; msg("Diese Datei ist kein Tagesplan-Backup. Wähle eine Datei, die mit tagesplan-backup beginnt."); }
@@ -1381,6 +1503,11 @@ body.modal-open{overflow:hidden}
     if(a==="sleep"){ var s=+b.dataset.d; edit(function(d){ if(d.sleep==null) d.sleep = s>0?SLEEP_GOAL:SLEEP_GOAL-0.5; else d.sleep=Math.max(0,Math.min(14,d.sleep+s)); }); return; }
     if(a==="rate"){ var key=b.dataset.k, v=+b.dataset.v; edit(function(d){ d[key] = d[key]===v ? null : v; }); return; }
     if(a==="export"){ exportBackup(); return; }
+    if(a==="csv-days"){ exportCSV("days"); return; }
+    if(a==="csv-weeks"){ exportCSV("weeks"); return; }
+    if(a==="rb-prev"){ saveNotes(); rbMon=addDays(rbMon,-7); renderReview(); return; }
+    if(a==="rb-next"){ saveNotes(); if(addDays(rbMon,7)<=mondayOf(trackerToday())){ rbMon=addDays(rbMon,7); renderReview(); } return; }
+    if(a==="open-review"){ rbMon=reviewDefault(); renderReview(); show("rueckblick"); return; }
     if(a==="ana-range"){ anaRange=b.dataset.r; renderAna(); return; }
     if(a==="pday"){ pDay=+b.dataset.w; copySel={}; renderPlan(); return; }
     if(a==="pwater"){ var dp=plan.days[String(pDay)]; dp.water=Math.max(1,Math.min(4,Math.round(((+dp.water||2.5)+(+b.dataset.d))*4)/4)); savePlan(); return; }
@@ -1414,7 +1541,7 @@ body.modal-open{overflow:hidden}
     if(a==="list-reset"){ lists[listTab]={}; renderLists(); persist(); msg(""); return; }
     if(a==="import"){ $("importFile").click(); return; }
     if(a==="import-no"){ pendingImport=null; $("confirm").hidden=true; msg("Nichts geändert."); return; }
-    if(a==="import-yes"){ if(pendingImport){ var pi=pendingImport, cnt=Object.keys(pi.days).length; Object.keys(pi.days).forEach(function(k){ days[k]=pi.days[k]; if(!Array.isArray(days[k].tasks)) days[k].tasks=clone(sortTasks(((pi.plan||plan).days[String(dow(k))]).tasks)); }); if(pi.plan){ plan=pi.plan; applyGoals(plan.goals); } if(pi.lists){ lists=pi.lists; lists.shop=lists.shop||{}; lists.prep=lists.prep||{}; } pendingImport=null; $("confirm").hidden=true; persistNow(); render(); msg((cnt===1?"1 Tag":cnt+" Tage")+" geladen."+(pi.plan?" Plan und Ziele übernommen.":"")); } return; }
+    if(a==="import-yes"){ if(pendingImport){ var pi=pendingImport, cnt=Object.keys(pi.days).length; Object.keys(pi.days).forEach(function(k){ days[k]=pi.days[k]; if(!Array.isArray(days[k].tasks)) snapPlan(days[k],k,pi.plan||plan); }); if(pi.weeks){ Object.keys(pi.weeks).forEach(function(m){ if(isDate(m)) weeks[m]=pi.weeks[m]; }); } if(pi.plan){ plan=pi.plan; applyGoals(plan.goals); } if(pi.lists){ lists=pi.lists; lists.shop=lists.shop||{}; lists.prep=lists.prep||{}; } pendingImport=null; $("confirm").hidden=true; persistNow(); render(); msg((cnt===1?"1 Tag":cnt+" Tage")+" geladen."+(pi.plan?" Plan und Ziele übernommen.":"")); } return; }
   });
   $("weight").addEventListener("change", function(){
     var raw=this.value.trim().replace(",",".");
@@ -1449,7 +1576,7 @@ body.modal-open{overflow:hidden}
       if(k<today) return;
       var d=days[k], nt=clone(sortTasks(plan.days[String(dow(k))].tasks)), keep={};
       nt.forEach(function(t){ if(d.done && d.done[t.id]) keep[t.id]=true; });
-      d.tasks=nt; d.done=keep;
+      d.tasks=nt; d.done=keep; d.shift=plan.days[String(dow(k))].shift||""; d.waterGoal=+plan.days[String(dow(k))].water||2.5;
     });
     applyGoals(plan.goals); persistNow(); render();
   }
@@ -1630,12 +1757,102 @@ body.modal-open{overflow:hidden}
     }).join("");
   }
 
+
+  // ---------- Wochenrückblick ----------
+  function reviewDefault(){ var t=trackerToday(); return dow(t)===0 ? mondayOf(t) : addDays(mondayOf(t),-7); }
+  var rbMon=reviewDefault();
+  function weekSummary(mon){
+    var today=trackerToday(), r={n:0,pct:null,train:0,trainPlanned:0,sleep:null,energy:null,mood:null,water:null,weight:null,family:false,waterMet:0,waterDays:0,sleepMet:0,sleepDays:0,best:null,bestPct:-1,vegDays:0};
+    var P=[],S=[],E=[],M=[],Wt=[];
+    for(var i=0;i<7;i++){
+      var k=addDays(mon,i), d=days[k], its=itemsFor(k);
+      if(its.some(function(t){ return t.cat==="train"; })) r.trainPlanned++;
+      if(!d || !hasData(d) || k>today) continue;
+      r.n++;
+      if(typeof d.sleep==="number"){ S.push(d.sleep); r.sleepDays++; if(d.sleep>=SLEEP_GOAL) r.sleepMet++; }
+      if(typeof d.energy==="number") E.push(d.energy);
+      if(typeof d.mood==="number") M.push(d.mood);
+      if(typeof d.weight==="number") r.weight=d.weight;
+      var dc=doneCats(k); if(dc.family) r.family=true;
+      if(k<today){
+        var pc=pctFor(k); P.push(pc); if(pc>r.bestPct){ r.bestPct=pc; r.best=k; }
+        if(dc.train) r.train++;
+        var wl=(d.water||0)*0.25; Wt.push(wl); r.waterDays++; if(wl>=waterGoalL(k)) r.waterMet++;
+        if((d.veg||0)>=3) r.vegDays++;
+      } else if(dc.train) r.train++;
+    }
+    r.pct=mean(P); r.sleep=mean(S); r.energy=mean(E); r.mood=mean(M); r.water=mean(Wt);
+    return r;
+  }
+  function deltaHtml(cur, prev, dig, unit, lowerIsGood){
+    if(cur==null || prev==null) return '<div class="dl">&nbsp;</div>';
+    var dv=cur-prev, eps=Math.pow(10,-dig)/2;
+    if(Math.abs(dv)<eps) return '<div class="dl">wie Vorwoche</div>';
+    var good = lowerIsGood ? dv<0 : dv>0;
+    return '<div class="dl '+(good?"up":"down")+'">'+(dv>0?"+":"−")+fmt(Math.abs(dv),dig)+(unit||"")+'</div>';
+  }
+  function renderReview(){
+    if(!$("rbStats")) return;
+    var w=weekSummary(rbMon), pw=weekSummary(addDays(rbMon,-7)), t=trackerToday();
+    $("rbTitle").textContent="KW "+isoWeek(rbMon);
+    $("rbRange").textContent=shortDate(rbMon)+" bis "+dateDE(addDays(rbMon,6));
+    $("rbNext").disabled = addDays(rbMon,7) > mondayOf(t);
+    function st(v,k,d){ return '<div class="stat"><div class="v">'+v+'</div><div class="k">'+k+'</div>'+d+'</div>'; }
+    $("rbStats").innerHTML =
+      st(w.pct==null?"–":Math.round(w.pct*100)+" %","Checkliste Ø", deltaHtml(w.pct==null?null:w.pct*100, pw.pct==null?null:pw.pct*100, 0, " Pkt."))
+      +st(w.train+"/"+w.trainPlanned,"Trainings", deltaHtml(w.train, pw.n?pw.train:null, 0, ""))
+      +st(w.sleep==null?"–":fmt(w.sleep,1)+" h","Schlaf Ø", deltaHtml(w.sleep, pw.sleep, 1, " h"))
+      +st(f1(w.energy),"Energie Ø", deltaHtml(w.energy, pw.energy, 1, ""))
+      +st(f1(w.mood),"Stimmung Ø", deltaHtml(w.mood, pw.mood, 1, ""))
+      +st(w.water==null?"–":fmt(w.water,1)+" L","Wasser Ø", deltaHtml(w.water, pw.water, 1, " L"))
+      +st(w.weight==null?"–":fmt(w.weight,1)+" kg","Gewicht", deltaHtml(w.weight, pw.weight, 1, " kg", true))
+      +st(w.family?"Ja":"Nein","Familie angerufen",'<div class="dl">&nbsp;</div>');
+    var ins=[];
+    if(!w.n) ins.push("Für diese Woche gibt es noch keine Einträge.");
+    else {
+      if(w.best) ins.push("Bester Tag: <b>"+DAYS[dow(w.best)]+"</b> mit "+Math.round(w.bestPct*100)+" % der Checkliste.");
+      ins.push("Training: <b>"+w.train+" von "+w.trainPlanned+"</b> geplanten Einheiten."+(w.train>=w.trainPlanned&&w.trainPlanned>0?" Alle geschafft.":""));
+      if(w.waterDays) ins.push("Wasserziel an <b>"+w.waterMet+" von "+w.waterDays+"</b> Tagen erreicht.");
+      if(w.sleepDays) ins.push("Schlafziel von "+fmt(SLEEP_GOAL,1).replace(",0","")+" h an <b>"+w.sleepMet+" von "+w.sleepDays+"</b> Tagen erreicht.");
+      if(w.waterDays) ins.push("3 Portionen Gemüse an <b>"+w.vegDays+" von "+w.waterDays+"</b> Tagen.");
+      if(w.weight!=null){ var sat=addDays(rbMon,5), tg=target(sat<PLAN_START?PLAN_START:sat); ins.push("Gewicht <b>"+fmt(w.weight,1)+" kg</b>, Richtwert "+fmt(tg,1)+" kg"+(w.weight<=tg+0.1?", im Plan.":", "+fmt(w.weight-tg,1)+" kg darüber.")); }
+      ins.push(w.family ? "Familie angerufen." : "Familie in dieser Woche nicht angerufen.");
+    }
+    $("rbInsights").innerHTML=ins.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+    var nt=weeks[rbMon]||{};
+    ["rbGood","rbNextTxt"].forEach(function(id,i){ var el=$(id); if(document.activeElement!==el) el.value = (i===0?nt.good:nt.next)||""; });
+    var rv=reviewDefault(), open=!(weeks[rv] && ((weeks[rv].good||"").trim() || (weeks[rv].next||"").trim())), sw=weekSummary(rv);
+    setAll(".sum-rb", "KW "+isoWeek(rv)+(sw.pct==null?"":" · Checkliste "+Math.round(sw.pct*100)+" %")+" · Training "+sw.train+"/"+sw.trainPlanned+(open?" · Notizen offen":""));
+  }
+  var rbTimer=null;
+  function saveNotes(){
+    var g=$("rbGood").value, n=$("rbNextTxt").value, cur=weeks[rbMon]||{};
+    if(!g.trim() && !n.trim() && !cur.good && !cur.next) return;
+    weeks[rbMon]={good:g, next:n, updated:new Date().toISOString()};
+    persistNow(); $("rbSaved").textContent="Gespeichert"; renderNudges(); renderReview();
+    setTimeout(function(){ $("rbSaved").textContent=""; },1500);
+  }
+  ["rbGood","rbNextTxt"].forEach(function(id){ $(id).addEventListener("input", function(){ clearTimeout(rbTimer); rbTimer=setTimeout(saveNotes,600); }); $(id).addEventListener("blur", function(){ clearTimeout(rbTimer); saveNotes(); }); });
+
+  // ---------- Hinweise auf Heute ----------
+  function renderNudges(){
+    var h="", t=trackerToday(), due=backupDue();
+    if(view===t){
+      var rv=reviewDefault(), wd=dow(t), nt=weeks[rv]||{};
+      if((wd===0||wd===1) && !((nt.good||"").trim()||(nt.next||"").trim()) && weekSummary(rv).n>0)
+        h+='<button class="nudge" data-act="open-review">'+tileHtml("cal","people")+'<span class="lab">Wochenrückblick KW '+isoWeek(rv)+'<span class="hint">Zahlen ansehen und zwei Sätze notieren</span></span><i class="go" aria-hidden="true"></i></button>';
+      if(due)
+        h+='<button class="nudge" data-act="nav" data-page="backup">'+tileHtml("cloud","coffee")+'<span class="lab">'+(due.never?"Noch kein Backup":"Backup ist "+due.age+" Tage alt")+'<span class="hint">Einmal speichern, dauert 10 Sekunden</span></span><i class="go" aria-hidden="true"></i></button>';
+    }
+    $("nudges").innerHTML=h; $("nudges").hidden=!h;
+  }
+
   // ---------- Kurze Rückmeldung ----------
   var toastT=null;
   function toast(t){ var el=$("toast"); el.textContent=t; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove("show"); },1800); }
 
   // ---------- Seiten ----------
-  var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr",plan:"mehr",ziele:"mehr",auswertung:"mehr"};
+  var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr",plan:"mehr",ziele:"mehr",auswertung:"mehr",rueckblick:"mehr"};
   function show(pg){
     Array.prototype.forEach.call(document.querySelectorAll(".page"), function(el){ el.hidden = el.dataset.page!==pg; });
     var tab=PARENT[pg]||pg;
