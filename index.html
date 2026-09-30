@@ -113,6 +113,23 @@ h2{font:700 12px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;c
 .drop.goal{box-shadow:inset 0 -3px 0 var(--done)}
 .waterline{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
 .waterline b{color:var(--ink);font-size:15px}
+.waterline .behind{color:var(--warn);font-weight:700}
+.waterline .ahead{color:var(--done);font-weight:700}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--surface-2);padding:4px;border-radius:12px;margin-bottom:6px}
+.seg button{border:0;background:transparent;border-radius:9px;min-height:38px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.group{margin-top:12px}
+.group h3{font:700 12px/1.2 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 2px;display:flex;justify-content:space-between;gap:8px}
+.chk{list-style:none;margin:0;padding:0}
+.chk button{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 2px;cursor:pointer}
+.chk li:last-child button{border-bottom:0}
+.chk .sq{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);display:grid;place-items:center}
+.chk .sq svg{width:13px;height:13px;opacity:0}
+.chk button[aria-pressed="true"] .sq{background:var(--done);border-color:var(--done)}
+.chk button[aria-pressed="true"] .sq svg{opacity:1}
+.chk button[aria-pressed="true"] .t{color:var(--muted);text-decoration:line-through}
+.chk .t small{display:block;color:var(--muted);font-size:13px}
 
 .counters{display:grid;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 .ctr{display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -238,8 +255,20 @@ td.good{color:var(--done);font-weight:700}
   <section class="card" aria-labelledby="h-food">
     <div class="card-head"><h2 id="h-food">Trinken und Essen</h2><span class="meta">1 Glas = 250 ml</span></div>
     <div class="water" id="water"></div>
-    <div class="waterline"><span><b id="waterL">0 L</b> getrunken</span><span>Ziel 2,5 bis 3 L</span></div>
+    <div class="waterline"><span><b id="waterL">0 L</b> getrunken</span><span id="waterGoal">Ziel 3 L</span></div>
     <div class="counters" id="counters"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-prep">
+    <div class="card-head"><h2 id="h-prep">Meal Prep</h2><span class="meta" id="prepMeta"></span></div>
+    <div class="seg" role="tablist" aria-label="Liste wählen">
+      <button role="tab" id="tabShop" data-act="tab" data-tab="shop" aria-selected="true">Einkaufen (Sa 16:00)</button>
+      <button role="tab" id="tabPrep" data-act="tab" data-tab="prep" aria-selected="false">Vorbereiten</button>
+    </div>
+    <div id="lists"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" data-act="list-reset" id="resetBtn">Liste für neue Woche leeren</button>
+    </div>
   </section>
 
   <section class="card" aria-labelledby="h-feel">
@@ -312,6 +341,7 @@ td.good{color:var(--done);font-weight:700}
   </section>
 
   <footer class="help">
+    <span>Erinnerungen für Wasser, Essen, Training und Schlaf kommen über deinen Google Kalender.</span>
     <span>Wenn es dir schlecht geht: Telefonseelsorge <b>0800 111 0 111</b>, rund um die Uhr, kostenlos. Im Notfall <b>112</b>.</span>
   </footer>
 </div>
@@ -322,8 +352,41 @@ td.good{color:var(--done);font-weight:700}
   // ---------- Plan-Konstanten ----------
   var PLAN_START = "2026-09-30", PLAN_END = "2026-11-30";
   var W_START = 78, W_END = 72.5, W_FINAL = 70;
-  var WATER_MAX = 12, WATER_GOAL = 10;
+  var WATER_MAX = 12;
   var KEY = "tagesplan.v1";
+
+  // Wasser-Plan: [Uhrzeit in Minuten, Liter bis dahin], passend zu den Kalender-Erinnerungen
+  var WATER_PLAN = {
+    work:[[330,.25],[345,.5],[450,.75],[540,1],[660,1.25],[810,1.5],[935,2],[1020,2.25],[1125,2.5],[1230,2.75],[1320,3]],
+    sat:[[540,.25],[570,.5],[630,.75],[725,1.25],[780,1.5],[870,1.75],[1035,2],[1110,2.25],[1200,2.5],[1290,2.75]],
+    sun:[[450,.25],[465,.5],[615,1],[720,1.25],[780,1.5],[870,1.75],[1035,2.25],[1170,2.5],[1290,2.75]]
+  };
+  function waterPlanFor(s){ var w=new Date(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10)).getDay(); return w===6?WATER_PLAN.sat:w===0?WATER_PLAN.sun:WATER_PLAN.work; }
+
+  // Meal Prep: Einkaufsliste (Samstag) und Vorbereitung (Sonntag und Mittwoch)
+  var SHOP=[
+    {g:"Eiweiß",items:[["chicken","1,5 kg Hähnchenbrust"],["beef","500 g mageres Rind","Steak oder mageres Hack"],["fish","2 Lachs- oder Makrelenfilets"],["eggs","10 Eier"],["quark","2 kg Magerquark","4 Becher à 500 g"],["yogurt","1 kg Naturjoghurt"],["lentils","500 g rote Linsen"],["chickpeas","2 Dosen Kichererbsen"]]},
+    {g:"Beilagen",items:[["oats","500 g Haferflocken"],["rice","1 kg Reis","reicht 2 Wochen"],["potatoes","2 kg Kartoffeln"],["bread","1 Vollkornbrot"],["wraps","1 Packung Vollkorn-Wraps"]]},
+    {g:"Gemüse",items:[["pepper","6 Paprika"],["cucumber","2 Gurken"],["carrots","1 kg Möhren"],["tomatoes","500 g Tomaten"],["salad","2 Salat"],["broccoli","1 kg TK-Brokkoli"],["spinach","450 g TK-Spinat"],["onion","Zwiebeln, Knoblauch"],["passata","500 g passierte Tomaten","für das Linsen-Curry"]]},
+    {g:"Obst",items:[["apples","6 Äpfel"],["oranges","1 kg Orangen"],["berries","500 g TK-Beeren"],["lemons","2 Zitronen"]]},
+    {g:"Sonstiges",items:[["walnuts","200 g Walnüsse"],["almonds","200 g Mandeln"],["oil","Olivenöl oder Rapsöl","nur falls leer"],["curry","Currypulver"]]}
+  ];
+  var PREP=[
+    {g:"Sonntag 11:00, für Montag bis Mittwoch",items:[
+      ["s-rice","Reis oder Kartoffeln für 3 Tage kochen"],
+      ["s-chicken","1 kg Hähnchenbrust würzen und garen","Ofen 200 °C, etwa 25 Minuten, innen nicht mehr rosa"],
+      ["s-curry","Linsen-Curry kochen, 3 Portionen","Zwiebel, Knoblauch, rote Linsen, passierte Tomaten, Curry, 20 Minuten"],
+      ["s-eggs","6 Eier hart kochen","10 Minuten, für das Essen vor der Schicht"],
+      ["s-veg","Gemüse schneiden","Paprika, Gurke, Möhren in Dosen"],
+      ["s-box","In 3 Boxen portionieren und kühlen","Gekochtes hält im Kühlschrank 3 bis 4 Tage"]]},
+    {g:"Mittwoch 16:00, für Donnerstag und Freitag",items:[
+      ["w-protein","500 g Hähnchen oder Fisch garen"],
+      ["w-side","Beilage für 2 Tage kochen"],
+      ["w-eggs","4 Eier hart kochen"],
+      ["w-veg","Salat waschen, Gemüse schneiden"],
+      ["w-box","In 2 Boxen portionieren und kühlen"]]}
+  ];
+  var listTab="shop";
 
   // ---------- Datum ----------
   function pad(n){ return String(n).padStart(2,"0"); }
@@ -409,18 +472,19 @@ td.good{color:var(--done);font-weight:700}
   function load(){
     try{
       var raw=localStorage.getItem(KEY);
-      if(raw){ var o=JSON.parse(raw); if(o && o.days && typeof o.days==="object") return {days:o.days,lastBackup:o.lastBackup||null}; }
+      if(raw){ var o=JSON.parse(raw); if(o && o.days && typeof o.days==="object") return {days:o.days,lastBackup:o.lastBackup||null,lists:(o.lists&&typeof o.lists==="object")?o.lists:{shop:{},prep:{}}}; }
     }catch(e){}
     var start=blank(PLAN_START); start.weight=W_START;
     var init={}; init[PLAN_START]=start;
-    return {days:init,lastBackup:null};
+    return {days:init,lastBackup:null,lists:{shop:{},prep:{}}};
   }
   var store=load();
-  var days=store.days, lastBackup=store.lastBackup;
+  var days=store.days, lastBackup=store.lastBackup, lists=store.lists;
+  lists.shop=lists.shop||{}; lists.prep=lists.prep||{};
   var saveOk=true, saveTimer=null;
   function persistNow(){
     clearTimeout(saveTimer); saveTimer=null;
-    try{ localStorage.setItem(KEY, JSON.stringify({v:1,days:days,lastBackup:lastBackup})); saveOk=true; }
+    try{ localStorage.setItem(KEY, JSON.stringify({v:1,days:days,lastBackup:lastBackup,lists:lists})); saveOk=true; }
     catch(e){ saveOk=false; }
     setStatus();
   }
@@ -493,11 +557,18 @@ td.good{color:var(--done);font-weight:700}
 
   function renderFood(){
     var d=cur(), w=d.water||0, html="";
+    var plan=waterPlanFor(view), goalL=plan[plan.length-1][1], goalG=Math.round(goalL/0.25);
     for(var i=0;i<WATER_MAX;i++){
-      html+='<button class="drop'+(i<w?" on":"")+(i===WATER_GOAL-1?" goal":"")+'" data-act="water" data-n="'+(i+1)+'" aria-label="'+(i+1)+' Gläser"></button>';
+      html+='<button class="drop'+(i<w?" on":"")+(i===goalG-1?" goal":"")+'" data-act="water" data-n="'+(i+1)+'" aria-label="'+(i+1)+' Gläser"></button>';
     }
     $("water").innerHTML=html;
     $("waterL").textContent=litres(w);
+    var gl=$("waterGoal"), goalTxt="Ziel "+fmt(goalL,2).replace(/,?0+$/,"")+" L";
+    if(view===trackerToday()){
+      var nm=nowMinutes(), soll=0; plan.forEach(function(p){ if(p[0]<=nm) soll=p[1]; });
+      var ist=w*0.25, cls = soll===0 ? "" : ist+0.001<soll-0.25 ? "behind" : ist>=soll ? "ahead" : "";
+      gl.innerHTML='Soll jetzt <span class="'+cls+'">'+litres(soll/0.25)+'</span> · '+goalTxt;
+    } else gl.textContent=goalTxt;
     $("counters").innerHTML = COUNTERS.map(function(c){
       var v=d[c.k]||0;
       return '<div class="ctr"><span class="lab">'+c.label+'<small>'+c.sub+', Ziel '+c.goal+'</small></span>'
@@ -621,7 +692,24 @@ td.good{color:var(--done);font-weight:700}
     $("backupInfo").textContent = lastBackup ? "Letztes Backup "+shortDate(lastBackup) : n+" Tage erfasst";
   }
 
-  function render(){ renderHead(); renderBand(); renderItems(); renderFood(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); setStatus(); }
+  var SQ='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function renderLists(){
+    var src = listTab==="shop" ? SHOP : PREP, state = lists[listTab], total=0, done=0;
+    $("tabShop").setAttribute("aria-selected", listTab==="shop");
+    $("tabPrep").setAttribute("aria-selected", listTab==="prep");
+    $("lists").innerHTML = src.map(function(grp){
+      var gd=0; grp.items.forEach(function(it){ total++; if(state[it[0]]){ done++; gd++; } });
+      return '<div class="group"><h3><span>'+grp.g+'</span><span>'+gd+'/'+grp.items.length+'</span></h3><ul class="chk">'
+        + grp.items.map(function(it){
+            var on=!!state[it[0]];
+            return '<li><button data-act="listcheck" data-id="'+it[0]+'" aria-pressed="'+on+'"><span class="sq">'+SQ+'</span><span class="t">'+it[1]+(it[2]?'<small>'+it[2]+'</small>':'')+'</span></button></li>';
+          }).join("") + '</ul></div>';
+    }).join("");
+    $("prepMeta").textContent = done+"/"+total+" erledigt";
+    $("resetBtn").textContent = listTab==="shop" ? "Einkaufsliste leeren" : "Vorbereitung leeren";
+  }
+
+  function render(){ renderHead(); renderBand(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); setStatus(); }
 
   // ---------- Backup ----------
   var pendingImport=null;
@@ -678,6 +766,9 @@ td.good{color:var(--done);font-weight:700}
     if(a==="sleep"){ var s=+b.dataset.d; edit(function(d){ if(d.sleep==null) d.sleep = s>0?6.5:6; else d.sleep=Math.max(0,Math.min(14,d.sleep+s)); }); return; }
     if(a==="rate"){ var key=b.dataset.k, v=+b.dataset.v; edit(function(d){ d[key] = d[key]===v ? null : v; }); return; }
     if(a==="export"){ exportBackup(); return; }
+    if(a==="tab"){ listTab=b.dataset.tab; renderLists(); return; }
+    if(a==="listcheck"){ var lid=b.dataset.id, st=lists[listTab]; if(st[lid]) delete st[lid]; else st[lid]=true; renderLists(); persist(); return; }
+    if(a==="list-reset"){ lists[listTab]={}; renderLists(); persist(); msg(""); return; }
     if(a==="import"){ $("importFile").click(); return; }
     if(a==="import-no"){ pendingImport=null; $("confirm").hidden=true; msg("Nichts geändert."); return; }
     if(a==="import-yes"){ if(pendingImport){ var cnt=Object.keys(pendingImport).length; Object.keys(pendingImport).forEach(function(k){ days[k]=pendingImport[k]; }); pendingImport=null; $("confirm").hidden=true; persistNow(); render(); msg(cnt+" Tage geladen."); } return; }
@@ -695,7 +786,7 @@ td.good{color:var(--done);font-weight:700}
   function refreshDay(){
     var t=trackerToday();
     if(t!==lastToday){ if(view===lastToday) view=t; lastToday=t; render(); }
-    else { renderBand(); renderItems(); }
+    else { renderBand(); renderItems(); renderFood(); }
   }
   setInterval(refreshDay,60000);
   document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") refreshDay(); });
