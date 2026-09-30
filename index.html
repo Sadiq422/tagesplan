@@ -316,6 +316,127 @@ td.good{color:var(--accent)}
 .tabs button[aria-current="page"] svg{background:var(--accent-soft)}
 .rowlink:active,.it:active{background:var(--surface-2)}
 .go{border-color:var(--muted)}
+
+/* ===== Moderner App-Look in Oliv ===== */
+:root{
+  --wake:#E8CF76; --wake-s:#36321C; --food:#DBAB4E; --food-s:#372E1B; --coffee:#CFA07A; --coffee-s:#34291F;
+  --prep:#B9C46E; --prep-s:#2A311C; --walk:#8FC7A0; --walk-s:#20322A; --sleep-s:#28263F; --train-s:#3B2922; --people-s:#1E3533;
+  --r:22px;
+}
+.wrap{gap:16px;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
+.page:not([hidden]){gap:16px}
+svg{fill:none}
+.ico{width:44px;height:44px;border-radius:14px;background:var(--ks);color:var(--k);display:grid;place-items:center;flex:none}
+.ico svg,.qi svg,.avatar svg,.gauge-c svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+.hello{display:flex;align-items:center;gap:12px}
+.avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(140deg,#D5DE92,#6B7B2F);display:grid;place-items:center;color:#151808;flex:none;box-shadow:0 6px 18px -8px rgba(185,196,110,.6)}
+.hello-txt{display:grid;flex:1;min-width:0}
+.hello .brand{color:var(--ink);font-size:16px;letter-spacing:0}
+.hello-sub{font-size:13.5px;color:var(--muted)}
+.pill{border:1px solid var(--line);background:var(--surface);color:var(--accent);border-radius:99px;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer}
+.titlebox{display:grid;gap:4px;margin-top:2px}
+.dayname{margin:0}
+
+.weekstrip{display:flex;align-items:center;gap:4px;margin-inline:-6px}
+.wsnav{width:26px;height:66px;border:0;background:none;color:var(--muted);font-size:24px;cursor:pointer;flex:none;padding:0}
+.wsdays{flex:1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.wsd{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:9px 0 8px;display:grid;justify-items:center;gap:4px;cursor:pointer;color:var(--ink)}
+.wsd .n{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.wsd .d{font:800 17px/1 var(--display);font-variant-numeric:tabular-nums}
+.wsd .dot{width:5px;height:5px;border-radius:50%;background:transparent}
+.wsd .dot.part{background:var(--muted)}
+.wsd .dot.full{background:var(--accent)}
+.wsd.today:not(.sel) .d{color:var(--accent)}
+.wsd.sel{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 10px 22px -12px rgba(185,196,110,.8)}
+.wsd.sel .n{color:var(--accent-ink);opacity:.7}
+.wsd.sel .dot.full,.wsd.sel .dot.part{background:var(--accent-ink)}
+
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:20px;color:#151808;background:linear-gradient(140deg,#D5DE92 0%,#A9B65C 45%,#67772C 100%);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 16px;align-items:center;box-shadow:0 22px 44px -22px rgba(169,182,92,.7)}
+.hero::before{content:"";position:absolute;width:230px;height:230px;border-radius:50%;right:-80px;top:-110px;background:rgba(255,255,255,.2)}
+.hero::after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;left:-70px;bottom:-110px;background:rgba(21,24,8,.10)}
+.hero>*{position:relative}
+.hero-main{display:grid;gap:4px;min-width:0}
+.hero-label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+.hero-big{font:800 46px/1 var(--display);letter-spacing:-.03em}
+.hero-big small{font-size:22px;opacity:.55;margin-left:2px}
+.hero-next{font-size:14px;font-weight:700;line-height:1.3}
+.hero .ring{width:88px;height:88px}
+.hero .ring .rt{stroke:rgba(21,24,8,.16)}
+.hero .ring .rv{stroke:#151808}
+.hero .ring .count{font-size:17px;color:#151808}
+.hero-foot{grid-column:1/-1;display:grid;grid-template-columns:1.35fr 1fr;gap:10px}
+.hf{background:rgba(255,255,255,.3);border-radius:16px;padding:10px 12px;display:grid;gap:4px;min-width:0}
+.hf-k{font-size:12px;font-weight:700;opacity:.65}
+.hf-v{font:800 16px/1.1 var(--display);font-variant-numeric:tabular-nums}
+.hf-bar{height:6px;border-radius:9px;background:rgba(21,24,8,.15);overflow:hidden}
+.hf-bar i{display:block;height:100%;width:0;background:#151808;border-radius:9px;transition:width .3s ease}
+
+.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.qa{display:grid;justify-items:center;gap:7px;border:0;background:none;color:var(--ink);font-size:12.5px;font-weight:600;cursor:pointer;padding:0}
+.qi{width:60px;height:60px;border-radius:20px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;color:var(--accent);transition:transform .12s ease}
+.qi svg{width:24px;height:24px}
+.qa:active .qi{transform:scale(.93)}
+
+.sect-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:4px}
+.sect-head h2{font:800 20px/1.1 var(--display);letter-spacing:-.01em;text-transform:none;color:var(--ink)}
+.tasks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.tasks .it{display:grid;grid-template-columns:44px minmax(0,1fr) 28px;gap:12px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:12px 14px 12px 12px;cursor:pointer}
+.tasks .it .lab{font-weight:700;line-height:1.3}
+.tasks .it .hint{margin-top:3px}
+.tasks .it .tm{font-family:var(--mono);color:var(--ink);font-size:12.5px}
+.tasks .it.next{border-color:var(--accent);background:var(--accent-soft)}
+.tasks .it[aria-pressed="true"]{background:transparent}
+.tasks .it[aria-pressed="true"] .ico{opacity:.45}
+.tasks .box{width:28px;height:28px}
+
+.water-card{display:grid;gap:14px;justify-items:center}
+.gauge{position:relative;width:190px;height:190px}
+.gauge>svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge .gauge-c svg{width:24px;height:24px;transform:none}
+.gauge circle{fill:none;stroke-width:11}
+.gauge .gt{stroke:var(--surface-2)}
+.gauge .gv{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:326.73;stroke-dashoffset:326.73;transition:stroke-dashoffset .4s ease}
+.gauge-c{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:2px;color:var(--accent)}
+.gauge-c b{font:800 44px/1 var(--display);color:var(--ink);letter-spacing:-.02em}
+.gauge-c small{font-size:13px;color:var(--muted)}
+.wbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.wbtns .btn{min-height:50px;border-radius:16px;font-size:16px}
+.water-card .water,.water-card .waterline{width:100%}
+.ctr{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px}
+.counters{margin:0;padding:0;border:0;gap:14px}
+
+.seg{border-radius:18px;padding:5px}
+.seg button{border-radius:14px;min-height:42px}
+.group h3{color:var(--accent)}
+
+.mcard{display:grid;gap:14px}
+.mhead{display:flex;align-items:center;gap:12px}
+.mhead .lab{display:block;font-weight:700;font-size:16px}
+.mhead .meta{display:block}
+.step.big output{font:800 30px/1 var(--display);min-width:92px}
+.step.big button{width:52px;height:52px;border-radius:16px;font-size:22px}
+.rate button{height:42px;border-radius:12px}
+
+.menu .rowlink{gap:14px}
+.rl{flex:1;min-width:0}
+
+#weekChart svg{display:block;width:100%;height:auto}
+#weekChart .bb{fill:var(--surface-2)}
+#weekChart .bv{fill:#6E7A3A}
+#weekChart .bv.sel{fill:var(--accent)}
+#weekChart .bl{fill:var(--muted);font:700 11px var(--body)}
+#weekChart .bl.today{fill:var(--accent)}
+#weekChart .bn{fill:var(--ink);font:700 10.5px var(--mono)}
+.week .wd{border-radius:16px}
+
+.tabbar{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:596px;margin:0 auto;border-radius:28px;border:1px solid var(--line);padding-bottom:0;background:rgba(26,29,20,.88);box-shadow:0 16px 36px -12px rgba(0,0,0,.7)}
+.tabs button{min-height:64px;padding:8px 0 7px;gap:2px}
+.tabs svg{width:22px;height:22px;padding:6px;border-radius:50%}
+.tabs button[aria-current="page"] svg{background:var(--accent);color:var(--accent-ink)}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-weight:700;font-size:14px;z-index:30;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;max-width:calc(100% - 40px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
 </style>
 </head>
 <body>
@@ -323,7 +444,11 @@ td.good{color:var(--accent)}
 
   <!-- ===== Seite: Heute ===== -->
   <section class="page" data-page="heute">
-    <div class="top"><span class="brand">Tagesplan</span></div>
+    <div class="hello">
+      <div class="avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19.5C5 11 10.5 5 20 5c0 10-6 15-14.5 14.5"/><path d="M5 19.5c3-4 6.5-6.5 10-8.5"/></svg></div>
+      <div class="hello-txt"><span class="brand">Tagesplan</span><span class="hello-sub" id="greet">Guten Tag</span></div>
+      <button class="pill" data-act="today" id="toToday" hidden>Heute</button>
+    </div>
 
     <div class="install" id="install" hidden>
       <b>Als App installieren</b>
@@ -331,33 +456,58 @@ td.good{color:var(--accent)}
     </div>
     <div class="banner" id="saveErr" hidden>Speichern hat nicht geklappt. Prüf, ob auf dem iPhone noch Speicher frei ist.</div>
 
-    <h1 class="dayname" id="dayname">Heute</h1>
-    <div class="datebar" role="group" aria-label="Datum wählen">
-      <button data-act="prev" aria-label="Vorheriger Tag">‹</button>
-      <span class="dlabel" id="daylabel"></span>
-      <button data-act="next" aria-label="Nächster Tag">›</button>
+    <div class="titlebox">
+      <h1 class="dayname" id="dayname">Heute</h1>
+      <span class="hello-sub" id="helloSub"></span>
     </div>
-    <button class="linkbtn" data-act="today" id="toToday" hidden>Zurück zu heute</button>
 
-    <div class="card">
-      <div class="card-head check-head">
-        <div><h2>Checkliste</h2><p class="nextline" id="listmeta"></p></div>
-        <div class="ring" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="rt" cx="24" cy="24" r="20"/><circle class="rv" id="ringv" cx="24" cy="24" r="20"/></svg><span class="count" id="listcount">0/0</span></div>
-      </div>
-      <ul class="items" id="items"></ul>
+    <div class="weekstrip" role="group" aria-label="Datum wählen">
+      <button class="wsnav" data-act="prevweek" aria-label="Vorherige Woche">‹</button>
+      <div class="wsdays" id="wsdays"></div>
+      <button class="wsnav" data-act="nextweek" aria-label="Nächste Woche">›</button>
     </div>
+
+    <div class="hero">
+      <div class="hero-main">
+        <span class="hero-label">Fortschritt</span>
+        <span class="hero-big"><b id="heroDone">0</b><small id="heroTotal">/0</small></span>
+        <span class="hero-next" id="listmeta"></span>
+      </div>
+      <div class="ring" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="rt" cx="24" cy="24" r="20"/><circle class="rv" id="ringv" cx="24" cy="24" r="20"/></svg><span class="count" id="listcount">0%</span></div>
+      <div class="hero-foot">
+        <div class="hf"><span class="hf-k">Wasser</span><span class="hf-v" id="heroWater">0 / 3 L</span><span class="hf-bar"><i id="heroWaterBar"></i></span></div>
+        <div class="hf"><span class="hf-k">Training</span><span class="hf-v" id="heroTrain">–</span></div>
+      </div>
+    </div>
+
+    <div class="quick">
+      <button class="qa" data-act="water-plus"><span class="qi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z"/><path d="M12 11.5v5M9.5 14h5"/></svg></span><span>+1 Glas</span></button>
+      <button class="qa" data-act="next-done"><span class="qi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Erledigt</span></button>
+      <button class="qa" data-act="nav" data-page="ich"><span class="qi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg></span><span>Stimmung</span></button>
+      <button class="qa" data-act="nav" data-page="prep"><span class="qi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3.5h3l2.4 11.5h11l2-8H6.6"/></svg></span><span>Einkauf</span></button>
+    </div>
+
+    <div class="sect-head"><h2>Deine Aufgaben</h2><span class="meta" id="listcount2">0/0</span></div>
+    <ul class="tasks" id="items"></ul>
   </section>
 
   <!-- ===== Seite: Trinken und Essen ===== -->
   <section class="page" data-page="essen" hidden>
     <header class="phead"><h1 class="ptitle">Trinken und Essen</h1><p class="psub"><span class="pdate"></span></p><p class="psub" id="sumFood"></p></header>
-    <div class="card">
-      <div class="card-head"><h2>Wasser</h2><span class="meta">1 Glas = 250 ml</span></div>
+    <div class="card water-card">
+      <div class="gauge">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="gt" cx="60" cy="60" r="52"/><circle class="gv" id="gaugev" cx="60" cy="60" r="52"/></svg>
+        <div class="gauge-c"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z"/></svg><b id="waterL">0</b><small id="waterOf">von 3 L</small></div>
+      </div>
+      <div class="wbtns">
+        <button class="btn" data-act="water-minus">− Glas</button>
+        <button class="btn primary" data-act="water-plus">+ Glas</button>
+      </div>
       <div class="water" id="water"></div>
-      <div class="waterline"><span><b id="waterL">0 L</b> getrunken</span><span id="waterGoal">Ziel 3 L</span></div>
+      <div class="waterline"><span>1 Glas = 250 ml</span><span id="waterGoal">Ziel 3 L</span></div>
     </div>
+    <div class="sect-head"><h2>Essen heute</h2></div>
     <div class="card">
-      <div class="card-head"><h2>Essen</h2></div>
       <div class="counters" id="counters"></div>
     </div>
   </section>
@@ -365,13 +515,13 @@ td.good{color:var(--accent)}
   <!-- ===== Seite: Meal Prep ===== -->
   <section class="page" data-page="prep" hidden>
     <header class="phead"><h1 class="ptitle">Meal Prep</h1><p class="psub" id="prepMeta"></p></header>
+    <div class="seg" role="tablist" aria-label="Liste wählen">
+      <button role="tab" id="tabShop" data-act="tab" data-tab="shop" aria-selected="true">Einkaufen · Sa 16:00</button>
+      <button role="tab" id="tabPrep" data-act="tab" data-tab="prep" aria-selected="false">Vorbereiten</button>
+    </div>
     <div class="card">
-      <div class="seg" role="tablist" aria-label="Liste wählen">
-        <button role="tab" id="tabShop" data-act="tab" data-tab="shop" aria-selected="true">Einkaufen (Sa 16:00)</button>
-        <button role="tab" id="tabPrep" data-act="tab" data-tab="prep" aria-selected="false">Vorbereiten</button>
-      </div>
       <div id="lists"></div>
-      <div class="row" style="margin-top:12px">
+      <div class="row" style="margin-top:14px">
         <button class="btn" data-act="list-reset" id="resetBtn">Liste leeren</button>
       </div>
     </div>
@@ -380,33 +530,30 @@ td.good{color:var(--accent)}
   <!-- ===== Seite: Wie geht es dir? ===== -->
   <section class="page" data-page="ich" hidden>
     <header class="phead"><h1 class="ptitle">Wie geht es dir?</h1><p class="psub"><span class="pdate"></span></p><p class="psub" id="sumFeel"></p></header>
-    <div class="card feel">
-      <div class="feelrow">
-        <div class="rowhead"><span class="lab">Schlaf letzte 24 h</span><span class="meta">Nacht plus Nachmittag</span></div>
-        <div class="step">
-          <button data-act="sleep" data-d="-0.5" aria-label="Weniger Schlaf">−</button>
-          <output id="sleepOut">– h</output>
-          <button data-act="sleep" data-d="0.5" aria-label="Mehr Schlaf">+</button>
-          <span class="meta" style="margin-left:8px">Ziel 6,5 h</span>
-        </div>
+    <div class="card mcard">
+      <div class="mhead"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></span><div><span class="lab">Schlaf letzte 24 h</span><span class="meta">Nacht plus Nachmittag, Ziel 6,5 h</span></div></div>
+      <div class="step big">
+        <button data-act="sleep" data-d="-0.5" aria-label="Weniger Schlaf">−</button>
+        <output id="sleepOut">– h</output>
+        <button data-act="sleep" data-d="0.5" aria-label="Mehr Schlaf">+</button>
       </div>
-      <div class="feelrow">
-        <div class="rowhead"><span class="lab">Energie</span><span class="meta" id="energyOut"></span></div>
-        <div class="rate" id="energy"></div>
-        <div class="scale"><span>1 sehr müde</span><span>10 voller Kraft</span></div>
-      </div>
-      <div class="feelrow">
-        <div class="rowhead"><span class="lab">Stimmung</span><span class="meta" id="moodOut"></span></div>
-        <div class="rate" id="mood"></div>
-        <div class="scale"><span>1 leer, schwer</span><span>10 richtig gut</span></div>
-      </div>
-      <div class="feelrow">
-        <div class="rowhead"><span class="lab">Gewicht</span><span class="meta">Samstag nüchtern wiegen</span></div>
-        <div class="weight">
-          <input id="weight" inputmode="decimal" autocomplete="off" placeholder="z. B. 77,4" aria-label="Gewicht in Kilogramm">
-          <span class="unit">kg</span>
-          <span class="meta" id="weightInfo"></span>
-        </div>
+    </div>
+    <div class="card mcard">
+      <div class="mhead"><span class="ico" style="--k:var(--food);--ks:var(--food-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6z"/></svg></span><div><span class="lab">Energie</span><span class="meta" id="energyOut">Wie viel Kraft hast du heute?</span></div></div>
+      <div class="rate" id="energy"></div>
+      <div class="scale"><span>1 sehr müde</span><span>10 voller Kraft</span></div>
+    </div>
+    <div class="card mcard">
+      <div class="mhead"><span class="ico" style="--k:var(--people);--ks:var(--people-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg></span><div><span class="lab">Stimmung</span><span class="meta" id="moodOut">Wie fühlst du dich?</span></div></div>
+      <div class="rate" id="mood"></div>
+      <div class="scale"><span>1 leer, schwer</span><span>10 richtig gut</span></div>
+    </div>
+    <div class="card mcard">
+      <div class="mhead"><span class="ico" style="--k:var(--prep);--ks:var(--prep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.8 10.5a4.5 4.5 0 0 1 6.4 0M12 10.5l1.6-1.6"/></svg></span><div><span class="lab">Gewicht</span><span class="meta">Samstag nüchtern wiegen</span></div></div>
+      <div class="weight">
+        <input id="weight" inputmode="decimal" autocomplete="off" placeholder="z. B. 77,4" aria-label="Gewicht in Kilogramm">
+        <span class="unit">kg</span>
+        <span class="meta" id="weightInfo"></span>
       </div>
     </div>
   </section>
@@ -415,10 +562,10 @@ td.good{color:var(--accent)}
   <section class="page" data-page="mehr" hidden>
     <header class="phead"><h1 class="ptitle">Mehr</h1></header>
     <nav class="card menu" aria-label="Weitere Seiten">
-      <button class="rowlink" data-act="nav" data-page="woche"><span><span class="t">Diese Woche</span><span class="s sum-week"></span></span><i class="go" aria-hidden="true"></i></button>
-      <button class="rowlink" data-act="nav" data-page="gewicht"><span><span class="t">Gewichtsverlauf</span><span class="s sum-chart"></span></span><i class="go" aria-hidden="true"></i></button>
-      <button class="rowlink" data-act="nav" data-page="ueberblick"><span><span class="t">Wochen im Überblick</span><span class="s">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><i class="go" aria-hidden="true"></i></button>
-      <button class="rowlink" data-act="nav" data-page="backup"><span><span class="t">Backup</span><span class="s sum-backup"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="woche"><span class="ico" style="--k:var(--prep);--ks:var(--prep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="rl"><span class="t">Diese Woche</span><span class="s sum-week"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="gewicht"><span class="ico" style="--k:var(--food);--ks:var(--food-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg></span><span class="rl"><span class="t">Gewichtsverlauf</span><span class="s sum-chart"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="ueberblick"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M3.5 10h17M3.5 15h17M10 4.5v15"/></svg></span><span class="rl"><span class="t">Wochen im Überblick</span><span class="s">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="backup"><span class="ico" style="--k:var(--people);--ks:var(--people-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5"/><path d="M12 12v8M9 15l3-3 3 3"/></svg></span><span class="rl"><span class="t">Backup</span><span class="s sum-backup"></span></span><i class="go" aria-hidden="true"></i></button>
     </nav>
     <footer class="help">
       <span>Erinnerungen für Wasser, Essen, Training und Schlaf kommen über deinen Google Kalender.</span>
@@ -431,9 +578,11 @@ td.good{color:var(--accent)}
     <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
     <header class="phead"><h1 class="ptitle">Diese Woche</h1><p class="psub sum-week"></p></header>
     <div class="card">
-      <div class="week" id="week"></div>
-      <div class="stats" id="stats"></div>
+      <div class="card-head"><h2>Erledigt pro Tag</h2><span class="meta">in Prozent</span></div>
+      <div id="weekChart"></div>
     </div>
+    <div class="week" id="week"></div>
+    <div class="stats" id="stats"></div>
   </section>
 
   <section class="page chart" data-page="gewicht" hidden>
@@ -482,9 +631,10 @@ td.good{color:var(--accent)}
     <button data-act="nav" data-page="essen" data-tab="essen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z"/></svg><span>Essen</span></button>
     <button data-act="nav" data-page="prep" data-tab="prep"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6M9 10h6M9 14h6M9 18h3.5"/></svg><span>Prep</span></button>
     <button data-act="nav" data-page="ich" data-tab="ich"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span>Ich</span></button>
-    <button data-act="nav" data-page="mehr" data-tab="mehr"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg><span>Mehr</span></button>
+    <button data-act="nav" data-page="mehr" data-tab="mehr"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg><span>Mehr</span></button>
   </div>
 </nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
@@ -600,10 +750,10 @@ td.good{color:var(--accent)}
     return [[0,450,"sleep","Schlaf"],[570,610,"train",""],[930,1020,"sleep",""],[1080,1110,"way",""],[1110,1410,"work","Arbeit"],[1410,1440,"way",""]];
   }
   var COUNTERS=[
-    {k:"veg",label:"Gemüse und Salat",sub:"Handvoll",goal:3,max:8},
-    {k:"fruit",label:"Obst",sub:"Portionen",goal:2,max:6},
-    {k:"protein",label:"Mahlzeiten mit Eiweiß",sub:"Fleisch, Fisch, Eier, Quark, Linsen",goal:4,max:6},
-    {k:"nuts",label:"Nüsse",sub:"Handvoll",goal:1,max:3}
+    {k:"veg",label:"Gemüse und Salat",sub:"Handvoll",goal:3,max:8,icon:"leaf",kind:"walk"},
+    {k:"fruit",label:"Obst",sub:"Portionen",goal:2,max:6,icon:"apple",kind:"train"},
+    {k:"protein",label:"Mahlzeiten mit Eiweiß",sub:"Fleisch, Fisch, Eier, Quark, Linsen",goal:4,max:6,icon:"bowl",kind:"food"},
+    {k:"nuts",label:"Nüsse",sub:"Handvoll",goal:1,max:3,icon:"nut",kind:"coffee"}
   ];
 
   // ---------- Speicher auf dem Handy ----------
@@ -640,34 +790,63 @@ td.good{color:var(--accent)}
   function edit(fn){ var d=clone(cur()); fn(d); days[view]=d; render(); persist(); }
 
   // ---------- Rendern ----------
+  var ICON={"heute": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8 12.5l2.7 2.5L16 9.5\"/>", "drop": "<path d=\"M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z\"/>", "dropplus": "<path d=\"M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z\"/><path d=\"M12 11.5v5M9.5 14h5\"/>", "list": "<rect x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2\"/><path d=\"M9 3.5h6M9 10h6M9 14h6M9 18h3.5\"/>", "heart": "<path d=\"M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z\"/>", "dots": "<circle cx=\"5\" cy=\"12\" r=\"1.3\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/><circle cx=\"19\" cy=\"12\" r=\"1.3\"/>", "sun": "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4\"/>", "bowl": "<path d=\"M3.5 11.5h17a8.5 8.5 0 0 1-17 0z\"/><path d=\"M8.5 8c0-1.3 1-1.8 1-3M12.5 8c0-1.3 1-1.8 1-3\"/>", "apple": "<path d=\"M12 7.5c-3-2-7.5-1-7.5 4 0 4 3 8.5 5 8.5 1 0 1.5-.5 2.5-.5s1.5.5 2.5.5c2 0 5-4.5 5-8.5 0-5-4.5-6-7.5-4z\"/><path d=\"M12 7.5c0-2 1-3.5 3-4\"/>", "cup": "<path d=\"M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z\"/><path d=\"M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5v3M12 3.5v3\"/>", "moon": "<path d=\"M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z\"/>", "dumbbell": "<path d=\"M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11\"/>", "pot": "<path d=\"M4 10.5h16v5.5a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z\"/><path d=\"M2 10.5h20M9.5 7c0-1 1-1.5 1-2.5M14 7c0-1 1-1.5 1-2.5\"/>", "walk": "<circle cx=\"13.5\" cy=\"4.5\" r=\"1.8\"/><path d=\"M10 21l2-6 3 3v3M12 15l-1-5 4-1 2 4 2.5 1M11 10l-3 2-1 3\"/>", "scale": "<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"4\"/><path d=\"M8.8 10.5a4.5 4.5 0 0 1 6.4 0M12 10.5l1.6-1.6\"/>", "phone": "<path d=\"M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z\"/>", "users": "<circle cx=\"9\" cy=\"8\" r=\"3.2\"/><path d=\"M3 20a6 6 0 0 1 12 0\"/><circle cx=\"17\" cy=\"9\" r=\"2.6\"/><path d=\"M15.8 14.2A5 5 0 0 1 21 19\"/>", "cart": "<circle cx=\"9\" cy=\"20\" r=\"1.4\"/><circle cx=\"18\" cy=\"20\" r=\"1.4\"/><path d=\"M2.5 3.5h3l2.4 11.5h11l2-8H6.6\"/>", "leaf": "<path d=\"M5 19.5C5 11 10.5 5 20 5c0 10-6 15-14.5 14.5\"/><path d=\"M5 19.5c3-4 6.5-6.5 10-8.5\"/>", "nut": "<path d=\"M12 3.5c4 0 7 3 7 8s-3 9.5-7 9.5-7-4.5-7-9.5 3-8 7-8z\"/><path d=\"M12 7.5v10\"/>", "bolt": "<path d=\"M13 2.5 5 13.5h6l-1 8 8-11h-6z\"/>", "smile": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01\"/>", "cal": "<rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15\" rx=\"3\"/><path d=\"M3.5 10h17M8 3v4M16 3v4\"/>", "trend": "<path d=\"M3 17l5-5 4 3 8-8\"/><path d=\"M15 7h5v5\"/>", "table": "<rect x=\"3.5\" y=\"4.5\" width=\"17\" height=\"15\" rx=\"3\"/><path d=\"M3.5 10h17M3.5 15h17M10 4.5v15\"/>", "cloud": "<path d=\"M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5\"/><path d=\"M12 12v8M9 15l3-3 3 3\"/>", "check": "<path d=\"M5 12.5l4.5 4.5L19 7.5\"/>"};
+  function svgI(n){ return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(ICON[n]||"")+'</svg>'; }
+  var KIND={wake:["sun","wake"],breakfast:["bowl","food"],snack:["apple","food"],coffee:["cup","coffee"],lunch:["bowl","food"],nap:["moon","sleep"],training:["dumbbell","train"],prep2:["pot","prep"],prep:["pot","prep"],walk:["walk","walk"],pre:["bowl","food"],"break":["bowl","food"],night:["moon","sleep"],check:["scale","prep"],family:["phone","people"],people:["users","people"]};
+  function tileHtml(name,kind){ return '<span class="ico" style="--k:var(--'+kind+');--ks:var(--'+kind+'-s)">'+svgI(name)+'</span>'; }
   var CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function nowMinutes(){ var n=new Date(); var m=n.getHours()*60+n.getMinutes(); return n.getHours()<4? m+1440 : m; }
 
+  function fmtL(v){ return fmt(v,2).replace(/,?0+$/,""); }
   function renderHead(){
-    var today=trackerToday(), dd=parse(view);
+    var today=trackerToday(), dd=parse(view), hr=new Date().getHours();
+    $("greet").textContent = (hr<4||hr>=22) ? "Gute Nacht" : hr<11 ? "Guten Morgen" : hr<17 ? "Guten Tag" : "Guten Abend";
     $("dayname").textContent = view===today ? "Heute" : view===addDays(today,-1) ? "Gestern" : view===addDays(today,1) ? "Morgen" : DAYS[dow(view)];
-    $("daylabel").textContent = DSHORT[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
+    $("helloSub").textContent = DAYS[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
     $("toToday").hidden = view===today;
     var lbl=(view===today?"Heute, ":"")+DAYS[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
     Array.prototype.forEach.call(document.querySelectorAll(".pdate"), function(el){ el.textContent=lbl; });
     var its=itemsFor(view), d=cur(), n=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
-    $("listcount").textContent = n+"/"+its.length;
-    $("ringv").style.strokeDashoffset = (125.66*(1-n/its.length)).toFixed(2);
+    $("heroDone").textContent=n; $("heroTotal").textContent="/"+its.length;
+    $("listcount").textContent=Math.round(100*n/its.length)+"%";
+    $("listcount2").textContent=n+" von "+its.length;
+    $("ringv").style.strokeDashoffset=(125.66*(1-n/its.length)).toFixed(2);
+    var plan=waterPlanFor(view), goalL=plan[plan.length-1][1], wl=(d.water||0)*0.25;
+    $("heroWater").textContent=fmtL(wl)+" / "+fmtL(goalL)+" L";
+    $("heroWaterBar").style.width=Math.min(100,Math.round(100*wl/goalL))+"%";
+    var tr=its.filter(function(i){ return i.k==="train"; })[0];
+    $("heroTrain").textContent = tr ? ((d.done&&d.done[tr.id]) ? "Erledigt" : tr.t+" Uhr") : "Ruhetag";
+    renderStrip();
+  }
+  function renderStrip(){
+    var mon=mondayOf(view), today=trackerToday(), h="";
+    for(var i=0;i<7;i++){
+      var s=addDays(mon,i), pc=pctFor(s);
+      h+='<button class="wsd'+(s===view?" sel":"")+(s===today?" today":"")+'" data-act="goto" data-date="'+s+'" aria-label="'+DAYS[dow(s)]+', '+parse(s).getDate()+'. '+MONTHS[parse(s).getMonth()]+'">'
+        +'<span class="n">'+DSHORT[dow(s)]+'</span><span class="d">'+parse(s).getDate()+'</span><span class="dot'+(pc>=1?" full":pc>0?" part":"")+'"></span></button>';
+    }
+    $("wsdays").innerHTML=h;
   }
   function setAll(sel,text){ Array.prototype.forEach.call(document.querySelectorAll(sel), function(el){ el.textContent=text; }); }
 
+  function nextItem(){
+    var its=itemsFor(view), d=cur(), open=its.filter(function(i){ return !(d.done&&d.done[i.id]); });
+    if(!open.length) return null;
+    if(view===trackerToday()){ var nm=nowMinutes(); for(var i=0;i<open.length;i++){ if(mins(open[i].t)>=nm-45) return open[i]; } }
+    return open[0];
+  }
   function renderItems(){
     var its=itemsFor(view), d=cur(), isToday=view===trackerToday(), nm=nowMinutes(), nextId=null;
     if(isToday){ for(var i=0;i<its.length;i++){ var it=its[i]; if(!(d.done&&d.done[it.id]) && mins(it.t)>=nm-45){ nextId=it.id; break; } } }
     var done=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
     var nx=its.filter(function(i){ return i.id===nextId; })[0];
-    $("listmeta").textContent = nx ? "Als Nächstes: "+nx.t+" "+nx.label : (isToday && done===its.length ? "Alles geschafft für heute." : "");
+    $("listmeta").textContent = nx ? "Als Nächstes: "+nx.t+" "+nx.label : (done===its.length ? "Alles geschafft." : (isToday ? "Für heute ist nichts mehr fällig." : "Tippe eine Aufgabe zum Abhaken."));
     $("items").innerHTML = its.map(function(it){
-      var on=!!(d.done&&d.done[it.id]);
-      var kd = '<i class="kdot" style="--k:'+(it.k?'var(--'+it.k+')':'transparent')+'"></i>';
+      var on=!!(d.done&&d.done[it.id]), kd=KIND[it.id]||["heute","prep"];
       return '<li><button class="it'+(it.id===nextId?" next":"")+'" data-act="toggle" data-id="'+it.id+'" aria-pressed="'+on+'">'
-        +'<span class="time">'+kd+it.t+'</span>'
-        +'<span class="lab">'+it.label+(it.id===nextId?'<span class="tag">Als Nächstes</span>':'')+(it.hint?'<span class="hint">'+it.hint+'</span>':'')+'</span>'
+        + tileHtml(kd[0],kd[1])
+        +'<span class="lab">'+it.label+(it.id===nextId?'<span class="tag">Als Nächstes</span>':'')
+        +'<span class="hint"><span class="tm">'+it.t+'</span>'+(it.hint?' · '+it.hint:'')+'</span></span>'
         +'<span class="box">'+CHECK+'</span></button></li>';
     }).join("");
   }
@@ -679,7 +858,9 @@ td.good{color:var(--accent)}
       html+='<button class="drop'+(i<w?" on":"")+(i===goalG-1?" goal":"")+'" data-act="water" data-n="'+(i+1)+'" aria-label="'+(i+1)+' Gläser"></button>';
     }
     $("water").innerHTML=html;
-    $("waterL").textContent=litres(w);
+    $("waterL").textContent=litres(w).replace(" L","");
+    $("waterOf").textContent="von "+litres(goalG);
+    $("gaugev").style.strokeDashoffset=(326.73*(1-Math.min(1,w/goalG))).toFixed(2);
     var gl=$("waterGoal"), goalTxt="Ziel "+fmt(goalL,2).replace(/,?0+$/,"")+" L";
     var soll=0, cls="";
     if(view===trackerToday()){
@@ -693,7 +874,7 @@ td.good{color:var(--accent)}
     $("sumFood").innerHTML=sf;
     $("counters").innerHTML = COUNTERS.map(function(c){
       var v=d[c.k]||0;
-      return '<div class="ctr"><span class="lab">'+c.label+'<small>'+c.sub+', Ziel '+c.goal+'</small></span>'
+      return '<div class="ctr">'+tileHtml(c.icon,c.kind)+'<span class="lab">'+c.label+'<small>'+c.sub+', Ziel '+c.goal+'</small></span>'
         +'<span class="step"><button data-act="count" data-k="'+c.k+'" data-d="-1" aria-label="'+c.label+' weniger">−</button>'
         +'<output class="'+(v>=c.goal?"met":"")+'">'+v+'/'+c.goal+'</output>'
         +'<button data-act="count" data-k="'+c.k+'" data-d="1" aria-label="'+c.label+' mehr">+</button></span></div>';
@@ -709,8 +890,8 @@ td.good{color:var(--accent)}
     $("sleepOut").textContent = d.sleep==null ? "– h" : fmt(d.sleep,1).replace(",0","")+" h";
     $("energy").innerHTML=rateRow("energy",d.energy);
     $("mood").innerHTML=rateRow("mood",d.mood);
-    $("energyOut").textContent = d.energy? d.energy+" von 10" : "";
-    $("moodOut").textContent = d.mood? d.mood+" von 10" : "";
+    $("energyOut").textContent = d.energy? d.energy+" von 10" : "Wie viel Kraft hast du heute?";
+    $("moodOut").textContent = d.mood? d.mood+" von 10" : "Wie fühlst du dich?";
     var inp=$("weight");
     if(document.activeElement!==inp) inp.value = typeof d.weight==="number" ? fmt(d.weight,1) : "";
     $("weightInfo").textContent = view>=PLAN_START ? "Richtwert heute "+fmt(target(view),1)+" kg" : "";
@@ -748,6 +929,15 @@ td.good{color:var(--accent)}
         +'<span class="n">'+DSHORT[dow(x.date)]+'</span><span class="d">'+parse(x.date).getDate()+'</span>'
         +'<span class="mini"><i style="width:'+p+'%"></i></span><span class="tr'+(tr?" on":"")+'"></span></button>';
     }).join("");
+    var Wc=340,Hc=150,top=18,bot=24,step=Wc/7,bw=24,bars="";
+    wk.list.forEach(function(x,i){
+      var pc=pctFor(x.date), cx=step*i+step/2, hh=(Hc-top-bot), vh=Math.max(pc>0?4:0, hh*pc);
+      bars+='<rect class="bb" x="'+(cx-bw/2).toFixed(1)+'" y="'+top+'" width="'+bw+'" height="'+hh+'" rx="8"/>';
+      if(vh>0) bars+='<rect class="bv'+(x.date===view?" sel":"")+'" x="'+(cx-bw/2).toFixed(1)+'" y="'+(top+hh-vh).toFixed(1)+'" width="'+bw+'" height="'+vh.toFixed(1)+'" rx="8"/>';
+      bars+='<text class="bl'+(x.date===today?" today":"")+'" x="'+cx.toFixed(1)+'" y="'+(Hc-6)+'" text-anchor="middle">'+DSHORT[dow(x.date)]+'</text>';
+      if(pc>0) bars+='<text class="bn" x="'+cx.toFixed(1)+'" y="'+(top+hh-vh-5).toFixed(1)+'" text-anchor="middle">'+Math.round(pc*100)+'</text>';
+    });
+    $("weekChart").innerHTML='<svg viewBox="0 0 '+Wc+' '+Hc+'" role="img" aria-label="Erledigte Aufgaben pro Tag">'+bars+'</svg>';
     function f(v,unit){ return v==null? "–" : fmt(v,1)+(unit||""); }
     $("stats").innerHTML =
       '<div class="stat"><div class="v">'+wk.training+'/4</div><div class="k">Trainings</div></div>'
@@ -890,9 +1080,14 @@ td.good{color:var(--accent)}
     if(a==="prev"){ view=addDays(view,-1); render(); return; }
     if(a==="next"){ view=addDays(view,1); render(); return; }
     if(a==="today"){ view=trackerToday(); render(); return; }
-    if(a==="goto"){ view=b.dataset.date; render(); show("heute"); return; }
+    if(a==="goto"){ var fromHome=!document.querySelector('.page[data-page="heute"]').hidden; view=b.dataset.date; render(); if(!fromHome) show("heute"); return; }
     if(a==="nav"){ show(b.dataset.page); return; }
     if(a==="toggle"){ var id=b.dataset.id; edit(function(d){ d.done=d.done||{}; if(d.done[id]) delete d.done[id]; else d.done[id]=true; }); return; }
+    if(a==="water-plus"){ edit(function(d){ d.water=Math.min(WATER_MAX,(d.water||0)+1); }); toast("+1 Glas · "+litres(cur().water||0)); return; }
+    if(a==="water-minus"){ edit(function(d){ d.water=Math.max(0,(d.water||0)-1); }); toast("−1 Glas · "+litres(cur().water||0)); return; }
+    if(a==="next-done"){ var nx=nextItem(); if(!nx){ toast("Alles erledigt."); return; } edit(function(d){ d.done=d.done||{}; d.done[nx.id]=true; }); toast("Erledigt: "+nx.label); return; }
+    if(a==="prevweek"){ view=addDays(view,-7); render(); return; }
+    if(a==="nextweek"){ view=addDays(view,7); render(); return; }
     if(a==="water"){ var n=+b.dataset.n; edit(function(d){ d.water = (d.water===n) ? n-1 : n; }); return; }
     if(a==="count"){ var k=b.dataset.k, dl=+b.dataset.d, c=COUNTERS.filter(function(x){return x.k===k;})[0]; edit(function(d){ d[k]=Math.max(0,Math.min(c.max,(d[k]||0)+dl)); }); return; }
     if(a==="sleep"){ var s=+b.dataset.d; edit(function(d){ if(d.sleep==null) d.sleep = s>0?6.5:6; else d.sleep=Math.max(0,Math.min(14,d.sleep+s)); }); return; }
@@ -926,6 +1121,10 @@ td.good{color:var(--accent)}
   // Hinweis zum Installieren nur im Browser, nicht in der installierten App
   var standalone = window.navigator.standalone===true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
   $("install").hidden = standalone;
+
+  // ---------- Kurze Rückmeldung ----------
+  var toastT=null;
+  function toast(t){ var el=$("toast"); el.textContent=t; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove("show"); },1800); }
 
   // ---------- Seiten ----------
   var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr"};
