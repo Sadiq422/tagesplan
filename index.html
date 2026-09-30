@@ -564,6 +564,36 @@ svg{fill:none}
 .mbtns{justify-content:flex-start}
 body.modal-open{overflow:hidden}
 @media (prefers-reduced-motion: reduce){.modal-card{animation:none}}
+
+/* ===== Auswertung ===== */
+.seg.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+#anaChart svg{width:100%;height:auto;display:block}
+#anaChart .g{stroke:var(--line);stroke-width:1}
+#anaChart .gl{stroke:var(--sleep);stroke-width:1;stroke-dasharray:3 4;opacity:.7}
+#anaChart .ax{font:500 10px var(--mono);fill:var(--muted)}
+#anaChart .sb{fill:var(--sleep);opacity:.22}
+#anaChart .ln{fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#anaChart .le{stroke:var(--food)} #anaChart .pe{fill:var(--food)}
+#anaChart .lm{stroke:var(--people)} #anaChart .pm{fill:var(--people)}
+#anaChart .empty{font:600 13px var(--body);fill:var(--muted)}
+.legend i.soft{background:var(--k);opacity:.3}
+.legend i.ln{height:3px;border-radius:3px}
+.corr{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.corr li{background:var(--surface-2);border-radius:14px;padding:12px 14px;display:grid;gap:5px}
+.corr .t{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700;color:var(--ink)}
+.corr .badge{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--accent);color:#FFFFFF;white-space:nowrap}
+.corr .badge.mid{background:#C3CB93;color:#2F3A10}
+.corr .badge.low{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
+.corr .s{font-size:14px;color:var(--ink);line-height:1.45}
+.corr .s b{font-variant-numeric:tabular-nums}
+.corr .r{font:500 11.5px var(--mono);color:var(--muted)}
+.dowbars{display:grid;gap:9px}
+.dowbars .dr{display:grid;grid-template-columns:26px minmax(0,1fr) 44px;align-items:center;gap:10px;font-size:13px}
+.dowbars .dn{font-weight:700;color:var(--muted)}
+.dowbars .dn.best{color:var(--accent)}
+.dowbars .bar{height:10px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.dowbars .bar i{display:block;height:100%;background:var(--accent);border-radius:9px}
+.dowbars .pv{font:500 12px var(--mono);text-align:right;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -698,6 +728,7 @@ body.modal-open{overflow:hidden}
       <button class="rowlink" data-act="nav" data-page="plan"><span class="ico" style="--k:var(--train);--ks:var(--train-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span><span class="rl"><span class="t">Plan bearbeiten</span><span class="s sum-plan"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="ziele"><span class="ico" style="--k:var(--wake);--ks:var(--wake-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span><span class="rl"><span class="t">Ziele</span><span class="s sum-goals"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="woche"><span class="ico" style="--k:var(--prep);--ks:var(--prep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="rl"><span class="t">Diese Woche</span><span class="s sum-week"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="auswertung"><span class="ico" style="--k:var(--walk);--ks:var(--walk-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-12"/><path d="M3 20h18"/></svg></span><span class="rl"><span class="t">Auswertung</span><span class="s sum-ana"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="gewicht"><span class="ico" style="--k:var(--food);--ks:var(--food-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg></span><span class="rl"><span class="t">Gewichtsverlauf</span><span class="s sum-chart"></span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="ueberblick"><span class="ico" style="--k:var(--sleep);--ks:var(--sleep-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M3.5 10h17M3.5 15h17M10 4.5v15"/></svg></span><span class="rl"><span class="t">Wochen im Überblick</span><span class="s">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><i class="go" aria-hidden="true"></i></button>
       <button class="rowlink" data-act="nav" data-page="backup"><span class="ico" style="--k:var(--people);--ks:var(--people-s)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5"/><path d="M12 12v8M9 15l3-3 3 3"/></svg></span><span class="rl"><span class="t">Backup</span><span class="s sum-backup"></span></span><i class="go" aria-hidden="true"></i></button>
@@ -751,6 +782,36 @@ body.modal-open{overflow:hidden}
         <p class="formerr" id="gErr" role="alert"></p>
         <div class="row"><button class="btn primary" data-act="goals-save">Ziele speichern</button></div>
       </div>
+    </div>
+  </section>
+
+  <section class="page" data-page="auswertung" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Auswertung</h1><p class="psub">Muster in deinen eigenen Einträgen</p></header>
+    <div class="sheet">
+      <div class="seg three" role="tablist" aria-label="Zeitraum wählen">
+        <button role="tab" data-act="ana-range" data-r="7" aria-selected="false">7 Tage</button>
+        <button role="tab" data-act="ana-range" data-r="30" aria-selected="true">30 Tage</button>
+        <button role="tab" data-act="ana-range" data-r="all" aria-selected="false">Alles</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Durchschnitt</h2><span class="meta" id="anaMeta"></span></div>
+        <div class="stats" id="anaStats"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Verlauf</h2><span class="meta">Skala 0 bis 10</span></div>
+        <div id="anaChart"></div>
+        <div class="legend"><span style="--k:var(--sleep)"><i class="soft"></i>Schlaf in h</span><span style="--k:var(--food)"><i class="ln"></i>Energie</span><span style="--k:var(--people)"><i class="ln"></i>Stimmung</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Zusammenhänge</h2><span class="meta">ab 5 Tagen</span></div>
+        <ul class="corr" id="anaCorr"></ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Wochentage</h2><span class="meta">Checkliste Ø</span></div>
+        <div class="dowbars" id="anaDow"></div>
+      </div>
+      <p class="note">Zusammenhang heißt nicht Ursache. Die Werte zeigen nur, was in deinen Tagen gemeinsam auftritt. Abgeschlossene Tage zählen für Checkliste, Wasser und Training, heute zählt nur bei Schlaf, Energie und Stimmung.</p>
     </div>
   </section>
 
@@ -1257,7 +1318,7 @@ body.modal-open{overflow:hidden}
     $("resetBtn").textContent = listTab==="shop" ? "Einkaufsliste leeren" : "Vorbereitung leeren";
   }
 
-  function render(){ renderHead(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); renderPlan(); renderGoals(); setStatus(); }
+  function render(){ renderHead(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); renderPlan(); renderGoals(); renderAna(); setStatus(); }
 
   // ---------- Backup ----------
   var pendingImport=null;
@@ -1320,6 +1381,7 @@ body.modal-open{overflow:hidden}
     if(a==="sleep"){ var s=+b.dataset.d; edit(function(d){ if(d.sleep==null) d.sleep = s>0?SLEEP_GOAL:SLEEP_GOAL-0.5; else d.sleep=Math.max(0,Math.min(14,d.sleep+s)); }); return; }
     if(a==="rate"){ var key=b.dataset.k, v=+b.dataset.v; edit(function(d){ d[key] = d[key]===v ? null : v; }); return; }
     if(a==="export"){ exportBackup(); return; }
+    if(a==="ana-range"){ anaRange=b.dataset.r; renderAna(); return; }
     if(a==="pday"){ pDay=+b.dataset.w; copySel={}; renderPlan(); return; }
     if(a==="pwater"){ var dp=plan.days[String(pDay)]; dp.water=Math.max(1,Math.min(4,Math.round(((+dp.water||2.5)+(+b.dataset.d))*4)/4)); savePlan(); return; }
     if(a==="task-new"){ openTask(null); return; }
@@ -1459,12 +1521,121 @@ body.modal-open{overflow:hidden}
   }
   function num(id){ return parseFloat(String($(id).value).replace(",",".")); }
 
+
+  // ---------- Auswertung ----------
+  var anaRange="30";
+  function hasData(d){
+    if(!d) return false;
+    if(d.done && Object.keys(d.done).some(function(k){ return d.done[k]; })) return true;
+    return (d.water>0)||d.sleep!=null||d.energy!=null||d.mood!=null||typeof d.weight==="number"||d.veg>0||d.fruit>0||d.protein>0;
+  }
+  function anaDays(range){
+    var today=trackerToday(), keys=Object.keys(days).filter(function(k){ return isDate(k) && k<=today && hasData(days[k]); }).sort();
+    var from = range==="all" ? (keys[0]||today) : addDays(today, -(+range-1));
+    return keys.filter(function(k){ return k>=from; }).map(function(k){
+      var d=days[k], its=itemsFor(k), past=k<today, dc=doneCats(k);
+      return {date:k, past:past, sleep:d.sleep, energy:d.energy, mood:d.mood,
+        water: past ? (d.water||0)*0.25 : null, waterGoal: waterGoalL(k),
+        pct: past ? pctFor(k) : null, veg: past ? (d.veg||0) : null,
+        trainPlanned: its.some(function(i){ return i.cat==="train"; }), train: past ? !!dc.train : null};
+    });
+  }
+  function mean(a){ a=a.filter(function(v){ return v!=null && !isNaN(v); }); if(!a.length) return null; return a.reduce(function(s,v){ return s+v; },0)/a.length; }
+  function pearson(xs,ys){
+    var n=xs.length; if(n<3) return null;
+    var mx=mean(xs), my=mean(ys), sxy=0, sxx=0, syy=0;
+    for(var i=0;i<n;i++){ var dx=xs[i]-mx, dy=ys[i]-my; sxy+=dx*dy; sxx+=dx*dx; syy+=dy*dy; }
+    if(sxx===0||syy===0) return null;
+    return sxy/Math.sqrt(sxx*syy);
+  }
+  function f1(v){ return v==null ? "–" : fmt(v,1); }
+  function corrItem(title, rows, xKey, yKey, cond, labA, labB, yName){
+    var pr=rows.filter(function(r){ return r[xKey]!=null && r[yKey]!=null; });
+    var n=pr.length, MIN=5;
+    if(n<MIN) return '<li><div class="t"><span>'+title+'</span><span class="badge low">'+n+' von '+MIN+' Tagen</span></div><div class="s">Noch zu wenig Tage mit beiden Werten.</div></li>';
+    var xs=pr.map(function(r){ return typeof r[xKey]==="boolean" ? (r[xKey]?1:0) : r[xKey]; }), ys=pr.map(function(r){ return r[yKey]; });
+    var r=pearson(xs,ys);
+    var A=pr.filter(cond), B=pr.filter(function(x){ return !cond(x); });
+    var mA=mean(A.map(function(x){ return x[yKey]; })), mB=mean(B.map(function(x){ return x[yKey]; }));
+    var sent;
+    if(A.length && B.length) sent=labA+': '+yName+' Ø <b>'+f1(mA)+'</b> ('+A.length+' '+(A.length===1?"Tag":"Tage")+'). '+labB+': Ø <b>'+f1(mB)+'</b> ('+B.length+' '+(B.length===1?"Tag":"Tage")+').';
+    else sent='Bisher nur Tage '+(A.length ? labA.toLowerCase() : labB.toLowerCase())+'. Für einen Vergleich fehlen Tage der anderen Art.';
+    var badge, cls="";
+    if(r==null){ badge="kein Muster"; cls=" low"; }
+    else { var a=Math.abs(r); badge = a<0.2 ? "kaum" : a<0.4 ? "schwach" : a<0.6 ? "mittel" : "deutlich"; cls = a<0.2 ? " low" : a<0.4 ? " mid" : ""; }
+    return '<li><div class="t"><span>'+title+'</span><span class="badge'+cls+'">'+badge+'</span></div><div class="s">'+sent+'</div>'
+      +'<div class="r">'+(r==null?"r nicht berechenbar, Werte schwanken nicht":"r = "+fmt(r,2))+' · n = '+n+(n<14?' · noch unsicher':'')+'</div></li>';
+  }
+  function renderAna(){
+    if(!$("anaStats")) return;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-act="ana-range"]'), function(b){ b.setAttribute("aria-selected", b.dataset.r===anaRange); });
+    var rows=anaDays(anaRange), past=rows.filter(function(r){ return r.past; });
+    $("anaMeta").textContent = rows.length+" "+(rows.length===1?"Tag":"Tage")+" mit Einträgen";
+    var trP=past.filter(function(r){ return r.trainPlanned; }).length, trD=past.filter(function(r){ return r.train; }).length;
+    var mS=mean(rows.map(function(r){ return r.sleep; })), mE=mean(rows.map(function(r){ return r.energy; })), mM=mean(rows.map(function(r){ return r.mood; }));
+    var mW=mean(past.map(function(r){ return r.water; })), mP=mean(past.map(function(r){ return r.pct; }));
+    $("anaStats").innerHTML =
+      '<div class="stat"><div class="v">'+(mS==null?"–":fmt(mS,1)+" h")+'</div><div class="k">Schlaf Ø</div></div>'
+      +'<div class="stat"><div class="v">'+f1(mE)+'</div><div class="k">Energie Ø</div></div>'
+      +'<div class="stat"><div class="v">'+f1(mM)+'</div><div class="k">Stimmung Ø</div></div>'
+      +'<div class="stat"><div class="v">'+(mW==null?"–":fmt(mW,1)+" L")+'</div><div class="k">Wasser Ø</div></div>'
+      +'<div class="stat"><div class="v">'+(mP==null?"–":Math.round(mP*100)+" %")+'</div><div class="k">Checkliste Ø</div></div>'
+      +'<div class="stat"><div class="v">'+trD+"/"+trP+'</div><div class="k">Trainings</div></div>';
+    setAll(".sum-ana", rows.length ? "Schlaf "+(mS==null?"–":fmt(mS,1)+" h")+" · Energie "+f1(mE)+" · Stimmung "+f1(mM) : "Schlaf, Energie, Stimmung und Zusammenhänge");
+
+    // Verlauf
+    var today=trackerToday(), first = anaRange==="all" ? (rows[0] ? rows[0].date : today) : addDays(today, -(+anaRange-1));
+    var nD=diff(first,today)+1, W=340, H=170, L=22, R=6, T=10, B=22, cw=(W-L-R)/nD;
+    function X(i){ return L+cw*i+cw/2; } function Y(v){ return T+(H-T-B)*(10-v)/10; }
+    var o='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Schlaf, Energie und Stimmung im Verlauf">';
+    [0,5,10].forEach(function(v){ o+='<line class="g" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-5)+'" y="'+(Y(v)+3.5)+'" text-anchor="end">'+v+'</text>'; });
+    o+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(SLEEP_GOAL).toFixed(1)+'" y2="'+Y(SLEEP_GOAL).toFixed(1)+'"/>';
+    var byDate={}; rows.forEach(function(r){ byDate[r.date]=r; });
+    var bw=Math.max(2,Math.min(18,cw*0.62)), pe=[], pm=[];
+    for(var i=0;i<nD;i++){
+      var ds=addDays(first,i), r=byDate[ds];
+      if(r && r.sleep!=null){ var sv=Math.min(10,r.sleep); o+='<rect class="sb" x="'+(X(i)-bw/2).toFixed(1)+'" y="'+Y(sv).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(Y(0)-Y(sv)).toFixed(1)+'" rx="'+Math.min(4,bw/2).toFixed(1)+'"/>'; }
+      pe.push(r && r.energy!=null ? [X(i),Y(r.energy)] : null); pm.push(r && r.mood!=null ? [X(i),Y(r.mood)] : null);
+    }
+    function path(pts,cls,pcls){
+      var d="", segs=0, out="";
+      pts.forEach(function(p){ if(!p) return; d+=(d?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1); segs++; });
+      if(segs>1) out+='<path class="ln '+cls+'" d="'+d+'"/>';
+      pts.forEach(function(p){ if(p && nD<=31) out+='<circle class="'+pcls+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.6"/>'; });
+      return out;
+    }
+    o+=path(pe,"le","pe")+path(pm,"lm","pm");
+    var lbl=[0,Math.floor((nD-1)/2),nD-1].filter(function(v,i,a){ return a.indexOf(v)===i; });
+    lbl.forEach(function(i,k){ var an = k===0 && lbl.length>1 ? "start" : (i===nD-1 && lbl.length>1 ? "end" : "middle"); o+='<text class="ax" x="'+(an==="start"?L:an==="end"?W-R:X(i)).toFixed(1)+'" y="'+(H-6)+'" text-anchor="'+an+'">'+shortDate(addDays(first,i))+'</text>'; });
+    if(!rows.some(function(r){ return r.sleep!=null||r.energy!=null||r.mood!=null; })) o+='<text class="empty" x="'+(W/2)+'" y="'+(H/2-6)+'" text-anchor="middle">Trag unter "Ich" Schlaf, Energie und Stimmung ein.</text>';
+    $("anaChart").innerHTML=o+'</svg>';
+
+    // Zusammenhänge
+    var sg=SLEEP_GOAL, sgT=fmt(sg,1).replace(",0","")+" h";
+    rows.forEach(function(r){ r.waterMet = r.water==null ? null : r.water>=r.waterGoal; r.pctHi = r.pct==null ? null : r.pct; });
+    $("anaCorr").innerHTML =
+      corrItem("Schlaf und Energie", rows, "sleep","energy", function(x){ return x.sleep>=sg; }, "Mit "+sgT+" Schlaf oder mehr", "Mit weniger", "Energie")
+      +corrItem("Schlaf und Stimmung", rows, "sleep","mood", function(x){ return x.sleep>=sg; }, "Mit "+sgT+" Schlaf oder mehr", "Mit weniger", "Stimmung")
+      +corrItem("Wasser und Energie", rows, "water","energy", function(x){ return x.waterMet; }, "Wasserziel erreicht", "Nicht erreicht", "Energie")
+      +corrItem("Training und Stimmung", rows, "train","mood", function(x){ return x.train; }, "An Trainingstagen", "Ohne Training", "Stimmung")
+      +corrItem("Checkliste und Stimmung", rows, "pctHi","mood", function(x){ return x.pct>=0.7; }, "Mit 70 % oder mehr erledigt", "Mit weniger", "Stimmung")
+      +corrItem("Gemüse und Energie", rows, "veg","energy", function(x){ return x.veg>=3; }, "Mit 3 Portionen Gemüse oder mehr", "Mit weniger", "Energie");
+
+    // Wochentage
+    var dw={}; past.forEach(function(r){ var w=dow(r.date); (dw[w]=dw[w]||[]).push(r.pct); });
+    var best=null, bestV=-1; [1,2,3,4,5,6,0].forEach(function(w){ var m=mean(dw[w]||[]); if(m!=null && m>bestV){ bestV=m; best=w; } });
+    $("anaDow").innerHTML=[1,2,3,4,5,6,0].map(function(w){
+      var m=mean(dw[w]||[]), pc=m==null?0:Math.round(m*100);
+      return '<div class="dr"><span class="dn'+(w===best&&past.length>2?" best":"")+'">'+DSHORT[w]+'</span><span class="bar"><i style="width:'+pc+'%"></i></span><span class="pv">'+(m==null?"–":pc+" %")+'</span></div>';
+    }).join("");
+  }
+
   // ---------- Kurze Rückmeldung ----------
   var toastT=null;
   function toast(t){ var el=$("toast"); el.textContent=t; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove("show"); },1800); }
 
   // ---------- Seiten ----------
-  var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr",plan:"mehr",ziele:"mehr"};
+  var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr",plan:"mehr",ziele:"mehr",auswertung:"mehr"};
   function show(pg){
     Array.prototype.forEach.call(document.querySelectorAll(".page"), function(el){ el.hidden = el.dataset.page!==pg; });
     var tab=PARENT[pg]||pg;

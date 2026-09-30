@@ -1,6 +1,6 @@
 # Tagesplan
 
-Persönliche iPhone-App (Progressive Web App) für den Alltag mit Früh- und Spätschicht: Tages-Checkliste mit eigenem Wochenplan (Aufgaben, Uhrzeiten, Schicht, Wasserziel pro Wochentag, in der App bearbeitbar), Wasser- und Essenszähler, Schlaf, Energie, Stimmung, Gewicht und Gewichtsverlauf für Oktober und November 2026.
+Persönliche iPhone-App (Progressive Web App) für den Alltag mit Früh- und Spätschicht: Tages-Checkliste mit eigenem Wochenplan (Aufgaben, Uhrzeiten, Schicht, Wasserziel pro Wochentag, in der App bearbeitbar), Wasser- und Essenszähler, Schlaf, Energie, Stimmung, Gewicht und Gewichtsverlauf, dazu eine Auswertung mit Durchschnitten, Verlauf, Zusammenhängen (Pearson r, zum Beispiel Schlaf und Energie) und Wochentag-Mustern.
 
 ## Installieren
 
