@@ -214,6 +214,44 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
 .acc-body{padding:12px 16px 16px}
 .acc-body.feel{padding-top:16px}
 
+/* Seiten und Leiste unten */
+.page:not([hidden]){display:grid;gap:14px;animation:pagein .2s ease}
+@keyframes pagein{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+.wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs{max-width:620px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.tabs button{display:grid;justify-items:center;gap:3px;padding:9px 0 7px;border:0;background:none;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;min-height:54px}
+.tabs svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs button[aria-current="page"]{color:var(--accent)}
+.tabs button[aria-current="page"] svg{stroke-width:2.3}
+
+.dayname{margin-top:6px}
+.datebar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px}
+.datebar button{width:46px;height:44px;border:0;border-radius:10px;background:var(--surface-2);font-size:22px;line-height:1;cursor:pointer}
+.dlabel{flex:1;text-align:center;font-weight:700;font-size:16px;font-variant-numeric:tabular-nums}
+.linkbtn{justify-self:start;border:0;background:none;color:var(--accent);font-weight:700;font-size:15px;padding:4px 0;cursor:pointer;margin-top:-6px}
+.count{font:800 18px/1 var(--display);font-variant-numeric:tabular-nums}
+.nextline{margin:10px 0 2px;font-size:13.5px;color:var(--accent);font-weight:600}
+.nextline:empty{display:none}
+.card .bar{height:8px}
+
+.phead{display:grid;gap:4px}
+.ptitle{font:800 clamp(30px,8.5vw,40px)/1 var(--display);letter-spacing:-.02em;margin:0}
+.psub{margin:0;color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.psub:empty{display:none}
+.psub .behind{color:var(--warn);font-weight:700}
+.psub .ahead{color:var(--done);font-weight:700}
+.back{justify-self:start;border:0;background:none;color:var(--accent);font-weight:700;font-size:16px;padding:6px 0;min-height:44px;cursor:pointer}
+
+.menu{padding:0}
+.rowlink{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:15px 16px;border:0;background:none;text-align:left;cursor:pointer}
+.rowlink+.rowlink{border-top:1px solid var(--line)}
+.rowlink .t{display:block;font-weight:700;font-size:16px}
+.rowlink .s{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.go{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);flex:none;margin-right:4px}
+.banner{border-radius:10px;padding:10px 12px;background:var(--surface-2);font-size:13.5px}
+@media (prefers-reduced-motion: reduce){.page:not([hidden]){animation:none}}
+
 .help{font-size:13px;color:var(--muted);display:grid;gap:4px;padding-inline:4px}
 .help b{color:var(--ink);-webkit-user-select:all;user-select:all;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
@@ -221,66 +259,51 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
 </head>
 <body>
 <div class="wrap">
-  <div class="top">
-    <span class="brand">Tagesplan</span>
-    <span class="status" id="status">Auf dem Handy gespeichert</span>
-  </div>
 
-  <div class="install" id="install" hidden>
-    <b>Als App installieren</b>
-    <span>In Safari unten auf Teilen tippen, dann "Zum Home-Bildschirm". Danach öffnest du den Tagesplan über das Symbol, ohne Browserleiste.</span>
-  </div>
+  <!-- ===== Seite: Heute ===== -->
+  <section class="page" data-page="heute">
+    <div class="top"><span class="brand">Tagesplan</span></div>
 
-  <header class="dayhead">
-    <div>
-      <h1 class="dayname" id="dayname">Heute</h1>
-      <div class="daydate"><span id="daydate"></span><span class="chip" id="daytype"></span></div>
+    <div class="install" id="install" hidden>
+      <b>Als App installieren</b>
+      <span>In Safari unten auf Teilen tippen, dann "Zum Home-Bildschirm". Danach öffnest du den Tagesplan über das Symbol, ohne Browserleiste.</span>
     </div>
-    <div class="nav">
-      <button class="btn" data-act="prev" aria-label="Vorheriger Tag">‹</button>
-      <button class="btn" data-act="today" id="todayBtn">Heute</button>
-      <button class="btn" data-act="next" aria-label="Nächster Tag">›</button>
-    </div>
-  </header>
+    <div class="banner" id="saveErr" hidden>Speichern hat nicht geklappt. Prüf, ob auf dem iPhone noch Speicher frei ist.</div>
 
-  <section class="summary" aria-label="Fortschritt heute">
-    <div class="sumline">
-      <div class="sumbig" id="sumbig">0<small>von 0 erledigt</small></div>
-      <div class="meta" id="sumside"></div>
+    <h1 class="dayname" id="dayname">Heute</h1>
+    <div class="datebar" role="group" aria-label="Datum wählen">
+      <button data-act="prev" aria-label="Vorheriger Tag">‹</button>
+      <span class="dlabel" id="daylabel"></span>
+      <button data-act="next" aria-label="Nächster Tag">›</button>
     </div>
-    <div class="bar"><i id="sumbar" style="width:0%"></i></div>
-  </section>
+    <button class="linkbtn" data-act="today" id="toToday" hidden>Zurück zu heute</button>
 
-  <section class="band" aria-label="Tagesablauf">
-    <div id="band"></div>
-    <div class="legend">
-      <span style="--k:var(--sleep)"><i></i>Schlaf</span>
-      <span style="--k:var(--work)"><i></i>Arbeit</span>
-      <span style="--k:var(--way)"><i></i>Unterwegs</span>
-      <span style="--k:var(--train)"><i></i>Training</span>
-      <span style="--k:var(--people)"><i></i>Menschen</span>
-    </div>
-  </section>
-
-  <details class="card acc" id="acc-list">
-    <summary><span class="acc-title"><span class="acc-h">Checkliste</span><span class="acc-sum" id="listmeta"></span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body">
+    <div class="card">
+      <div class="card-head"><h2>Checkliste</h2><span class="count" id="listcount">0/0</span></div>
+      <div class="bar"><i id="sumbar" style="width:0%"></i></div>
+      <p class="nextline" id="listmeta"></p>
       <ul class="items" id="items"></ul>
     </div>
-  </details>
+  </section>
 
-  <details class="card acc" id="acc-food">
-    <summary><span class="acc-title"><span class="acc-h">Trinken und Essen</span><span class="acc-sum" id="sumFood"></span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body">
+  <!-- ===== Seite: Trinken und Essen ===== -->
+  <section class="page" data-page="essen" hidden>
+    <header class="phead"><h1 class="ptitle">Trinken und Essen</h1><p class="psub"><span class="pdate"></span></p><p class="psub" id="sumFood"></p></header>
+    <div class="card">
+      <div class="card-head"><h2>Wasser</h2><span class="meta">1 Glas = 250 ml</span></div>
       <div class="water" id="water"></div>
-      <div class="waterline"><span><b id="waterL">0 L</b> getrunken, 1 Glas = 250 ml</span><span id="waterGoal">Ziel 3 L</span></div>
+      <div class="waterline"><span><b id="waterL">0 L</b> getrunken</span><span id="waterGoal">Ziel 3 L</span></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Essen</h2></div>
       <div class="counters" id="counters"></div>
     </div>
-  </details>
+  </section>
 
-  <details class="card acc" id="acc-prep">
-    <summary><span class="acc-title"><span class="acc-h">Meal Prep</span><span class="acc-sum" id="prepMeta"></span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body">
+  <!-- ===== Seite: Meal Prep ===== -->
+  <section class="page" data-page="prep" hidden>
+    <header class="phead"><h1 class="ptitle">Meal Prep</h1><p class="psub" id="prepMeta"></p></header>
+    <div class="card">
       <div class="seg" role="tablist" aria-label="Liste wählen">
         <button role="tab" id="tabShop" data-act="tab" data-tab="shop" aria-selected="true">Einkaufen (Sa 16:00)</button>
         <button role="tab" id="tabPrep" data-act="tab" data-tab="prep" aria-selected="false">Vorbereiten</button>
@@ -290,11 +313,12 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
         <button class="btn" data-act="list-reset" id="resetBtn">Liste leeren</button>
       </div>
     </div>
-  </details>
+  </section>
 
-  <details class="card acc" id="acc-feel">
-    <summary><span class="acc-title"><span class="acc-h">Wie geht es dir?</span><span class="acc-sum" id="sumFeel"></span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body feel">
+  <!-- ===== Seite: Wie geht es dir? ===== -->
+  <section class="page" data-page="ich" hidden>
+    <header class="phead"><h1 class="ptitle">Wie geht es dir?</h1><p class="psub"><span class="pdate"></span></p><p class="psub" id="sumFeel"></p></header>
+    <div class="card feel">
       <div class="feelrow">
         <div class="rowhead"><span class="lab">Schlaf letzte 24 h</span><span class="meta">Nacht plus Nachmittag</span></div>
         <div class="step">
@@ -323,35 +347,55 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
         </div>
       </div>
     </div>
-  </details>
+  </section>
 
-  <details class="card acc" id="acc-week">
-    <summary><span class="acc-title"><span class="acc-h">Diese Woche</span><span class="acc-sum" id="weekrange"></span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body">
+  <!-- ===== Seite: Mehr ===== -->
+  <section class="page" data-page="mehr" hidden>
+    <header class="phead"><h1 class="ptitle">Mehr</h1></header>
+    <nav class="card menu" aria-label="Weitere Seiten">
+      <button class="rowlink" data-act="nav" data-page="woche"><span><span class="t">Diese Woche</span><span class="s sum-week"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="gewicht"><span><span class="t">Gewichtsverlauf</span><span class="s sum-chart"></span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="ueberblick"><span><span class="t">Wochen im Überblick</span><span class="s">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><i class="go" aria-hidden="true"></i></button>
+      <button class="rowlink" data-act="nav" data-page="backup"><span><span class="t">Backup</span><span class="s sum-backup"></span></span><i class="go" aria-hidden="true"></i></button>
+    </nav>
+    <footer class="help">
+      <span>Erinnerungen für Wasser, Essen, Training und Schlaf kommen über deinen Google Kalender.</span>
+      <span>Wenn es dir schlecht geht: Telefonseelsorge <b>0800 111 0 111</b>, rund um die Uhr, kostenlos. Im Notfall <b>112</b>.</span>
+    </footer>
+  </section>
+
+  <!-- ===== Unterseiten von Mehr ===== -->
+  <section class="page" data-page="woche" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Diese Woche</h1><p class="psub sum-week"></p></header>
+    <div class="card">
       <div class="week" id="week"></div>
       <div class="stats" id="stats"></div>
     </div>
-  </details>
+  </section>
 
-  <details class="card acc chart" id="acc-chart">
-    <summary><span class="acc-title"><span class="acc-h">Gewichtsverlauf</span><span class="acc-sum" id="sumChart"></span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body">
+  <section class="page chart" data-page="gewicht" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Gewichtsverlauf</h1><p class="psub sum-chart"></p></header>
+    <div class="card">
       <div class="keys"><span><i></i>Dein Gewicht</span><span><i class="dash"></i>Richtwert 0,5 bis 0,75 kg pro Woche</span></div>
       <div id="chart"></div>
       <p class="chartsum" id="chartsum"></p>
     </div>
-  </details>
+  </section>
 
-  <details class="card acc" id="acc-table">
-    <summary><span class="acc-title"><span class="acc-h">Wochen im Überblick</span><span class="acc-sum">Gewicht, Schlaf, Energie, Stimmung pro Woche</span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body">
+  <section class="page" data-page="ueberblick" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Wochen im Überblick</h1><p class="psub">Oktober und November</p></header>
+    <div class="card">
       <div class="tablewrap"><table id="table"></table></div>
     </div>
-  </details>
+  </section>
 
-  <details class="card acc" id="acc-backup">
-    <summary><span class="acc-title"><span class="acc-h">Backup</span><span class="acc-sum" id="backupInfo"></span></span><span class="chev" aria-hidden="true"></span></summary>
-    <div class="acc-body backup">
+  <section class="page" data-page="backup" hidden>
+    <button class="back" data-act="nav" data-page="mehr">‹ Mehr</button>
+    <header class="phead"><h1 class="ptitle">Backup</h1><p class="psub sum-backup"></p></header>
+    <div class="card backup">
       <p>Deine Einträge liegen nur auf diesem iPhone. Speichere jeden Samstag ein Backup in Dateien, und schick es Claude, wenn du eine Auswertung willst.</p>
       <div class="row">
         <button class="btn primary" data-act="export">Backup speichern</button>
@@ -367,13 +411,18 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
       </div>
       <div class="msg" id="msg" role="status"></div>
     </div>
-  </details>
-
-  <footer class="help">
-    <span>Erinnerungen für Wasser, Essen, Training und Schlaf kommen über deinen Google Kalender.</span>
-    <span>Wenn es dir schlecht geht: Telefonseelsorge <b>0800 111 0 111</b>, rund um die Uhr, kostenlos. Im Notfall <b>112</b>.</span>
-  </footer>
+  </section>
 </div>
+
+<nav class="tabbar" aria-label="Hauptmenü">
+  <div class="tabs">
+    <button data-act="nav" data-page="heute" data-tab="heute"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.5L16 9.5"/></svg><span>Heute</span></button>
+    <button data-act="nav" data-page="essen" data-tab="essen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c-3 4-6 7-6 10.5a6 6 0 0 0 12 0c0-3.5-3-6.5-6-10.5z"/></svg><span>Essen</span></button>
+    <button data-act="nav" data-page="prep" data-tab="prep"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6M9 10h6M9 14h6M9 18h3.5"/></svg><span>Prep</span></button>
+    <button data-act="nav" data-page="ich" data-tab="ich"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span>Ich</span></button>
+    <button data-act="nav" data-page="mehr" data-tab="mehr"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg><span>Mehr</span></button>
+  </div>
+</nav>
 
 <script>
 (function(){
@@ -463,7 +512,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
     }
     if(w===6) return [
       {id:"wake",t:"9:00",label:"Aufstehen, spätestens 9:00"},
-      {id:"check",t:"9:15",label:"Wochen-Check: wiegen",hint:"Nüchtern, unter \"Wie geht es dir?\" eintragen, danach Backup speichern"},
+      {id:"check",t:"9:15",label:"Wochen-Check: wiegen",hint:"Nüchtern, unter \"Ich\" eintragen, danach Backup speichern"},
       {id:"training",t:"11:00",label:"Training lang, 60 Min",hint:"Alle Übungen plus 20 Minuten zügig gehen",k:"train"},
       {id:"coffee",t:"11:50",label:"Letzter Kaffee"},
       {id:"lunch",t:"13:00",label:"Mittagessen mit Eiweiß und Gemüse"},
@@ -525,11 +574,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
   var view=trackerToday(), lastToday=view;
   function cur(){ return days[view] || blank(view); }
   function $(id){ return document.getElementById(id); }
-  function setStatus(){
-    var el=$("status");
-    el.dataset.s = saveOk ? "ok" : "error";
-    el.textContent = saveOk ? "Auf dem Handy gespeichert" : "Speichern fehlgeschlagen";
-  }
+  function setStatus(){ var e=$("saveErr"); if(e) e.hidden=saveOk; }
   function edit(fn){ var d=clone(cur()); fn(d); days[view]=d; render(); persist(); }
 
   // ---------- Rendern ----------
@@ -537,44 +582,24 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
   function nowMinutes(){ var n=new Date(); var m=n.getHours()*60+n.getMinutes(); return n.getHours()<4? m+1440 : m; }
 
   function renderHead(){
-    var today=trackerToday(), near = view===today||view===addDays(today,-1)||view===addDays(today,1);
+    var today=trackerToday(), dd=parse(view);
     $("dayname").textContent = view===today ? "Heute" : view===addDays(today,-1) ? "Gestern" : view===addDays(today,1) ? "Morgen" : DAYS[dow(view)];
-    $("daydate").textContent = near ? DAYS[dow(view)]+", "+longDate(view) : longDate(view);
-    $("daytype").textContent = dayType(view);
-    $("todayBtn").disabled = view===today;
+    $("daylabel").textContent = DSHORT[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
+    $("toToday").hidden = view===today;
+    var lbl=(view===today?"Heute, ":"")+DAYS[dow(view)]+", "+dd.getDate()+". "+MONTHS[dd.getMonth()];
+    Array.prototype.forEach.call(document.querySelectorAll(".pdate"), function(el){ el.textContent=lbl; });
     var its=itemsFor(view), d=cur(), n=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
-    $("sumbig").innerHTML = n+"<small>von "+its.length+" erledigt</small>";
+    $("listcount").textContent = n+"/"+its.length;
     $("sumbar").style.width = Math.round(100*n/its.length)+"%";
-    $("sumside").textContent = litres(d.water||0)+" Wasser";
   }
-
-  function renderBand(){
-    var W=600,y=6,h=26, sx=function(m){ return W*m/1440; };
-    var out='<svg viewBox="-4 0 608 62" role="img" aria-label="Tagesablauf von 0 bis 24 Uhr">';
-    out+='<rect class="track" x="0" y="'+y+'" width="'+W+'" height="'+h+'" rx="7"/>';
-    blocksFor(view).forEach(function(b){
-      var x=sx(b[0]), w=Math.max(2,sx(b[1])-sx(b[0]));
-      out+='<rect class="k-'+b[2]+'" x="'+x.toFixed(1)+'" y="'+y+'" width="'+w.toFixed(1)+'" height="'+h+'" rx="4"/>';
-      if(b[3] && w>56) out+='<text class="t-lab" x="'+(x+w/2).toFixed(1)+'" y="'+(y+h/2+4)+'" text-anchor="middle">'+b[3]+'</text>';
-    });
-    for(var hr=0;hr<=24;hr+=3){
-      var xx=sx(hr*60);
-      out+='<text class="t-hour" x="'+xx.toFixed(1)+'" y="52" text-anchor="'+(hr===0?"start":hr===24?"end":"middle")+'">'+pad(hr===24?0:hr)+'</text>';
-    }
-    if(view===iso(new Date())){
-      var n=new Date(), nx=sx(n.getHours()*60+n.getMinutes());
-      out+='<line class="now" x1="'+nx.toFixed(1)+'" x2="'+nx.toFixed(1)+'" y1="2" y2="'+(y+h+4)+'"/>';
-    }
-    out+='</svg>';
-    $("band").innerHTML=out;
-  }
+  function setAll(sel,text){ Array.prototype.forEach.call(document.querySelectorAll(sel), function(el){ el.textContent=text; }); }
 
   function renderItems(){
     var its=itemsFor(view), d=cur(), isToday=view===trackerToday(), nm=nowMinutes(), nextId=null;
     if(isToday){ for(var i=0;i<its.length;i++){ var it=its[i]; if(!(d.done&&d.done[it.id]) && mins(it.t)>=nm-45){ nextId=it.id; break; } } }
     var done=its.filter(function(i){ return d.done&&d.done[i.id]; }).length;
     var nx=its.filter(function(i){ return i.id===nextId; })[0];
-    $("listmeta").textContent = done+"/"+its.length+" erledigt"+(nx ? " · Als Nächstes "+nx.t+" "+nx.label : done===its.length ? " · alles geschafft" : "");
+    $("listmeta").textContent = nx ? "Als Nächstes: "+nx.t+" "+nx.label : (isToday && done===its.length ? "Alles geschafft für heute." : "");
     $("items").innerHTML = its.map(function(it){
       var on=!!(d.done&&d.done[it.id]);
       var kd = '<i class="kdot" style="--k:'+(it.k?'var(--'+it.k+')':'transparent')+'"></i>';
@@ -654,7 +679,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
 
   function renderWeek(){
     var mon=mondayOf(view), today=trackerToday(), wk=weekData(mon);
-    $("weekrange").textContent=shortDate(mon)+"–"+shortDate(addDays(mon,6))+" · Training "+wk.training+"/4 · Familie "+(wk.family?"angerufen":"noch nicht");
+    setAll(".sum-week", shortDate(mon)+"–"+shortDate(addDays(mon,6))+" · Training "+wk.training+"/4 · Familie "+(wk.family?"angerufen":"noch nicht"));
     $("week").innerHTML = wk.list.map(function(x){
       var p=Math.round(pctFor(x.date)*100), tr=!!(x.d&&x.d.done&&x.d.done.training);
       return '<button class="wd'+(x.date===view?" sel":"")+(x.date===today?" today":"")+'" data-act="goto" data-date="'+x.date+'" aria-label="'+DAYS[dow(x.date)]+', '+p+' Prozent erledigt">'
@@ -710,8 +735,8 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
         +(Math.abs(dlt)<0.25?'Genau im Plan. ':dlt<0?'<b>'+fmt(-dlt,1)+' kg</b> besser als der Richtwert. ':'<b>'+fmt(dlt,1)+' kg</b> über dem Richtwert, kein Problem, der Trend zählt. ')
         +(rest>0?'Noch <b>'+fmt(rest,1)+' kg</b> bis 72,5.':'Ziel für November erreicht.');
     } else sum.textContent="";
-    if(pts.length){ var lp3=pts[pts.length-1], r3=lp3.w-W_END; $("sumChart").textContent="Zuletzt "+fmt(lp3.w,1)+" kg"+(r3>0?" · noch "+fmt(r3,1)+" kg bis 72,5":" · Ziel erreicht"); }
-    else $("sumChart").textContent="Noch kein Gewicht eingetragen";
+    if(pts.length){ var lp3=pts[pts.length-1], r3=lp3.w-W_END; setAll(".sum-chart","Zuletzt "+fmt(lp3.w,1)+" kg"+(r3>0?" · noch "+fmt(r3,1)+" kg bis 72,5":" · Ziel erreicht")); }
+    else setAll(".sum-chart","Noch kein Gewicht eingetragen");
   }
 
   function renderTable(){
@@ -732,7 +757,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
 
   function renderBackup(){
     var n=Object.keys(days).length;
-    $("backupInfo").textContent = (lastBackup ? "Letztes Backup "+shortDate(lastBackup) : "Noch kein Backup")+" · "+n+(n===1?" Tag":" Tage")+" erfasst";
+    setAll(".sum-backup", (lastBackup ? "Letztes Backup "+shortDate(lastBackup) : "Noch kein Backup")+" · "+n+(n===1?" Tag":" Tage")+" erfasst");
   }
 
   var SQ='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -753,7 +778,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
     $("resetBtn").textContent = listTab==="shop" ? "Einkaufsliste leeren" : "Vorbereitung leeren";
   }
 
-  function render(){ renderHead(); renderBand(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); setStatus(); }
+  function render(){ renderHead(); renderItems(); renderFood(); renderLists(); renderFeel(); renderWeek(); renderChart(); renderTable(); renderBackup(); setStatus(); }
 
   // ---------- Backup ----------
   var pendingImport=null;
@@ -803,7 +828,8 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
     if(a==="prev"){ view=addDays(view,-1); render(); return; }
     if(a==="next"){ view=addDays(view,1); render(); return; }
     if(a==="today"){ view=trackerToday(); render(); return; }
-    if(a==="goto"){ view=b.dataset.date; render(); try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ window.scrollTo(0,0); } return; }
+    if(a==="goto"){ view=b.dataset.date; render(); show("heute"); return; }
+    if(a==="nav"){ show(b.dataset.page); return; }
     if(a==="toggle"){ var id=b.dataset.id; edit(function(d){ d.done=d.done||{}; if(d.done[id]) delete d.done[id]; else d.done[id]=true; }); return; }
     if(a==="water"){ var n=+b.dataset.n; edit(function(d){ d.water = (d.water===n) ? n-1 : n; }); return; }
     if(a==="count"){ var k=b.dataset.k, dl=+b.dataset.d, c=COUNTERS.filter(function(x){return x.k===k;})[0]; edit(function(d){ d[k]=Math.max(0,Math.min(c.max,(d[k]||0)+dl)); }); return; }
@@ -830,7 +856,7 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
   function refreshDay(){
     var t=trackerToday();
     if(t!==lastToday){ if(view===lastToday) view=t; lastToday=t; render(); }
-    else { renderBand(); renderItems(); renderFood(); }
+    else { renderItems(); renderFood(); }
   }
   setInterval(refreshDay,60000);
   document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") refreshDay(); });
@@ -839,13 +865,17 @@ details.acc[open]>summary{border-bottom:1px solid var(--line)}
   var standalone = window.navigator.standalone===true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
   $("install").hidden = standalone;
 
-  // ---------- Auf- und Zuklappen (wird auf dem Handy gemerkt) ----------
-  var UIKEY="tagesplan.ui", uiOpen={"acc-list":true};
-  try{ var u=JSON.parse(localStorage.getItem(UIKEY)||"null"); if(u && u.open && typeof u.open==="object") uiOpen=u.open; }catch(e){}
-  Array.prototype.forEach.call(document.querySelectorAll("details.acc"), function(el){
-    el.open = !!uiOpen[el.id];
-    el.addEventListener("toggle", function(){ uiOpen[el.id]=el.open; try{ localStorage.setItem(UIKEY, JSON.stringify({open:uiOpen})); }catch(e){} });
-  });
+  // ---------- Seiten ----------
+  var PARENT={woche:"mehr",gewicht:"mehr",ueberblick:"mehr",backup:"mehr"};
+  function show(pg){
+    Array.prototype.forEach.call(document.querySelectorAll(".page"), function(el){ el.hidden = el.dataset.page!==pg; });
+    var tab=PARENT[pg]||pg;
+    Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function(bt){
+      if(bt.dataset.tab===tab) bt.setAttribute("aria-current","page"); else bt.removeAttribute("aria-current");
+    });
+    window.scrollTo(0,0);
+  }
+  show("heute");
 
   render();
 
