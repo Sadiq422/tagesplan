@@ -443,6 +443,40 @@ svg{fill:none}
 .titlerow{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .shift{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px;color:var(--accent);margin-top:2px}
 .shift svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Heller Aufgaben-Bereich mit olivgrüner Schrift */
+.sheet{
+  --l-bg:#F3F4EA; --l-card:#FFFFFF; --l-line:#E1E5D0; --l-ink:#3B4716; --l-olive:#5A6A22; --l-muted:#737B57; --l-check:#6B7B26;
+  --sleep:#6A61C4; --sleep-s:#ECEAFA; --train:#C0603E; --train-s:#FAE9E2; --food:#A87A18; --food-s:#FAF0D9;
+  --wake:#9C7F0C; --wake-s:#F9F2D2; --coffee:#94663F; --coffee-s:#F4E9DE; --prep:#5A6A22; --prep-s:#EAEED5;
+  --walk:#3C7F53; --walk-s:#E0F0E5; --people:#2A7F7B; --people-s:#DDF0EE;
+  position:relative;display:grid;gap:12px;
+  margin-inline:calc(-1 * max(16px, env(safe-area-inset-left,0px)));
+  margin-top:6px;
+  margin-bottom:calc(-120px - env(safe-area-inset-bottom,0px));
+  padding:26px max(16px, env(safe-area-inset-left,0px)) calc(130px + env(safe-area-inset-bottom,0px));
+  background:var(--l-bg);color:var(--l-ink);
+  border-radius:30px 30px 0 0;
+  min-height:60vh;
+  box-shadow:0 -18px 40px -24px rgba(0,0,0,.6);
+}
+.sheet::before{content:"";position:absolute;top:10px;left:50%;width:42px;height:5px;margin-left:-21px;border-radius:9px;background:#D6DBC3}
+.sheet .sect-head{margin-top:0}
+.sheet .sect-head h2{color:var(--l-ink)}
+.sheet .sect-head .meta{color:var(--l-olive);font-weight:700}
+.sheet .tasks .it{background:var(--l-card);border-color:var(--l-line);color:var(--l-ink);box-shadow:0 1px 2px rgba(59,71,22,.06)}
+.sheet .tasks .it .lab{color:var(--l-ink)}
+.sheet .tasks .it .hint{color:var(--l-muted)}
+.sheet .tasks .it .tm{color:var(--l-olive);font-weight:500}
+.sheet .tasks .it.next{background:#EEF1DA;border-color:#A5B55A}
+.sheet .tag{color:var(--l-olive)}
+.sheet .box{border-color:#C8CEB0;color:#FFFFFF}
+.sheet .it[aria-pressed="true"]{background:#F8F9F1}
+.sheet .it[aria-pressed="true"] .box{background:var(--l-check);border-color:var(--l-check)}
+.sheet .it[aria-pressed="true"] .lab{color:#9AA182;text-decoration-color:#B9BFA3}
+.sheet .it[aria-pressed="true"] .ico{opacity:.5}
+.sheet .it:active{background:#EEF1DA}
+.sheet :focus-visible{outline-color:var(--l-olive)}
 </style>
 </head>
 <body>
@@ -490,8 +524,10 @@ svg{fill:none}
       <button class="qa" data-act="nav" data-page="prep"><span class="qi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3.5h3l2.4 11.5h11l2-8H6.6"/></svg></span><span>Einkauf</span></button>
     </div>
 
-    <div class="sect-head"><h2>Deine Aufgaben</h2><span class="meta" id="listcount2">0/0</span></div>
-    <ul class="tasks" id="items"></ul>
+    <div class="sheet">
+      <div class="sect-head"><h2>Deine Aufgaben</h2><span class="meta" id="listcount2">0/0</span></div>
+      <ul class="tasks" id="items"></ul>
+    </div>
   </section>
 
   <!-- ===== Seite: Trinken und Essen ===== -->
