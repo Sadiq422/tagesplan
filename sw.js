@@ -1,5 +1,5 @@
 // Offline-Cache für den Tagesplan. Bei Änderungen an der App die Versionsnummer erhöhen.
-const CACHE = "tagesplan-v13";
+const CACHE = "tagesplan-v14";
 const ASSETS = [
   "./",
   "./index.html",
@@ -39,7 +39,8 @@ self.addEventListener("fetch", (event) => {
   // Seite selbst: erst Netz (damit Updates ankommen), offline aus dem Cache.
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req)
+      // no-store: nie eine alte Kopie aus dem Browser-Cache nehmen, damit Updates sofort ankommen
+      fetch(req.url, { cache: "no-store", credentials: "same-origin" })
         .then((res) => {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put("./index.html", copy));

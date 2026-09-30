@@ -764,6 +764,7 @@ body.modal-open{overflow:hidden}
     <footer class="help">
       <span>Erinnerungen für Wasser, Essen, Training und Schlaf kommen über deinen Google Kalender.</span>
       <span>Wenn es dir schlecht geht: Telefonseelsorge <b>0800 111 0 111</b>, rund um die Uhr, kostenlos. Im Notfall <b>112</b>.</span>
+      <span>App-Version <b id="appVer"></b></span>
     </footer>
     </div>
   </section>
@@ -1866,10 +1867,17 @@ body.modal-open{overflow:hidden}
   render();
 
   // Offline-Unterstützung
+  var APP_VERSION="14";
+  $("appVer").textContent=APP_VERSION;
   if("serviceWorker" in navigator){
     var hadController=!!navigator.serviceWorker.controller, reloaded=false;
     navigator.serviceWorker.addEventListener("controllerchange", function(){ if(hadController && !reloaded){ reloaded=true; persistNow(); location.reload(); } });
-    window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(reg){
+        // Beim Zurückkehren in die App nach neuer Version suchen
+        document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") reg.update().catch(function(){}); });
+      }).catch(function(){});
+    });
   }
 })();
 </script>
