@@ -1,12 +1,20 @@
 # Tagesplan
 
-Persönliche iPhone-App (Progressive Web App) für den Alltag mit Früh- und Spätschicht: Tages-Checkliste mit eigenem Wochenplan (Aufgaben, Uhrzeiten, Schicht, Wasserziel pro Wochentag, in der App bearbeitbar), Wasser- und Essenszähler, Schlaf, Energie, Stimmung, Gewicht und Gewichtsverlauf, dazu eine Auswertung mit Durchschnitten, Verlauf, Zusammenhängen (Pearson r, zum Beispiel Schlaf und Energie) und Wochentag-Mustern.
+Persönliche iPhone-App (Progressive Web App) für den Alltag mit Früh- und Spätschicht: Tages-Checkliste mit eigenem Wochenplan (Aufgaben, Uhrzeiten, Schicht, Wasserziel pro Wochentag, in der App bearbeitbar), Wasser- und Essenszähler, Schlaf, Energie, Stimmung, Gewicht und Gewichtsverlauf, dazu eine Auswertung mit Durchschnitten, Verlauf, Zusammenhängen (Pearson r, zum Beispiel Schlaf und Energie) und Wochentag-Mustern. Der Reiter **Arbeit** führt den Stundenzettel für DönerBiz und Dirk deckt dein Dach (Beginn, Ende, Pause, Summe pro Tag, Woche und Monat) sowie freie Tage und Feiertage.
 
 ## Installieren
 
 1. `https://sadiq422.github.io/tagesplan/` in **Safari** auf dem iPhone öffnen.
 2. Unten auf **Teilen** tippen, dann **Zum Home-Bildschirm**.
 3. Die App über das neue Symbol öffnen.
+
+## Arbeit (Stundenzettel)
+
+- Reiter **Arbeit** in der Leiste unten. Pro Eintrag: Firma, Datum, Beginn, Ende, Pause in Minuten. Beispiel: 7:30 bis 12:45 ergibt 5:15 Std.
+- Ende vor Beginn gilt als Schicht über Mitternacht (18:00 bis 00:30 sind 6:30 Std brutto).
+- **Frei** und **Feiertag** lassen sich als eigener Tag eintragen, mehrere Schichten pro Tag sind möglich. Die gesetzlichen Feiertage in Berlin werden berechnet und angezeigt. Ein eingetragener freier Tag oder Feiertag erscheint auf der Seite Heute als Schicht.
+- Monatssumme, Aufteilung nach Firma, Wochentabelle (KW) und Eintragsliste. Bearbeiten mit Tipp auf den Eintrag, Löschen mit zweimal Tippen auf ×.
+- Die Stunden stecken im Backup (`work`) und lassen sich unter Mehr > Backup als **Stunden als CSV** exportieren.
 
 ## Daten
 
@@ -24,7 +32,7 @@ iPhone (App, localStorage)
   └─ Wochen als CSV    → Spalten wie Notion-Datenbank "Wochen"
         │
         ├─ Notion: Datei an Claude schicken (Upsert per Datum) oder "Merge with CSV"
-        └─ Computer: tools/tagesplan_export.py → daten/tage.csv, wochen.csv, aufgaben.csv
+        └─ Computer: tools/tagesplan_export.py → daten/tage.csv, wochen.csv, aufgaben.csv, stunden.csv
 ```
 
 Die App hat keinen Server und keinen Notion-Schlüssel im Code. Das Repo ist öffentlich, `.gitignore` hält Backups und CSV-Dateien heraus.
