@@ -6,6 +6,7 @@ Erzeugt aus der Backup-Datei der App drei CSV-Dateien:
     tage.csv       eine Zeile pro Tag, Spalten wie die Notion-Datenbank "Tage"
     wochen.csv     eine Zeile pro Woche (Mo bis So), Spalten wie "Wochen"
     aufgaben.csv   Langformat: eine Zeile pro Tag und Aufgabe (fuer Analysen)
+    stunden.csv    Arbeitszeiten (Stundenzettel), freie Tage und Feiertage; nur wenn das Backup welche enthaelt
 
 Nur Standardbibliothek, keine Installation noetig.
 
@@ -67,6 +68,7 @@ class Backup:
         self.days: dict[str, dict[str, Any]] = raw["days"]
         self.plan: dict[str, Any] | None = raw.get("plan")
         self.weeks: dict[str, dict[str, Any]] = raw.get("weeks") or {}
+        self.work: dict[str, dict[str, Any]] = ((raw.get("work") or {}).get("hours")) or {}
         goals = (self.plan or {}).get("goals") or {}
         self.sleep_goal = float(goals.get("sleepH") or 6.5)
         exported = raw.get("exported")
@@ -192,6 +194,38 @@ class Backup:
         return rows
 
 
+WORK_HEAD = ["Datum", "Wochentag", "KW", "Art", "Firma", "Beginn", "Ende", "Pause Min", "Stunden", "Stunden dezimal", "Notiz"]
+JOB_NAMES = {"doener": "DönerBiz", "dach": "Dirk deckt dein Dach"}
+WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+
+
+def clock_min(t: str) -> int | None:
+    try:
+        h, m = (int(x) for x in t.split(":"))
+    except (ValueError, AttributeError):
+        return None
+    return h * 60 + m if 0 <= h < 24 and 0 <= m < 60 else None
+
+
+def work_rows(work: dict[str, dict[str, Any]]) -> list[list[Any]]:
+    """Eine Zeile pro Schicht; freie Tage und Feiertage als eigene Zeilen. Ende vor Beginn = ueber Mitternacht."""
+    rows: list[list[Any]] = []
+    for k in sorted(work):
+        d = work[k]
+        dt = date.fromisoformat(k)
+        base = [k, WEEKDAYS[dt.weekday()], dt.isocalendar()[1]]
+        if d.get("mark") in ("frei", "feiertag"):
+            rows.append(base + ["Frei" if d["mark"] == "frei" else "Feiertag", "", "", "", "", "", "", d.get("note") or ""])
+        for e in d.get("entries") or []:
+            a, b = clock_min(e.get("start")), clock_min(e.get("end"))
+            if a is None or b is None or a == b:
+                continue
+            net = max(0, (b - a) % 1440 - int(e.get("pause") or 0))
+            rows.append(base + ["Arbeit", JOB_NAMES.get(e.get("job"), e.get("job")), e["start"], e["end"],
+                                int(e.get("pause") or 0), f"{net // 60}:{net % 60:02d}", num(net / 60, 2), ""])
+    return rows
+
+
 def write_csv(path: Path, head: list[str], rows: list[list[Any]]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -211,7 +245,10 @@ def main(argv: list[str] | None = None) -> int:
     write_csv(a.out / "tage.csv", DAY_HEAD, tage)
     write_csv(a.out / "wochen.csv", WEEK_HEAD, wochen)
     write_csv(a.out / "aufgaben.csv", TASK_HEAD, aufgaben)
-    print(f"{len(tage)} Tage, {len(wochen)} Wochen, {len(aufgaben)} Aufgaben-Zeilen nach {a.out}/")
+    stunden = work_rows(bk.work)
+    if stunden:
+        write_csv(a.out / "stunden.csv", WORK_HEAD, stunden)
+    print(f"{len(tage)} Tage, {len(wochen)} Wochen, {len(aufgaben)} Aufgaben-Zeilen, {len(stunden)} Stunden-Zeilen nach {a.out}/")
     return 0
 
 
